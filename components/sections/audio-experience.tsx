@@ -16,9 +16,17 @@ function formatTime(total: number) {
 
 type AudioExperienceProps = {
   audio: SiteContent["audio"];
+  id?: string;
+  className?: string;
+  showHeading?: boolean;
 };
 
-export function AudioExperience({ audio }: AudioExperienceProps) {
+export function AudioExperience({
+  audio,
+  id = "audio",
+  className,
+  showHeading = true,
+}: AudioExperienceProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [elapsed, setElapsed] = useState(42);
 
@@ -40,19 +48,26 @@ export function AudioExperience({ audio }: AudioExperienceProps) {
   const bars = [34, 56, 44, 78, 63, 48, 70, 40];
 
   return (
-    <section id="audio" className="relative py-24 md:py-32">
+    <section id={id} className={cn("relative py-24 md:py-32", className)}>
       <Container>
-        <Reveal className="max-w-3xl">
-          <span className="section-kicker">{audio.eyebrow}</span>
-          <h2 className="mt-6 text-4xl leading-[1.2] text-[#f8eee2] md:text-5xl lg:text-6xl">
-            {audio.title}
-          </h2>
-          <p className="mt-6 text-base leading-8 text-[#cfbea7]/86 md:text-lg md:leading-9">
-            {audio.description}
-          </p>
-        </Reveal>
+        {showHeading ? (
+          <Reveal className="max-w-3xl">
+            <span className="section-kicker">{audio.eyebrow}</span>
+            <h2 className="mt-6 text-4xl leading-[1.2] text-[#f8eee2] md:text-5xl lg:text-6xl">
+              {audio.title}
+            </h2>
+            <p className="mt-6 text-base leading-8 text-[#cfbea7]/86 md:text-lg md:leading-9">
+              {audio.description}
+            </p>
+          </Reveal>
+        ) : null}
 
-        <div className="mt-14 grid gap-7 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <div
+          className={cn(
+            "grid gap-7 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]",
+            showHeading && "mt-14",
+          )}
+        >
           <Reveal>
             <div className="paper-panel relative overflow-hidden rounded-[42px] p-7 md:p-10">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(214,177,119,0.12),transparent_22%)]" />

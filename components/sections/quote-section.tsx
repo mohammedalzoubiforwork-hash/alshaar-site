@@ -2,26 +2,39 @@ import { Share2, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import type { SiteContent } from "@/lib/site-content-types";
+import { cn } from "@/lib/utils";
 
 type QuoteSectionProps = {
   quote: SiteContent["quote"];
+  id?: string;
+  className?: string;
+  showHeading?: boolean;
 };
 
-export function QuoteSection({ quote }: QuoteSectionProps) {
+export function QuoteSection({
+  quote,
+  id = "quote",
+  className,
+  showHeading = true,
+}: QuoteSectionProps) {
   return (
-    <section id="quote" className="relative py-24 md:py-32">
+    <section id={id} className={cn("relative py-24 md:py-32", className)}>
       <Container>
         <div className="grid gap-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-stretch">
           <Reveal>
             <div className="paper-panel relative h-full overflow-hidden rounded-[42px] p-7 md:p-10 lg:p-12">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,177,119,0.09),transparent_18%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_34%)]" />
               <div className="relative">
-                <span className="section-kicker">{quote.eyebrow}</span>
-                <h2 className="mt-6 text-4xl leading-[1.2] text-[#f8eee2] md:text-5xl">
-                  {quote.title}
-                </h2>
+                {showHeading ? (
+                  <>
+                    <span className="section-kicker">{quote.eyebrow}</span>
+                    <h2 className="mt-6 text-4xl leading-[1.2] text-[#f8eee2] md:text-5xl">
+                      {quote.title}
+                    </h2>
+                  </>
+                ) : null}
 
-                <div className="mt-10 border-y border-white/10 py-10">
+                <div className={cn("border-y border-white/10 py-10", showHeading ? "mt-10" : "mt-0")}>
                   <p className="font-display text-3xl leading-[1.9] text-[#fbf3e8] md:text-5xl md:leading-[1.8]">
                     &quot;{quote.quote}&quot;
                   </p>

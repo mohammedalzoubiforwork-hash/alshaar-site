@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ArrowLeft, Play, Volume2 } from "lucide-react";
 import { useRef } from "react";
 import { Container } from "@/components/ui/container";
+import { SiteHeader } from "@/components/site/site-header";
 import type { LinkItem, SiteContent } from "@/lib/site-content-types";
 
 type HeroSectionProps = {
@@ -27,6 +28,7 @@ export function HeroSection({
 
   const visualY = useTransform(scrollYProgress, [0, 1], [0, 72]);
   const glowY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const hasHeroImage = hero.image.length > 0;
 
   return (
     <section
@@ -45,14 +47,18 @@ export function HeroSection({
         className="absolute inset-y-[14%] left-[4%] hidden w-[44%] lg:block"
       >
         <div className="relative h-full overflow-hidden rounded-[42px] border border-white/10 bg-[#15100d] shadow-[0_32px_120px_rgba(0,0,0,0.44)]">
-          <Image
-            src="/art/hero-scene.svg"
-            alt={hero.heroImageAlt}
-            fill
-            priority
-            sizes="(max-width: 1024px) 0vw, 44vw"
-            className="object-cover object-center opacity-90"
-          />
+          {hasHeroImage ? (
+            <Image
+              src={hero.image}
+              alt={hero.heroImageAlt}
+              fill
+              priority
+              sizes="(max-width: 1024px) 0vw, 44vw"
+              className="object-cover object-center opacity-90"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_24%,rgba(217,180,119,0.3),transparent_22%),radial-gradient(circle_at_78%_64%,rgba(255,255,255,0.08),transparent_20%),linear-gradient(180deg,#231a14_0%,#110c09_100%)]" />
+          )}
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,5,4,0.22),rgba(9,7,5,0.74))]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_22%,rgba(215,170,107,0.14),transparent_22%),radial-gradient(circle_at_25%_72%,rgba(255,255,255,0.06),transparent_18%)]" />
           <div className="absolute right-6 top-6 max-w-[16rem] rounded-[26px] border border-white/10 bg-black/18 p-4 backdrop-blur-md">
@@ -68,54 +74,16 @@ export function HeroSection({
         </div>
       </motion.div>
 
-      <Container className="relative flex min-h-screen flex-col py-5 md:py-7">
-        <motion.header
-          initial={{ opacity: 0, y: -18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="rounded-[32px] border border-white/10 bg-white/[0.04] px-4 py-4 backdrop-blur-xl lg:rounded-full lg:px-6"
-        >
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="font-display text-2xl text-[#f5ecdc] md:text-3xl">
-                  {site.brandName}
-                </p>
-                <p className="mt-1 text-sm text-[#cdb89a]/78">
-                  {site.tagline}
-                </p>
-              </div>
-              <div className="sound-pill lg:hidden">
-                <span className="sound-dot" />
-                <Volume2 className="size-4" />
-                {hero.audioPillMobileLabel}
-              </div>
-            </div>
+      <SiteHeader site={site} navigationLinks={navigationLinks} className="relative" />
 
-            <nav className="overflow-x-auto">
-              <ul className="flex min-w-max items-center gap-2 text-sm text-[#dccab1]/80">
-                {navigationLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="rounded-full px-4 py-2 hover:bg-white/[0.05] hover:text-[#f6ecdd]"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            <div className="hidden lg:flex">
-              <div className="sound-pill">
-                <span className="sound-dot" />
-                <Volume2 className="size-4" />
-                {hero.audioPillDesktopLabel}
-              </div>
-            </div>
+      <Container className="relative flex min-h-[calc(100vh-7rem)] flex-col">
+        <div className="mt-6 flex justify-end lg:hidden">
+          <div className="sound-pill">
+            <span className="sound-dot" />
+            <Volume2 className="size-4" />
+            {hero.audioPillMobileLabel}
           </div>
-        </motion.header>
+        </div>
 
         <div className="grid flex-1 items-center gap-12 py-14 md:py-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:py-20">
           <motion.div
@@ -166,20 +134,24 @@ export function HeroSection({
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.28 }}
-            className="relative min-h-[420px] lg:hidden"
-            style={{ y: visualY }}
-          >
-            <div className="absolute inset-0 overflow-hidden rounded-[38px] border border-white/10 bg-[#15100d] shadow-[0_24px_90px_rgba(0,0,0,0.38)]">
+          className="relative min-h-[420px] lg:hidden"
+          style={{ y: visualY }}
+        >
+          <div className="absolute inset-0 overflow-hidden rounded-[38px] border border-white/10 bg-[#15100d] shadow-[0_24px_90px_rgba(0,0,0,0.38)]">
+            {hasHeroImage ? (
               <Image
-                src="/art/hero-scene.svg"
+                src={hero.image}
                 alt={hero.mobileHeroImageAlt}
                 fill
                 priority
                 sizes="100vw"
                 className="object-cover opacity-90"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,5,4,0.2),rgba(10,7,5,0.72))]" />
-            </div>
+            ) : (
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_24%,rgba(217,180,119,0.3),transparent_22%),radial-gradient(circle_at_82%_68%,rgba(255,255,255,0.08),transparent_18%),linear-gradient(180deg,#231a14_0%,#110c09_100%)]" />
+            )}
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,5,4,0.2),rgba(10,7,5,0.72))]" />
+          </div>
             <div className="absolute left-5 top-5 max-w-[14rem] rounded-[24px] border border-white/10 bg-black/18 p-4 backdrop-blur-md">
               <p className="text-xs leading-6 text-[#f1e4d0]/78">
                 {hero.mobileVisualNote}
@@ -194,7 +166,7 @@ export function HeroSection({
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.45 }}
           className="self-start pb-6"
         >
-          <Link href="#journey" className="sound-pill">
+          <Link href={hero.secondaryActionHref} className="sound-pill">
             <ArrowDown className="size-4" />
             {hero.scrollPrompt}
           </Link>

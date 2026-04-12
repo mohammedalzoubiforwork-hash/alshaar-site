@@ -36,6 +36,18 @@ function stringValue(value: unknown, fallback: string) {
   return typeof value === "string" ? value : fallback;
 }
 
+function imagePathValue(value: unknown, fallback: string) {
+  if (typeof value !== "string") {
+    return fallback;
+  }
+
+  if (value.length === 0) {
+    return "";
+  }
+
+  return value.startsWith("/") ? value : fallback;
+}
+
 function numberValue(value: unknown, fallback: number) {
   return typeof value === "number" && Number.isFinite(value) ? value : fallback;
 }
@@ -102,6 +114,7 @@ function normalizeJourneyEntry(
         : fallback.icon,
     title: stringValue(record.title, fallback.title),
     description: stringValue(record.description, fallback.description),
+    image: imagePathValue(record.image, fallback.image),
     ctaLabel: stringValue(record.ctaLabel, fallback.ctaLabel),
     ctaHref: stringValue(record.ctaHref, fallback.ctaHref),
   };
@@ -119,6 +132,7 @@ function normalizeHonorItem(
     year: stringValue(record.year, fallback.year),
     title: stringValue(record.title, fallback.title),
     story: stringValue(record.story, fallback.story),
+    image: imagePathValue(record.image, fallback.image),
   };
 }
 
@@ -135,7 +149,7 @@ function normalizeNewsItem(
     title: stringValue(record.title, fallback.title),
     description: stringValue(record.description, fallback.description),
     href: stringValue(record.href, fallback.href),
-    image: stringValue(record.image, fallback.image),
+    image: imagePathValue(record.image, fallback.image),
   };
 }
 
@@ -182,6 +196,7 @@ export function normalizeSiteContent(value: unknown): SiteContent {
       ),
       title: stringValue(hero.title, fallbackSiteContent.hero.title),
       subtitle: stringValue(hero.subtitle, fallbackSiteContent.hero.subtitle),
+      image: imagePathValue(hero.image, fallbackSiteContent.hero.image),
       primaryActionLabel: stringValue(
         hero.primaryActionLabel,
         fallbackSiteContent.hero.primaryActionLabel,
@@ -263,6 +278,7 @@ export function normalizeSiteContent(value: unknown): SiteContent {
         pulse.description,
         fallbackSiteContent.pulse.description,
       ),
+      image: imagePathValue(pulse.image, fallbackSiteContent.pulse.image),
       note: stringValue(pulse.note, fallbackSiteContent.pulse.note),
       badgeLabel: stringValue(
         pulse.badgeLabel,

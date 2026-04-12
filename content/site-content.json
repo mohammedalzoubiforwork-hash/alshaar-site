@@ -7,44 +7,45 @@
   },
   "navigationLinks": [
     {
-      "id": "nav-journey",
-      "label": "المسارات",
-      "href": "#journey"
-    },
-    {
       "id": "nav-pulse",
       "label": "نبض الكاتب",
-      "href": "#pulse"
+      "href": "/writer"
+    },
+    {
+      "id": "nav-journey",
+      "label": "المسارات",
+      "href": "/journey"
     },
     {
       "id": "nav-honors",
       "label": "التكريمات",
-      "href": "#honors"
+      "href": "/honors"
     },
     {
       "id": "nav-news",
       "label": "الأخبار",
-      "href": "#news"
+      "href": "/news"
     },
     {
       "id": "nav-quote",
       "label": "الاقتباس",
-      "href": "#quote"
+      "href": "/quote"
     },
     {
       "id": "nav-audio",
       "label": "الصوت",
-      "href": "#audio"
+      "href": "/audio"
     }
   ],
   "hero": {
+    "image": "/art/hero-scene.svg",
     "sectionKicker": "الدخول إلى عالم سالم الورّاق",
     "title": "أنا لا أكتب… أنا أترك أثراً لمن سيأتي بعدي",
     "subtitle": "مرحباً بك في عالمي، حيث تتنفس الكلمات وتتحول إلى تجربة",
     "primaryActionLabel": "ابدأ الرحلة",
-    "primaryActionHref": "#pulse",
+    "primaryActionHref": "/writer",
     "secondaryActionLabel": "تصفح الأعمال",
-    "secondaryActionHref": "#journey",
+    "secondaryActionHref": "/journey",
     "audioPillMobileLabel": "تجربة صوتية",
     "audioPillDesktopLabel": "تجربة صوتية متاحة",
     "introPillLabel": "استمع إلى افتتاحية صوتية تُمهّد للدخول",
@@ -52,7 +53,7 @@
     "visualNoteTop": "في هذا الركن تُصغي الجدران لما تتركه القصائد من ضوءٍ خافت.",
     "visualNoteBottom": "مخطوطات، مصابيح، ومسافة صامتة تجعل الصفحة أقرب إلى مشهدٍ حي.",
     "mobileVisualNote": "هنا تبدأ الرحلة من ضوءٍ خافت، لا من لافتة صاخبة.",
-    "scrollPrompt": "مرّر لتبدأ الرحلة",
+    "scrollPrompt": "ادخل إلى صفحات الموقع",
     "heroImageAlt": "مشهد فني لكاتب في فضاء أدبي هادئ",
     "mobileHeroImageAlt": "مشهد بصري أدبي"
   },
@@ -64,39 +65,44 @@
     "entries": [
       {
         "id": "journey-poetry",
+        "image": "",
         "icon": "feather",
         "title": "الشعر",
         "description": "كلمات تنبض بالبوح، تقرأ وجع الإنسان وتعيد صياغته شعراً",
         "ctaLabel": "ادخل المسار",
-        "ctaHref": "#"
+        "ctaHref": "/journey"
       },
       {
         "id": "journey-books",
+        "image": "",
         "icon": "book-open",
         "title": "المؤلفات",
         "description": "كتب وُلدت من التأمل، وسافرت في ذاكرة القرّاء",
         "ctaLabel": "ادخل المسار",
-        "ctaHref": "#"
+        "ctaHref": "/journey"
       },
       {
         "id": "journey-theater",
+        "image": "",
         "icon": "drama",
         "title": "النصوص المسرحية",
         "description": "نصوص كُتبت لتُرى كما تُقرأ، وتُحسّ قبل أن تُفسَّر",
         "ctaLabel": "ادخل المسار",
-        "ctaHref": "#"
+        "ctaHref": "/journey"
       },
       {
         "id": "journey-biography",
+        "image": "",
         "icon": "user-round",
         "title": "السيرة الذاتية",
         "description": "ليست سيرة أحداث، بل سيرة أثرٍ تركته الحياة في اللغة",
         "ctaLabel": "ادخل المسار",
-        "ctaHref": "#"
+        "ctaHref": "/journey"
       }
     ]
   },
   "pulse": {
+    "image": "/art/writer-portrait.svg",
     "eyebrow": "مقطع داخلي",
     "title": "نبض الكاتب",
     "description": "هذا الموقع ليس أرشيفاً… بل محاولة لفهم كيف يفكر الكاتب. هنا لا أقدّم سيرةً جاهزة، بل أترك للقارئ أثراً من الأسئلة، والبحث، والانكسارات، واللحظات التي صنعت الكلمة.",
@@ -115,24 +121,28 @@
     "items": [
       {
         "id": "honor-2008",
+        "image": "",
         "year": "2008",
         "title": "جائزة الشاعر الشاب",
         "story": "كانت البداية التي لفتت الأنظار إلى صوته الخاص"
       },
       {
         "id": "honor-2012",
+        "image": "",
         "year": "2012",
         "title": "جائزة أفضل نص مسرحي",
         "story": "لحظة عبر فيها النص من الورق إلى الذاكرة"
       },
       {
         "id": "honor-2016",
+        "image": "",
         "year": "2016",
         "title": "وسام الثقافة",
         "story": "تكريم لمسار لم يكن سهلاً، لكنه كان صادقاً"
       },
       {
         "id": "honor-2021",
+        "image": "",
         "year": "2021",
         "title": "جائزة الإبداع العربي",
         "story": "محطة أكدت أن الكلمة الصادقة تصل أبعد مما نظن"
@@ -150,7 +160,7 @@
         "date": "08 نيسان 2026",
         "title": "إصدار ديوان جديد بعنوان \"خرائط الغيم\"",
         "description": "ديوان جديد يواصل أسئلة الذاكرة والغياب، ويقترب من الهشاشة بوصفها شكلاً آخر للقوة.",
-        "href": "#",
+        "href": "/news",
         "image": "/art/news-clouds.svg"
       },
       {
@@ -158,7 +168,7 @@
         "date": "22 آذار 2026",
         "title": "أمسية شعرية في دار الثقافة",
         "description": "لقاء حيّ يجاور القصيدة بالصوت، ويعيد للمنبر دفئه وللإنصات معناه الأصيل.",
-        "href": "#",
+        "href": "/news",
         "image": "/art/news-evening.svg"
       },
       {
@@ -166,7 +176,7 @@
         "date": "11 شباط 2026",
         "title": "مقال جديد: \"عن الكتابة والزمن\"",
         "description": "تأمل جديد في علاقة الكاتب بالوقت، وكيف تتحول السنوات إلى طبقات داخل الجملة.",
-        "href": "#",
+        "href": "/news",
         "image": "/art/news-time.svg"
       }
     ]
@@ -214,27 +224,32 @@
       {
         "id": "footer-home",
         "label": "الصفحة الرئيسية",
-        "href": "#home"
+        "href": "/"
+      },
+      {
+        "id": "footer-writer",
+        "label": "نبض الكاتب",
+        "href": "/writer"
       },
       {
         "id": "footer-journey",
         "label": "الشعر",
-        "href": "#journey"
+        "href": "/journey"
       },
       {
         "id": "footer-honors",
         "label": "التكريمات",
-        "href": "#honors"
+        "href": "/honors"
       },
       {
         "id": "footer-news",
         "label": "الأخبار",
-        "href": "#news"
+        "href": "/news"
       },
       {
         "id": "footer-audio",
         "label": "الصوتيات",
-        "href": "#audio"
+        "href": "/audio"
       }
     ],
     "socialLinks": [

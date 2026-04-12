@@ -1,17 +1,18 @@
-import { AudioExperience } from "@/components/sections/audio-experience";
 import { HeroSection } from "@/components/sections/hero-section";
-import { HonorsTimeline } from "@/components/sections/honors-timeline";
-import { JourneyGrid } from "@/components/sections/journey-grid";
-import { NewsSection } from "@/components/sections/news-section";
-import { QuoteSection } from "@/components/sections/quote-section";
 import { SiteFooter } from "@/components/sections/site-footer";
-import { WriterPulse } from "@/components/sections/writer-pulse";
+import { HomeDestinations } from "@/components/site/home-destinations";
+import { HomeSpotlight } from "@/components/site/home-spotlight";
 import { getSiteContent } from "@/lib/site-content";
+import { getPageSummaries } from "@/lib/site-pages";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const content = await getSiteContent();
+  const pages = getPageSummaries(content);
+  const newsPage = pages.find((page) => page.id === "news");
+  const quotePage = pages.find((page) => page.id === "quote");
+  const audioPage = pages.find((page) => page.id === "audio");
 
   return (
     <main className="page-shell">
@@ -32,12 +33,15 @@ export default async function Home() {
         hero={content.hero}
         navigationLinks={content.navigationLinks}
       />
-      <JourneyGrid journey={content.journey} />
-      <WriterPulse pulse={content.pulse} />
-      <HonorsTimeline honors={content.honors} />
-      <NewsSection news={content.news} />
-      <QuoteSection quote={content.quote} />
-      <AudioExperience audio={content.audio} />
+      <HomeDestinations pages={pages} />
+      <HomeSpotlight
+        quote={content.quote}
+        news={content.news}
+        audio={content.audio}
+        newsHref={newsPage?.href ?? "/news"}
+        quoteHref={quotePage?.href ?? "/quote"}
+        audioHref={audioPage?.href ?? "/audio"}
+      />
       <SiteFooter footer={content.footer} />
     </main>
   );

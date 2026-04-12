@@ -5,33 +5,51 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import type { SiteContent } from "@/lib/site-content-types";
+import { cn } from "@/lib/utils";
 
 type NewsSectionProps = {
   news: SiteContent["news"];
+  id?: string;
+  className?: string;
+  showHeading?: boolean;
 };
 
-export function NewsSection({ news }: NewsSectionProps) {
+export function NewsSection({
+  news,
+  id = "news",
+  className,
+  showHeading = true,
+}: NewsSectionProps) {
   return (
-    <section id="news" className="relative py-24 md:py-32">
+    <section id={id} className={cn("relative py-24 md:py-32", className)}>
       <Container>
-        <SectionHeading
-          eyebrow={news.eyebrow}
-          title={news.title}
-          description={news.description}
-        />
+        {showHeading ? (
+          <SectionHeading
+            eyebrow={news.eyebrow}
+            title={news.title}
+            description={news.description}
+          />
+        ) : null}
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
-          {news.items.map((item, index) => (
-            <Reveal key={item.title} delay={index * 0.08}>
+        <div className={cn("grid gap-6 lg:grid-cols-3", showHeading && "mt-14")}>
+          {news.items.map((item, index) => {
+            const hasNewsImage = item.image.length > 0;
+
+            return (
+              <Reveal key={item.title} delay={index * 0.08}>
               <article className="paper-panel group flex h-full flex-col overflow-hidden rounded-[32px]">
                 <div className="relative aspect-[4/5] overflow-hidden">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 33vw"
-                    className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                  />
+                  {hasNewsImage ? (
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 33vw"
+                      className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(221,186,134,0.18),transparent_24%),radial-gradient(circle_at_78%_74%,rgba(255,255,255,0.08),transparent_18%),linear-gradient(180deg,#241a15_0%,#120d0a_100%)]" />
+                  )}
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,5,4,0.1),rgba(10,7,5,0.56))]" />
                 </div>
 
@@ -54,8 +72,9 @@ export function NewsSection({ news }: NewsSectionProps) {
                   </div>
                 </div>
               </article>
-            </Reveal>
-          ))}
+              </Reveal>
+            );
+          })}
         </div>
       </Container>
     </section>

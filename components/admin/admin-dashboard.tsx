@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { type ChangeEvent, type ReactNode, useState } from "react";
 import Link from "next/link";
 import {
   AlertCircle,
@@ -62,49 +62,49 @@ const sectionItems: Array<{
   {
     id: "site",
     label: "الهوية",
-    description: "اسم الموقع والميتا وروابط الهيدر",
+    description: "اسم الموقع والميتا وروابط الهيدر والصفحات",
     icon: Globe,
   },
   {
     id: "hero",
     label: "الهيرو",
-    description: "الواجهة الأولى ورسائل البداية",
+    description: "الواجهة الرئيسية في صفحة /",
     icon: Sparkles,
   },
   {
     id: "journey",
     label: "المسارات",
-    description: "بطاقات الأعمال والروابط",
+    description: "محتوى صفحة /journey",
     icon: BookOpen,
   },
   {
     id: "pulse",
     label: "نبض الكاتب",
-    description: "النص التعريفي والنبض الداخلي",
+    description: "محتوى صفحة /writer",
     icon: FileText,
   },
   {
     id: "honors",
     label: "التكريمات",
-    description: "الخط الزمني والجوائز",
+    description: "محتوى صفحة /honors",
     icon: Award,
   },
   {
     id: "news",
     label: "الأخبار",
-    description: "بطاقات الأخبار والصور والروابط",
+    description: "محتوى صفحة /news",
     icon: Newspaper,
   },
   {
     id: "quote",
     label: "الاقتباس",
-    description: "اقتباس اليوم وبطاقة المشاركة",
+    description: "محتوى صفحة /quote",
     icon: Quote,
   },
   {
     id: "audio",
     label: "الصوت",
-    description: "وصف التجربة والمقطع الصوتي",
+    description: "محتوى صفحة /audio",
     icon: Volume2,
   },
   {
@@ -144,6 +144,7 @@ function createLinkItem(prefix: string): LinkItem {
 function createJourneyEntry(): JourneyEntry {
   return {
     id: createId("journey"),
+    image: "",
     icon: "feather",
     title: "",
     description: "",
@@ -155,6 +156,7 @@ function createJourneyEntry(): JourneyEntry {
 function createHonorItem(): HonorItem {
   return {
     id: createId("honor"),
+    image: "",
     year: "",
     title: "",
     story: "",
@@ -298,11 +300,11 @@ export function AdminDashboard({
                 لوحة الإدارة
               </span>
               <h1 className="mt-5 font-display text-4xl text-[#fbf4e8] md:text-6xl">
-                إدارة محتوى الموقع الرئيسي من مكان واحد
+                إدارة موقع متعدد الصفحات من مكان واحد
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-8 text-[#c7c0b4] md:text-lg">
-                عدّل كل النصوص والروابط والأقسام، ثم احفظها ليقرأها الموقع العام
-                مباشرة من ملف المحتوى.
+                عدّل نصوص الصفحة الرئيسية والصفحات الداخلية وروابط التنقل، ثم
+                احفظها ليقرأها الموقع العام مباشرة من ملف المحتوى.
               </p>
             </div>
 
@@ -514,7 +516,7 @@ function FieldShell({
   children: ReactNode;
 }) {
   return (
-    <label className="block">
+    <div className="block">
       <span className="text-sm text-[#efe5d4]">{label}</span>
       {description ? (
         <span className="mt-1 block text-xs leading-6 text-[#9d9588]">
@@ -522,7 +524,7 @@ function FieldShell({
         </span>
       ) : null}
       <div className="mt-2">{children}</div>
-    </label>
+    </div>
   );
 }
 
@@ -594,6 +596,142 @@ function TextAreaField({
         onChange={(event) => onChange(event.target.value)}
         className="w-full rounded-[18px] border border-white/10 bg-[#0a1015] px-4 py-3 text-sm leading-7 text-[#f6efe2] outline-none transition focus:border-[#d2b27c]/40"
       />
+    </FieldShell>
+  );
+}
+
+function ImageField({
+  label,
+  value,
+  onChange,
+  description,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  description?: string;
+}) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadTone, setUploadTone] = useState<StatusTone>("idle");
+  const [uploadMessage, setUploadMessage] = useState<string | null>(null);
+
+  async function handleFileUpload(
+    event: ChangeEvent<HTMLInputElement>,
+  ) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadTone("idle");
+    setUploadMessage(`جار رفع ${file.name}...`);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/upload-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      const payload = (await response.json()) as {
+        path?: string;
+        message?: string;
+      };
+
+      if (!response.ok || !payload.path) {
+        throw new Error(payload.message ?? "تعذر رفع الصورة.");
+      }
+
+      onChange(payload.path);
+      setUploadTone("success");
+      setUploadMessage("تم رفع الصورة وتحديث المسار داخل لوحة الأدمن.");
+    } catch (error) {
+      setUploadTone("error");
+      setUploadMessage(
+        error instanceof Error ? error.message : "حدث خطأ غير متوقع أثناء رفع الصورة.",
+      );
+    } finally {
+      event.target.value = "";
+      setIsUploading(false);
+    }
+  }
+
+  return (
+    <FieldShell label={label} description={description}>
+      <div className="space-y-3">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-[24px] border border-white/10 bg-[#0a1015]">
+          {value ? (
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(\"${value}\")` }}
+            />
+          ) : null}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,16,21,0.18),rgba(10,16,21,0.88))]" />
+          <div className="relative flex h-full flex-col justify-end gap-2 p-4">
+            <p className="text-sm text-[#f6efe2]">
+              {value ? "معاينة الصورة الحالية" : "لا توجد صورة مضافة بعد"}
+            </p>
+            <p className="line-clamp-2 text-xs leading-6 text-[#b6ac9c]">
+              {value || "/uploads/example-image.jpg"}
+            </p>
+          </div>
+        </div>
+
+        <input
+          type="text"
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder="/uploads/example-image.jpg"
+          className="w-full rounded-[18px] border border-white/10 bg-[#0a1015] px-4 py-3 text-sm text-[#f6efe2] outline-none transition focus:border-[#d2b27c]/40"
+        />
+
+        <div className="flex flex-wrap gap-3">
+          <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 text-sm text-[#f4ecde] transition hover:border-white/16 hover:bg-white/[0.06]">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileUpload}
+              className="hidden"
+              disabled={isUploading}
+            />
+            {isUploading ? (
+              <LoaderCircle className="size-4 animate-spin" />
+            ) : (
+              <Plus className="size-4" />
+            )}
+            {isUploading ? "جار رفع الصورة..." : "رفع صورة جديدة"}
+          </label>
+
+          {value ? (
+            <a
+              href={value}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 bg-[#0f141a] px-4 text-sm text-[#d9ccba] transition hover:border-white/16 hover:bg-white/[0.05]"
+            >
+              فتح الصورة
+              <ArrowUpRight className="size-4" />
+            </a>
+          ) : null}
+        </div>
+
+        <p
+          className={`text-xs leading-6 ${
+            uploadTone === "success"
+              ? "text-emerald-200"
+              : uploadTone === "error"
+                ? "text-rose-200"
+                : "text-[#948a7c]"
+          }`}
+        >
+          {uploadMessage ??
+            "ارفع صورة مباشرة من جهازك أو ضع مسارًا داخليًا مثل /uploads/your-image.jpg"}
+        </p>
+      </div>
     </FieldShell>
   );
 }
@@ -895,6 +1033,18 @@ function HeroSectionEditor({
               })
             }
           />
+          <div className="md:col-span-2">
+            <ImageField
+              label="صورة الهيرو"
+              value={content.hero.image}
+              description="هذه الصورة تظهر في الواجهة الرئيسية على سطح المكتب والجوال."
+              onChange={(value) =>
+                mutateContent((draft) => {
+                  draft.hero.image = value;
+                })
+              }
+            />
+          </div>
           <TextField
             label="بديل صورة الهيرو"
             value={content.hero.heroImageAlt}
@@ -1020,6 +1170,18 @@ function JourneySectionEditor({
                     })
                   }
                 />
+                <div className="md:col-span-2">
+                  <ImageField
+                    label="صورة المسار"
+                    value={entry.image}
+                    description="ارفع صورة للكتاب أو الديوان أو المسار الأدبي نفسه."
+                    onChange={(value) =>
+                      mutateContent((draft) => {
+                        draft.journey.entries[index].image = value;
+                      })
+                    }
+                  />
+                </div>
                 <TextField
                   label="نص زر البطاقة"
                   value={entry.ctaLabel}
@@ -1135,6 +1297,18 @@ function PulseSectionEditor({
               })
             }
           />
+          <div className="md:col-span-2">
+            <ImageField
+              label="صورة الشاعر"
+              value={content.pulse.image}
+              description="هذه الصورة تظهر في صفحة نبض الكاتب وفي الجزء البصري الخاص بالشاعر."
+              onChange={(value) =>
+                mutateContent((draft) => {
+                  draft.pulse.image = value;
+                })
+              }
+            />
+          </div>
           <TextField
             label="بديل الصورة"
             value={content.pulse.imageAlt}
@@ -1258,6 +1432,18 @@ function HonorsSectionEditor({
                     })
                   }
                 />
+                <div className="md:col-span-2">
+                  <ImageField
+                    label="صورة التكريم"
+                    value={item.image}
+                    description="يمكنك رفع صورة للشهادة أو الدرع أو لحظة التكريم."
+                    onChange={(value) =>
+                      mutateContent((draft) => {
+                        draft.honors.items[index].image = value;
+                      })
+                    }
+                  />
+                </div>
               </div>
             </ArrayItemCard>
           ))}
@@ -1392,6 +1578,18 @@ function NewsSectionEditor({
                     })
                   }
                 />
+                <div className="md:col-span-2">
+                  <ImageField
+                    label="رفع صورة الخبر"
+                    value={item.image}
+                    description="ارفع صورة الخبر مباشرة من جهازك أو عدّل المسار يدويًا."
+                    onChange={(value) =>
+                      mutateContent((draft) => {
+                        draft.news.items[index].image = value;
+                      })
+                    }
+                  />
+                </div>
               </div>
             </ArrayItemCard>
           ))}

@@ -17,6 +17,7 @@ export type JourneyEntry = {
   icon: JourneyIconName;
   title: string;
   description: string;
+  image: string;
   ctaLabel: string;
   ctaHref: string;
 };
@@ -26,6 +27,7 @@ export type HonorItem = {
   year: string;
   title: string;
   story: string;
+  image: string;
 };
 
 export type NewsItem = {
@@ -53,6 +55,7 @@ export type SiteContent = {
     sectionKicker: string;
     title: string;
     subtitle: string;
+    image: string;
     primaryActionLabel: string;
     primaryActionHref: string;
     secondaryActionLabel: string;
@@ -79,6 +82,7 @@ export type SiteContent = {
     eyebrow: string;
     title: string;
     description: string;
+    image: string;
     note: string;
     badgeLabel: string;
     aside: string;
