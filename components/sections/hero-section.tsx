@@ -88,9 +88,11 @@ export function HeroSection({ heroImage }: HeroSectionProps) {
             <h1 className="text-balance mt-7 text-5xl leading-[1.18] text-[#fff7ee] md:text-7xl lg:text-[5.7rem] lg:leading-[1.1]">
               {heroCopy.title}
             </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-9 text-[#dbe8ef]/84 md:text-xl md:leading-10">
-              {heroCopy.subtitle}
-            </p>
+            {heroCopy.subtitle ? (
+              <p className="mt-7 max-w-2xl text-lg leading-9 text-[#dbe8ef]/84 md:text-xl md:leading-10">
+                {heroCopy.subtitle}
+              </p>
+            ) : null}
 
             <div className="mt-10 flex flex-wrap gap-4">
               <Link

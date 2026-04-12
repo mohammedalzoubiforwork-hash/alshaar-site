@@ -58,8 +58,7 @@ export const footerCopy = {
 export const heroCopy = {
   sectionKicker: "مدخل إلى عالم سالم الورّاق",
   title: "أنا لا أكتب كي أملأ الورق، بل لأترك أثرًا يبقى",
-  subtitle:
-    "هنا تبدأ رحلة أدبية تجمع الأعمال والتكريمات والأخبار والاقتباسات والصوتيات في صفحات واضحة، بروح عربية هادئة ولمسة بصرية أكثر إشراقًا.",
+  subtitle: "",
   primaryActionLabel: "ابدأ من نبض الكاتب",
   primaryActionHref: "/writer",
   secondaryActionLabel: "استعرض الأعمال",
