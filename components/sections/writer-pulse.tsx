@@ -1,33 +1,33 @@
 import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
-import type { SiteContent } from "@/lib/site-content-types";
+import { writerCopy } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 type WriterPulseProps = {
-  pulse: SiteContent["pulse"];
+  writerImage: string;
   id?: string;
   className?: string;
   showHeading?: boolean;
 };
 
 export function WriterPulse({
-  pulse,
+  writerImage,
   id = "pulse",
   className,
   showHeading = true,
 }: WriterPulseProps) {
-  const hasPulseImage = pulse.image.length > 0;
+  const hasWriterImage = writerImage.length > 0;
 
   return (
     <section id={id} className={cn("relative py-24 md:py-32", className)}>
       <Container>
         <div className="paper-panel relative overflow-hidden rounded-[42px] border border-white/10 bg-[#17120f]/84">
           <div className="absolute inset-y-0 left-0 hidden w-[38%] lg:block">
-            {hasPulseImage ? (
+            {hasWriterImage ? (
               <Image
-                src={pulse.image}
-                alt={pulse.imageAlt}
+                src={writerImage}
+                alt={writerCopy.imageAlt}
                 fill
                 sizes="38vw"
                 className="object-cover object-center opacity-42"
@@ -42,10 +42,10 @@ export function WriterPulse({
 
           <div className="relative grid gap-8 lg:grid-cols-[0.88fr_1.12fr]">
             <div className="relative min-h-[260px] lg:hidden">
-              {hasPulseImage ? (
+              {hasWriterImage ? (
                 <Image
-                  src={pulse.image}
-                  alt={pulse.mobileImageAlt}
+                  src={writerImage}
+                  alt={writerCopy.mobileImageAlt}
                   fill
                   sizes="100vw"
                   className="object-cover opacity-45"
@@ -61,9 +61,9 @@ export function WriterPulse({
             <Reveal className="relative z-10 p-7 md:p-10 lg:p-16">
               {showHeading ? (
                 <>
-                  <span className="section-kicker">{pulse.eyebrow}</span>
+                  <span className="section-kicker">{writerCopy.eyebrow}</span>
                   <h2 className="mt-6 text-4xl leading-[1.2] text-[#f8eee2] md:text-5xl lg:text-6xl">
-                    {pulse.title}
+                    {writerCopy.title}
                   </h2>
                 </>
               ) : null}
@@ -73,27 +73,25 @@ export function WriterPulse({
                   showHeading ? "mt-8" : "mt-2",
                 )}
               >
-                {pulse.description}
+                {writerCopy.description}
               </p>
 
               <div className="mt-10 rounded-[28px] border border-white/10 bg-white/[0.03] px-5 py-4 text-sm leading-7 text-[#ccb897]/82 backdrop-blur-sm md:max-w-xl">
-                {pulse.note}
+                {writerCopy.note}
               </div>
 
               <div className="mt-12 flex flex-wrap items-center gap-4">
                 <span className="rounded-full border border-[#c7a877]/22 bg-[#c7a877]/8 px-4 py-2 text-sm text-[#e8d8bf]">
-                  {pulse.badgeLabel}
+                  {writerCopy.badgeLabel}
                 </span>
-                <span className="text-sm text-[#bba68a]/78">
-                  {pulse.aside}
-                </span>
+                <span className="text-sm text-[#bba68a]/78">{writerCopy.aside}</span>
               </div>
 
               <div className="mt-12">
                 <div className="pulse-line" />
                 <div className="mt-4 flex items-center gap-3 text-xs tracking-[0.22em] text-[#c9b18c]/76 uppercase">
                   <span className="sound-dot" />
-                  {pulse.pulseCaption}
+                  {writerCopy.pulseCaption}
                 </div>
               </div>
             </Reveal>

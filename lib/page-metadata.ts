@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
-import type { SiteContent } from "@/lib/site-content-types";
+import { siteIdentity } from "@/lib/site-config";
 
-export function buildSectionMetadata(
-  site: SiteContent["site"],
-  title: string,
-  description: string,
-): Metadata {
+export function buildSectionMetadata(title: string, description: string): Metadata {
   return {
-    title: `${title} | ${site.brandName}`,
+    title: `${title} | ${siteIdentity.brandName}`,
     description,
   };
 }

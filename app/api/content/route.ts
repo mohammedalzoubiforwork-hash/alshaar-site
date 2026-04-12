@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSiteContent, saveSiteContent } from "@/lib/site-content";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function GET() {
   const content = await getSiteContent();
@@ -15,7 +16,9 @@ export async function PUT(request: Request) {
     const content = await saveSiteContent(body);
 
     return NextResponse.json({ content });
-  } catch {
+  } catch (error) {
+    console.error("save content failed", error);
+
     return NextResponse.json(
       {
         message: "تعذر حفظ المحتوى. تأكد من صحة البيانات ثم حاول مرة أخرى.",

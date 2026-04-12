@@ -1,28 +1,21 @@
 import Link from "next/link";
-import { Container } from "@/components/ui/container";
-import type { LinkItem, SiteContent } from "@/lib/site-content-types";
+import { navigationLinks, siteIdentity } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 type SiteHeaderProps = {
-  site: SiteContent["site"];
-  navigationLinks: LinkItem[];
   className?: string;
 };
 
-export function SiteHeader({
-  site,
-  navigationLinks,
-  className,
-}: SiteHeaderProps) {
+export function SiteHeader({ className }: SiteHeaderProps) {
   return (
-    <Container className={cn("pt-5 md:pt-7", className)}>
+    <div className={cn("mx-auto w-full max-w-[1320px] px-5 pt-5 md:px-8 md:pt-7", className)}>
       <header className="rounded-[34px] border border-white/10 bg-white/[0.045] px-4 py-4 backdrop-blur-xl lg:rounded-full lg:px-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <Link href="/" className="block">
             <p className="font-display text-2xl text-[#f5ecdc] md:text-3xl">
-              {site.brandName}
+              {siteIdentity.brandName}
             </p>
-            <p className="mt-1 text-sm text-[#cdb89a]/78">{site.tagline}</p>
+            <p className="mt-1 text-sm text-[#cdb89a]/78">{siteIdentity.tagline}</p>
           </Link>
 
           <nav className="overflow-x-auto">
@@ -51,6 +44,6 @@ export function SiteHeader({
           </div>
         </div>
       </header>
-    </Container>
+    </div>
   );
 }

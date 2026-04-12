@@ -2,12 +2,8 @@ import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { PageHero } from "@/components/site/page-hero";
 import { SiteHeader } from "@/components/site/site-header";
-import type { LinkItem, SiteContent } from "@/lib/site-content-types";
 
 type StoryShellProps = {
-  site: SiteContent["site"];
-  navigationLinks: LinkItem[];
-  footer: SiteContent["footer"];
   eyebrow: string;
   title: string;
   description: string;
@@ -18,9 +14,6 @@ type StoryShellProps = {
 };
 
 export function StoryShell({
-  site,
-  navigationLinks,
-  footer,
   eyebrow,
   title,
   description,
@@ -39,7 +32,7 @@ export function StoryShell({
         aria-hidden
         className="ambient-glow left-[-6rem] top-[38rem] h-[22rem] w-[22rem] bg-[#6e8091]/12 float-slow"
       />
-      <SiteHeader site={site} navigationLinks={navigationLinks} />
+      <SiteHeader />
       <PageHero
         eyebrow={eyebrow}
         title={title}
@@ -49,7 +42,7 @@ export function StoryShell({
         actionHref={actionHref}
       />
       {children}
-      <SiteFooter footer={footer} />
+      <SiteFooter />
     </main>
   );
 }

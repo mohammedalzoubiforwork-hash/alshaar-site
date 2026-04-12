@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Aref_Ruqaa, IBM_Plex_Sans_Arabic } from "next/font/google";
-import { getSiteContent } from "@/lib/site-content";
+import { siteIdentity } from "@/lib/site-config";
 import "./globals.css";
 
 const displayFont = Aref_Ruqaa({
@@ -15,16 +15,10 @@ const bodyFont = IBM_Plex_Sans_Arabic({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-export const dynamic = "force-dynamic";
-
-export async function generateMetadata(): Promise<Metadata> {
-  const content = await getSiteContent();
-
-  return {
-    title: content.site.pageTitle,
-    description: content.site.pageDescription,
-  };
-}
+export const metadata: Metadata = {
+  title: siteIdentity.pageTitle,
+  description: siteIdentity.pageDescription,
+};
 
 export default function RootLayout({
   children,

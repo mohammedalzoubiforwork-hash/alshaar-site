@@ -1,28 +1,26 @@
-import baseSiteContent from "@/content/site-content.json";
 import type {
+  AudioTrack,
   HonorItem,
-  JourneyEntry,
-  JourneyIconName,
-  LinkItem,
   NewsItem,
+  QuoteItem,
   SiteContent,
-  SocialIconName,
-  SocialLink,
+  WorkItem,
+  WorkType,
 } from "@/lib/site-content-types";
 
-const journeyIcons = new Set<JourneyIconName>([
-  "feather",
-  "book-open",
-  "drama",
-  "user-round",
+const workTypes = new Set<WorkType>([
+  "poetry",
+  "books",
+  "theater",
+  "biography",
 ]);
 
-const socialIcons = new Set<SocialIconName>([
-  "instagram",
-  "youtube",
-  "send",
-  "mail",
-]);
+const legacyIconToType: Record<string, WorkType> = {
+  feather: "poetry",
+  "book-open": "books",
+  drama: "theater",
+  "user-round": "biography",
+};
 
 function cloneValue<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -36,7 +34,7 @@ function stringValue(value: unknown, fallback: string) {
   return typeof value === "string" ? value : fallback;
 }
 
-function imagePathValue(value: unknown, fallback: string) {
+function pathValue(value: unknown, fallback: string) {
   if (typeof value !== "string") {
     return fallback;
   }
@@ -45,422 +43,359 @@ function imagePathValue(value: unknown, fallback: string) {
     return "";
   }
 
-  return value.startsWith("/") ? value : fallback;
-}
-
-function numberValue(value: unknown, fallback: number) {
-  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+  return value.startsWith("/") || value.startsWith("http://") || value.startsWith("https://")
+    ? value
+    : fallback;
 }
 
 function normalizeArray<T>(
   value: unknown,
   fallback: T[],
-  normalizeItem: (item: unknown, fallbackItem: T, index: number) => T,
+  normalizeItem: (item: unknown, index: number) => T,
 ) {
-  if (!Array.isArray(value) || value.length === 0) {
+  if (!Array.isArray(value)) {
     return cloneValue(fallback);
   }
 
-  return value.map((item, index) =>
-    normalizeItem(item, fallback[index] ?? fallback[fallback.length - 1], index),
-  );
+  return value.map((item, index) => normalizeItem(item, index));
 }
 
-function normalizeLinkItem(
-  value: unknown,
-  fallback: LinkItem,
-  prefix: string,
-  index: number,
-): LinkItem {
+function defaultWorkItem(index: number): WorkItem {
+  return {
+    id: `work-${index + 1}`,
+    type: "books",
+    title: "",
+    description: "",
+    image: "",
+    href: "/journey",
+  };
+}
+
+function defaultHonorItem(index: number): HonorItem {
+  return {
+    id: `honor-${index + 1}`,
+    year: "",
+    title: "",
+    story: "",
+    image: "",
+  };
+}
+
+function defaultNewsItem(index: number): NewsItem {
+  return {
+    id: `news-${index + 1}`,
+    date: "",
+    title: "",
+    description: "",
+    href: "/news",
+    image: "",
+  };
+}
+
+function defaultQuoteItem(index: number): QuoteItem {
+  return {
+    id: `quote-${index + 1}`,
+    text: "",
+    caption: "",
+  };
+}
+
+function defaultAudioTrack(index: number): AudioTrack {
+  return {
+    id: `audio-${index + 1}`,
+    title: "",
+    description: "",
+    file: "",
+    durationLabel: "",
+  };
+}
+
+function normalizeWorkItem(value: unknown, index: number): WorkItem {
+  const fallback = defaultWorkItem(index);
   const record = isRecord(value) ? value : {};
+  const type = record.type;
 
   return {
-    id: stringValue(record.id, `${prefix}-${index + 1}`),
-    label: stringValue(record.label, fallback.label),
+    id: stringValue(record.id, fallback.id),
+    type:
+      typeof type === "string" && workTypes.has(type as WorkType)
+        ? (type as WorkType)
+        : fallback.type,
+    title: stringValue(record.title, fallback.title),
+    description: stringValue(record.description, fallback.description),
+    image: pathValue(record.image, fallback.image),
     href: stringValue(record.href, fallback.href),
   };
 }
 
-function normalizeSocialLink(
-  value: unknown,
-  fallback: SocialLink,
-  index: number,
-): SocialLink {
-  const record = isRecord(value) ? value : {};
-  const icon = record.icon;
-
-  return {
-    ...normalizeLinkItem(record, fallback, "social", index),
-    icon:
-      typeof icon === "string" && socialIcons.has(icon as SocialIconName)
-        ? (icon as SocialIconName)
-        : fallback.icon,
-  };
-}
-
-function normalizeJourneyEntry(
-  value: unknown,
-  fallback: JourneyEntry,
-  index: number,
-): JourneyEntry {
-  const record = isRecord(value) ? value : {};
-  const icon = record.icon;
-
-  return {
-    id: stringValue(record.id, `journey-${index + 1}`),
-    icon:
-      typeof icon === "string" && journeyIcons.has(icon as JourneyIconName)
-        ? (icon as JourneyIconName)
-        : fallback.icon,
-    title: stringValue(record.title, fallback.title),
-    description: stringValue(record.description, fallback.description),
-    image: imagePathValue(record.image, fallback.image),
-    ctaLabel: stringValue(record.ctaLabel, fallback.ctaLabel),
-    ctaHref: stringValue(record.ctaHref, fallback.ctaHref),
-  };
-}
-
-function normalizeHonorItem(
-  value: unknown,
-  fallback: HonorItem,
-  index: number,
-): HonorItem {
+function normalizeHonorItem(value: unknown, index: number): HonorItem {
+  const fallback = defaultHonorItem(index);
   const record = isRecord(value) ? value : {};
 
   return {
-    id: stringValue(record.id, `honor-${index + 1}`),
+    id: stringValue(record.id, fallback.id),
     year: stringValue(record.year, fallback.year),
     title: stringValue(record.title, fallback.title),
     story: stringValue(record.story, fallback.story),
-    image: imagePathValue(record.image, fallback.image),
+    image: pathValue(record.image, fallback.image),
   };
 }
 
-function normalizeNewsItem(
-  value: unknown,
-  fallback: NewsItem,
-  index: number,
-): NewsItem {
+function normalizeNewsItem(value: unknown, index: number): NewsItem {
+  const fallback = defaultNewsItem(index);
   const record = isRecord(value) ? value : {};
 
   return {
-    id: stringValue(record.id, `news-${index + 1}`),
+    id: stringValue(record.id, fallback.id),
     date: stringValue(record.date, fallback.date),
     title: stringValue(record.title, fallback.title),
     description: stringValue(record.description, fallback.description),
     href: stringValue(record.href, fallback.href),
-    image: imagePathValue(record.image, fallback.image),
+    image: pathValue(record.image, fallback.image),
   };
 }
 
-const fallbackSiteContent = cloneValue(baseSiteContent as SiteContent);
+function normalizeQuoteItem(value: unknown, index: number): QuoteItem {
+  const fallback = defaultQuoteItem(index);
+  const record = isRecord(value) ? value : {};
+
+  return {
+    id: stringValue(record.id, fallback.id),
+    text: stringValue(record.text, fallback.text),
+    caption: stringValue(record.caption, fallback.caption),
+  };
+}
+
+function normalizeAudioTrack(value: unknown, index: number): AudioTrack {
+  const fallback = defaultAudioTrack(index);
+  const record = isRecord(value) ? value : {};
+
+  return {
+    id: stringValue(record.id, fallback.id),
+    title: stringValue(record.title, fallback.title),
+    description: stringValue(record.description, fallback.description),
+    file: pathValue(record.file, fallback.file),
+    durationLabel: stringValue(record.durationLabel, fallback.durationLabel),
+  };
+}
+
+const defaultSiteContent: SiteContent = {
+  photos: {
+    heroImage: "/art/hero-scene.svg",
+    writerImage: "/art/writer-portrait.svg",
+  },
+  works: [
+    {
+      id: "journey-poetry",
+      type: "poetry",
+      title: "الشعر",
+      description: "كلمات تنبض بالبوح، تقرأ وجع الإنسان وتعيد صياغته شعراً",
+      image: "",
+      href: "/journey",
+    },
+    {
+      id: "journey-books",
+      type: "books",
+      title: "المؤلفات",
+      description: "كتب وُلدت من التأمل، وسافرت في ذاكرة القرّاء",
+      image: "",
+      href: "/journey",
+    },
+    {
+      id: "journey-theater",
+      type: "theater",
+      title: "النصوص المسرحية",
+      description: "نصوص كُتبت لتُرى كما تُقرأ، وتُحسّ قبل أن تُفسَّر",
+      image: "",
+      href: "/journey",
+    },
+    {
+      id: "journey-biography",
+      type: "biography",
+      title: "السيرة الذاتية",
+      description: "ليست سيرة أحداث، بل سيرة أثرٍ تركته الحياة في اللغة",
+      image: "",
+      href: "/journey",
+    },
+  ],
+  honors: [
+    {
+      id: "honor-2008",
+      year: "2008",
+      title: "جائزة الشاعر الشاب",
+      story: "كانت البداية التي لفتت الأنظار إلى صوته الخاص",
+      image: "",
+    },
+    {
+      id: "honor-2012",
+      year: "2012",
+      title: "جائزة أفضل نص مسرحي",
+      story: "لحظة عبر فيها النص من الورق إلى الذاكرة",
+      image: "",
+    },
+    {
+      id: "honor-2016",
+      year: "2016",
+      title: "وسام الثقافة",
+      story: "تكريم لمسار لم يكن سهلاً، لكنه كان صادقاً",
+      image: "",
+    },
+    {
+      id: "honor-2021",
+      year: "2021",
+      title: "جائزة الإبداع العربي",
+      story: "محطة أكدت أن الكلمة الصادقة تصل أبعد مما نظن",
+      image: "",
+    },
+  ],
+  news: [
+    {
+      id: "news-clouds",
+      date: "08 نيسان 2026",
+      title: "إصدار ديوان جديد بعنوان \"خرائط الغيم\"",
+      description:
+        "ديوان جديد يواصل أسئلة الذاكرة والغياب، ويقترب من الهشاشة بوصفها شكلاً آخر للقوة.",
+      href: "/news",
+      image: "/art/news-clouds.svg",
+    },
+    {
+      id: "news-evening",
+      date: "22 آذار 2026",
+      title: "أمسية شعرية في دار الثقافة",
+      description:
+        "لقاء حيّ يجاور القصيدة بالصوت، ويعيد للمنبر دفئه وللإنصات معناه الأصيل.",
+      href: "/news",
+      image: "/art/news-evening.svg",
+    },
+    {
+      id: "news-time",
+      date: "11 شباط 2026",
+      title: "مقال جديد: \"عن الكتابة والزمن\"",
+      description:
+        "تأمل جديد في علاقة الكاتب بالوقت، وكيف تتحول السنوات إلى طبقات داخل الجملة.",
+      href: "/news",
+      image: "/art/news-time.svg",
+    },
+  ],
+  quotes: [
+    {
+      id: "quote-1",
+      text: "الكتابة لا تغيّر العالم، لكنها تغيّر من يقرأ",
+      caption: "واجهة جاهزة لتوليد بطاقة مرئية قابلة للمشاركة",
+    },
+  ],
+  audioTracks: [],
+};
+
+function migrateLegacySiteContent(record: Record<string, unknown>): SiteContent {
+  const hero = isRecord(record.hero) ? record.hero : {};
+  const pulse = isRecord(record.pulse) ? record.pulse : {};
+  const journey = isRecord(record.journey) ? record.journey : {};
+  const honors = isRecord(record.honors) ? record.honors : {};
+  const news = isRecord(record.news) ? record.news : {};
+  const quote = isRecord(record.quote) ? record.quote : {};
+  const audio = isRecord(record.audio) ? record.audio : {};
+
+  const migratedQuote =
+    typeof quote.quote === "string" && quote.quote.trim().length > 0
+      ? [
+          {
+            id: stringValue(quote.id, "quote-1"),
+            text: stringValue(quote.quote, ""),
+            caption: stringValue(quote.cardCaption, ""),
+          },
+        ]
+      : cloneValue(defaultSiteContent.quotes);
+
+  const migratedAudioFile =
+    pathValue(audio.file, "") ||
+    pathValue(audio.src, "") ||
+    pathValue(audio.trackFile, "");
+
+  const migratedAudioTracks = migratedAudioFile
+    ? [
+        {
+          id: stringValue(audio.id, "audio-1"),
+          title: stringValue(audio.trackTitle, "مقطع صوتي"),
+          description: stringValue(audio.trackDescription, ""),
+          file: migratedAudioFile,
+          durationLabel: stringValue(audio.duration, ""),
+        },
+      ]
+    : cloneValue(defaultSiteContent.audioTracks);
+
+  return {
+    photos: {
+      heroImage: pathValue(hero.image, defaultSiteContent.photos.heroImage),
+      writerImage: pathValue(pulse.image, defaultSiteContent.photos.writerImage),
+    },
+    works: Array.isArray(journey.entries)
+      ? journey.entries.map((item, index) => {
+          const entry = isRecord(item) ? item : {};
+          const fallback = defaultWorkItem(index);
+          const legacyType =
+            typeof entry.icon === "string" ? legacyIconToType[entry.icon] : undefined;
+
+          return {
+            id: stringValue(entry.id, fallback.id),
+            type: legacyType ?? fallback.type,
+            title: stringValue(entry.title, fallback.title),
+            description: stringValue(entry.description, fallback.description),
+            image: pathValue(entry.image, fallback.image),
+            href: stringValue(entry.ctaHref, fallback.href),
+          };
+        })
+      : cloneValue(defaultSiteContent.works),
+    honors: Array.isArray(honors.items)
+      ? honors.items.map((item, index) => normalizeHonorItem(item, index))
+      : cloneValue(defaultSiteContent.honors),
+    news: Array.isArray(news.items)
+      ? news.items.map((item, index) => normalizeNewsItem(item, index))
+      : cloneValue(defaultSiteContent.news),
+    quotes: migratedQuote,
+    audioTracks: migratedAudioTracks,
+  };
+}
 
 export function cloneSiteContent(value: SiteContent) {
   return cloneValue(value);
 }
 
-export const defaultSiteContent = cloneSiteContent(fallbackSiteContent);
+export const defaultContent = cloneSiteContent(defaultSiteContent);
+export const defaultSiteContentValue = cloneSiteContent(defaultSiteContent);
 
 export function normalizeSiteContent(value: unknown): SiteContent {
   const record = isRecord(value) ? value : {};
-  const site = isRecord(record.site) ? record.site : {};
-  const hero = isRecord(record.hero) ? record.hero : {};
-  const journey = isRecord(record.journey) ? record.journey : {};
-  const pulse = isRecord(record.pulse) ? record.pulse : {};
-  const honors = isRecord(record.honors) ? record.honors : {};
-  const news = isRecord(record.news) ? record.news : {};
-  const quote = isRecord(record.quote) ? record.quote : {};
-  const audio = isRecord(record.audio) ? record.audio : {};
-  const footer = isRecord(record.footer) ? record.footer : {};
+  const hasNewShape =
+    "photos" in record ||
+    "works" in record ||
+    "honors" in record ||
+    "news" in record ||
+    "quotes" in record ||
+    "audioTracks" in record;
+
+  if (!hasNewShape) {
+    return migrateLegacySiteContent(record);
+  }
+
+  const photos = isRecord(record.photos) ? record.photos : {};
 
   return {
-    site: {
-      brandName: stringValue(site.brandName, fallbackSiteContent.site.brandName),
-      tagline: stringValue(site.tagline, fallbackSiteContent.site.tagline),
-      pageTitle: stringValue(site.pageTitle, fallbackSiteContent.site.pageTitle),
-      pageDescription: stringValue(
-        site.pageDescription,
-        fallbackSiteContent.site.pageDescription,
+    photos: {
+      heroImage: pathValue(photos.heroImage, defaultSiteContent.photos.heroImage),
+      writerImage: pathValue(
+        photos.writerImage,
+        defaultSiteContent.photos.writerImage,
       ),
     },
-    navigationLinks: normalizeArray(
-      record.navigationLinks,
-      fallbackSiteContent.navigationLinks,
-      (item, fallbackItem, index) =>
-        normalizeLinkItem(item, fallbackItem, "nav", index),
+    works: normalizeArray(record.works, defaultSiteContent.works, normalizeWorkItem),
+    honors: normalizeArray(record.honors, defaultSiteContent.honors, normalizeHonorItem),
+    news: normalizeArray(record.news, defaultSiteContent.news, normalizeNewsItem),
+    quotes: normalizeArray(record.quotes, defaultSiteContent.quotes, normalizeQuoteItem),
+    audioTracks: normalizeArray(
+      record.audioTracks,
+      defaultSiteContent.audioTracks,
+      normalizeAudioTrack,
     ),
-    hero: {
-      sectionKicker: stringValue(
-        hero.sectionKicker,
-        fallbackSiteContent.hero.sectionKicker,
-      ),
-      title: stringValue(hero.title, fallbackSiteContent.hero.title),
-      subtitle: stringValue(hero.subtitle, fallbackSiteContent.hero.subtitle),
-      image: imagePathValue(hero.image, fallbackSiteContent.hero.image),
-      primaryActionLabel: stringValue(
-        hero.primaryActionLabel,
-        fallbackSiteContent.hero.primaryActionLabel,
-      ),
-      primaryActionHref: stringValue(
-        hero.primaryActionHref,
-        fallbackSiteContent.hero.primaryActionHref,
-      ),
-      secondaryActionLabel: stringValue(
-        hero.secondaryActionLabel,
-        fallbackSiteContent.hero.secondaryActionLabel,
-      ),
-      secondaryActionHref: stringValue(
-        hero.secondaryActionHref,
-        fallbackSiteContent.hero.secondaryActionHref,
-      ),
-      audioPillMobileLabel: stringValue(
-        hero.audioPillMobileLabel,
-        fallbackSiteContent.hero.audioPillMobileLabel,
-      ),
-      audioPillDesktopLabel: stringValue(
-        hero.audioPillDesktopLabel,
-        fallbackSiteContent.hero.audioPillDesktopLabel,
-      ),
-      introPillLabel: stringValue(
-        hero.introPillLabel,
-        fallbackSiteContent.hero.introPillLabel,
-      ),
-      introCaption: stringValue(
-        hero.introCaption,
-        fallbackSiteContent.hero.introCaption,
-      ),
-      visualNoteTop: stringValue(
-        hero.visualNoteTop,
-        fallbackSiteContent.hero.visualNoteTop,
-      ),
-      visualNoteBottom: stringValue(
-        hero.visualNoteBottom,
-        fallbackSiteContent.hero.visualNoteBottom,
-      ),
-      mobileVisualNote: stringValue(
-        hero.mobileVisualNote,
-        fallbackSiteContent.hero.mobileVisualNote,
-      ),
-      scrollPrompt: stringValue(
-        hero.scrollPrompt,
-        fallbackSiteContent.hero.scrollPrompt,
-      ),
-      heroImageAlt: stringValue(
-        hero.heroImageAlt,
-        fallbackSiteContent.hero.heroImageAlt,
-      ),
-      mobileHeroImageAlt: stringValue(
-        hero.mobileHeroImageAlt,
-        fallbackSiteContent.hero.mobileHeroImageAlt,
-      ),
-    },
-    journey: {
-      eyebrow: stringValue(journey.eyebrow, fallbackSiteContent.journey.eyebrow),
-      title: stringValue(journey.title, fallbackSiteContent.journey.title),
-      description: stringValue(
-        journey.description,
-        fallbackSiteContent.journey.description,
-      ),
-      cardKicker: stringValue(
-        journey.cardKicker,
-        fallbackSiteContent.journey.cardKicker,
-      ),
-      entries: normalizeArray(
-        journey.entries,
-        fallbackSiteContent.journey.entries,
-        normalizeJourneyEntry,
-      ),
-    },
-    pulse: {
-      eyebrow: stringValue(pulse.eyebrow, fallbackSiteContent.pulse.eyebrow),
-      title: stringValue(pulse.title, fallbackSiteContent.pulse.title),
-      description: stringValue(
-        pulse.description,
-        fallbackSiteContent.pulse.description,
-      ),
-      image: imagePathValue(pulse.image, fallbackSiteContent.pulse.image),
-      note: stringValue(pulse.note, fallbackSiteContent.pulse.note),
-      badgeLabel: stringValue(
-        pulse.badgeLabel,
-        fallbackSiteContent.pulse.badgeLabel,
-      ),
-      aside: stringValue(pulse.aside, fallbackSiteContent.pulse.aside),
-      pulseCaption: stringValue(
-        pulse.pulseCaption,
-        fallbackSiteContent.pulse.pulseCaption,
-      ),
-      imageAlt: stringValue(pulse.imageAlt, fallbackSiteContent.pulse.imageAlt),
-      mobileImageAlt: stringValue(
-        pulse.mobileImageAlt,
-        fallbackSiteContent.pulse.mobileImageAlt,
-      ),
-    },
-    honors: {
-      eyebrow: stringValue(honors.eyebrow, fallbackSiteContent.honors.eyebrow),
-      title: stringValue(honors.title, fallbackSiteContent.honors.title),
-      description: stringValue(
-        honors.description,
-        fallbackSiteContent.honors.description,
-      ),
-      itemLabelPrefix: stringValue(
-        honors.itemLabelPrefix,
-        fallbackSiteContent.honors.itemLabelPrefix,
-      ),
-      items: normalizeArray(
-        honors.items,
-        fallbackSiteContent.honors.items,
-        normalizeHonorItem,
-      ),
-    },
-    news: {
-      eyebrow: stringValue(news.eyebrow, fallbackSiteContent.news.eyebrow),
-      title: stringValue(news.title, fallbackSiteContent.news.title),
-      description: stringValue(
-        news.description,
-        fallbackSiteContent.news.description,
-      ),
-      readMoreLabel: stringValue(
-        news.readMoreLabel,
-        fallbackSiteContent.news.readMoreLabel,
-      ),
-      items: normalizeArray(
-        news.items,
-        fallbackSiteContent.news.items,
-        normalizeNewsItem,
-      ),
-    },
-    quote: {
-      eyebrow: stringValue(quote.eyebrow, fallbackSiteContent.quote.eyebrow),
-      title: stringValue(quote.title, fallbackSiteContent.quote.title),
-      quote: stringValue(quote.quote, fallbackSiteContent.quote.quote),
-      shareLabel: stringValue(
-        quote.shareLabel,
-        fallbackSiteContent.quote.shareLabel,
-      ),
-      imageActionLabel: stringValue(
-        quote.imageActionLabel,
-        fallbackSiteContent.quote.imageActionLabel,
-      ),
-      cardLabel: stringValue(
-        quote.cardLabel,
-        fallbackSiteContent.quote.cardLabel,
-      ),
-      cardQuote: stringValue(
-        quote.cardQuote,
-        fallbackSiteContent.quote.cardQuote,
-      ),
-      cardCaption: stringValue(
-        quote.cardCaption,
-        fallbackSiteContent.quote.cardCaption,
-      ),
-    },
-    audio: {
-      eyebrow: stringValue(audio.eyebrow, fallbackSiteContent.audio.eyebrow),
-      title: stringValue(audio.title, fallbackSiteContent.audio.title),
-      description: stringValue(
-        audio.description,
-        fallbackSiteContent.audio.description,
-      ),
-      stageLabel: stringValue(
-        audio.stageLabel,
-        fallbackSiteContent.audio.stageLabel,
-      ),
-      ambientLabel: stringValue(
-        audio.ambientLabel,
-        fallbackSiteContent.audio.ambientLabel,
-      ),
-      trackTitle: stringValue(
-        audio.trackTitle,
-        fallbackSiteContent.audio.trackTitle,
-      ),
-      duration: stringValue(audio.duration, fallbackSiteContent.audio.duration),
-      totalSeconds: numberValue(
-        audio.totalSeconds,
-        fallbackSiteContent.audio.totalSeconds,
-      ),
-      trackDescription: stringValue(
-        audio.trackDescription,
-        fallbackSiteContent.audio.trackDescription,
-      ),
-      playLabel: stringValue(audio.playLabel, fallbackSiteContent.audio.playLabel),
-      pauseLabel: stringValue(
-        audio.pauseLabel,
-        fallbackSiteContent.audio.pauseLabel,
-      ),
-      nextLabel: stringValue(audio.nextLabel, fallbackSiteContent.audio.nextLabel),
-      listeningNoteTitle: stringValue(
-        audio.listeningNoteTitle,
-        fallbackSiteContent.audio.listeningNoteTitle,
-      ),
-      listeningNoteBody: stringValue(
-        audio.listeningNoteBody,
-        fallbackSiteContent.audio.listeningNoteBody,
-      ),
-      afterTrackTitle: stringValue(
-        audio.afterTrackTitle,
-        fallbackSiteContent.audio.afterTrackTitle,
-      ),
-      afterTrackBody: stringValue(
-        audio.afterTrackBody,
-        fallbackSiteContent.audio.afterTrackBody,
-      ),
-      playAriaLabel: stringValue(
-        audio.playAriaLabel,
-        fallbackSiteContent.audio.playAriaLabel,
-      ),
-      pauseAriaLabel: stringValue(
-        audio.pauseAriaLabel,
-        fallbackSiteContent.audio.pauseAriaLabel,
-      ),
-    },
-    footer: {
-      headlineFirstLine: stringValue(
-        footer.headlineFirstLine,
-        fallbackSiteContent.footer.headlineFirstLine,
-      ),
-      headlineSecondLine: stringValue(
-        footer.headlineSecondLine,
-        fallbackSiteContent.footer.headlineSecondLine,
-      ),
-      description: stringValue(
-        footer.description,
-        fallbackSiteContent.footer.description,
-      ),
-      quickLinksTitle: stringValue(
-        footer.quickLinksTitle,
-        fallbackSiteContent.footer.quickLinksTitle,
-      ),
-      newsletterTitle: stringValue(
-        footer.newsletterTitle,
-        fallbackSiteContent.footer.newsletterTitle,
-      ),
-      newsletterDescription: stringValue(
-        footer.newsletterDescription,
-        fallbackSiteContent.footer.newsletterDescription,
-      ),
-      emailPlaceholder: stringValue(
-        footer.emailPlaceholder,
-        fallbackSiteContent.footer.emailPlaceholder,
-      ),
-      newsletterButtonLabel: stringValue(
-        footer.newsletterButtonLabel,
-        fallbackSiteContent.footer.newsletterButtonLabel,
-      ),
-      quickLinks: normalizeArray(
-        footer.quickLinks,
-        fallbackSiteContent.footer.quickLinks,
-        (item, fallbackItem, index) =>
-          normalizeLinkItem(item, fallbackItem, "footer-link", index),
-      ),
-      socialLinks: normalizeArray(
-        footer.socialLinks,
-        fallbackSiteContent.footer.socialLinks,
-        normalizeSocialLink,
-      ),
-      copyright: stringValue(
-        footer.copyright,
-        fallbackSiteContent.footer.copyright,
-      ),
-    },
   };
 }

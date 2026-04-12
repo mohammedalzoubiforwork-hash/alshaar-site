@@ -1,36 +1,32 @@
 "use client";
 
-import { type ChangeEvent, type ReactNode, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { type ChangeEvent, type ReactNode, useState } from "react";
 import {
   AlertCircle,
   ArrowUpRight,
-  Award,
-  BookOpen,
+  BookCopy,
   CheckCircle2,
-  FileText,
-  Globe,
-  LayoutDashboard,
-  Link2,
+  FileAudio2,
+  Image as ImageIcon,
   LoaderCircle,
   Newspaper,
-  PanelBottom,
   Plus,
   Quote,
   Save,
-  Sparkles,
   Trash2,
-  Volume2,
+  Trophy,
 } from "lucide-react";
+import { workTypeLabels } from "@/lib/site-config";
 import type {
-  JourneyEntry,
-  JourneyIconName,
-  LinkItem,
-  NewsItem,
-  SiteContent,
-  SocialIconName,
-  SocialLink,
+  AudioTrack,
   HonorItem,
+  NewsItem,
+  QuoteItem,
+  SiteContent,
+  WorkItem,
+  WorkType,
 } from "@/lib/site-content-types";
 
 type AdminDashboardProps = {
@@ -38,128 +34,76 @@ type AdminDashboardProps = {
   contentPath: string;
 };
 
-type SectionId =
-  | "site"
-  | "hero"
-  | "journey"
-  | "pulse"
-  | "honors"
-  | "news"
-  | "quote"
-  | "audio"
-  | "footer";
-
+type SectionId = "photos" | "works" | "honors" | "news" | "quotes" | "audio";
 type StatusTone = "idle" | "success" | "error";
-
 type MutateContent = (mutator: (draft: SiteContent) => void) => void;
 
 const sectionItems: Array<{
   id: SectionId;
   label: string;
   description: string;
-  icon: typeof LayoutDashboard;
+  icon: typeof ImageIcon;
 }> = [
   {
-    id: "site",
-    label: "الهوية",
-    description: "اسم الموقع والميتا وروابط الهيدر والصفحات",
-    icon: Globe,
+    id: "photos",
+    label: "الصور",
+    description: "صورة الواجهة وصورة الكاتب وصور العناصر",
+    icon: ImageIcon,
   },
   {
-    id: "hero",
-    label: "الهيرو",
-    description: "الواجهة الرئيسية في صفحة /",
-    icon: Sparkles,
-  },
-  {
-    id: "journey",
-    label: "المسارات",
-    description: "محتوى صفحة /journey",
-    icon: BookOpen,
-  },
-  {
-    id: "pulse",
-    label: "نبض الكاتب",
-    description: "محتوى صفحة /writer",
-    icon: FileText,
+    id: "works",
+    label: "الأعمال",
+    description: "إضافة وحذف الكتب والأعمال المتنوعة",
+    icon: BookCopy,
   },
   {
     id: "honors",
     label: "التكريمات",
-    description: "محتوى صفحة /honors",
-    icon: Award,
+    description: "جوائز ومحطات مع صورة ووصف",
+    icon: Trophy,
   },
   {
     id: "news",
     label: "الأخبار",
-    description: "محتوى صفحة /news",
+    description: "أخبار وبطاقات تحديثات مع صورة",
     icon: Newspaper,
   },
   {
-    id: "quote",
-    label: "الاقتباس",
-    description: "محتوى صفحة /quote",
+    id: "quotes",
+    label: "الاقتباسات",
+    description: "إضافة أو حذف اقتباسات قصيرة",
     icon: Quote,
   },
   {
     id: "audio",
-    label: "الصوت",
-    description: "محتوى صفحة /audio",
-    icon: Volume2,
+    label: "الصوتيات",
+    description: "رفع ملفات صوتية وإدارة المكتبة",
+    icon: FileAudio2,
   },
-  {
-    id: "footer",
-    label: "الفوتر",
-    description: "الروابط السريعة والسوشيال",
-    icon: PanelBottom,
-  },
-];
-
-const journeyIconOptions: Array<{ value: JourneyIconName; label: string }> = [
-  { value: "feather", label: "ريشة" },
-  { value: "book-open", label: "كتاب" },
-  { value: "drama", label: "مسرح" },
-  { value: "user-round", label: "هوية" },
-];
-
-const socialIconOptions: Array<{ value: SocialIconName; label: string }> = [
-  { value: "instagram", label: "Instagram" },
-  { value: "youtube", label: "YouTube" },
-  { value: "send", label: "Telegram" },
-  { value: "mail", label: "Email" },
 ];
 
 function createId(prefix: string) {
-  return `${prefix}-${Math.random().toString(36).slice(2, 8)}`;
+  return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-function createLinkItem(prefix: string): LinkItem {
+function createWorkItem(): WorkItem {
   return {
-    id: createId(prefix),
-    label: "",
-    href: "#",
-  };
-}
-
-function createJourneyEntry(): JourneyEntry {
-  return {
-    id: createId("journey"),
-    image: "",
-    icon: "feather",
+    id: createId("work"),
+    type: "books",
     title: "",
     description: "",
-    ctaLabel: "ادخل المسار",
-    ctaHref: "#",
+    image: "",
+    href: "/journey",
   };
 }
 
 function createHonorItem(): HonorItem {
   return {
     id: createId("honor"),
-    image: "",
     year: "",
     title: "",
     story: "",
+    image: "",
   };
 }
 
@@ -169,18 +113,48 @@ function createNewsItem(): NewsItem {
     date: "",
     title: "",
     description: "",
-    href: "#",
-    image: "/art/news-clouds.svg",
+    href: "/news",
+    image: "",
   };
 }
 
-function createSocialLink(): SocialLink {
+function createQuoteItem(): QuoteItem {
   return {
-    id: createId("social"),
-    label: "",
-    href: "#",
-    icon: "instagram",
+    id: createId("quote"),
+    text: "",
+    caption: "",
   };
+}
+
+function createAudioTrack(): AudioTrack {
+  return {
+    id: createId("audio"),
+    title: "",
+    description: "",
+    file: "",
+    durationLabel: "",
+  };
+}
+
+async function uploadFile(file: File, endpoint: string) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    body: formData,
+  });
+
+  const payload = (await response.json()) as {
+    path?: string;
+    message?: string;
+  };
+
+  if (!response.ok || !payload.path) {
+    throw new Error(payload.message ?? "تعذر رفع الملف.");
+  }
+
+  return payload;
 }
 
 export function AdminDashboard({
@@ -188,7 +162,7 @@ export function AdminDashboard({
   contentPath,
 }: AdminDashboardProps) {
   const [content, setContent] = useState(initialContent);
-  const [activeSection, setActiveSection] = useState<SectionId>("site");
+  const [activeSection, setActiveSection] = useState<SectionId>("photos");
   const [statusTone, setStatusTone] = useState<StatusTone>("idle");
   const [statusMessage, setStatusMessage] = useState(
     "التعديلات غير محفوظة حتى تضغط زر الحفظ.",
@@ -197,13 +171,13 @@ export function AdminDashboard({
   const [isDirty, setIsDirty] = useState(false);
 
   const stats = [
-    { label: "روابط التنقل", value: content.navigationLinks.length },
-    { label: "مسارات الأعمال", value: content.journey.entries.length },
-    { label: "التكريمات", value: content.honors.items.length },
-    { label: "الأخبار", value: content.news.items.length },
+    { label: "الأعمال", value: content.works.length },
+    { label: "التكريمات", value: content.honors.length },
+    { label: "الأخبار", value: content.news.length },
+    { label: "الصوتيات", value: content.audioTracks.length },
   ];
 
-  function mutateContent(mutator: (draft: SiteContent) => void) {
+  const mutateContent: MutateContent = (mutator) => {
     setContent((current) => {
       const next = structuredClone(current);
       mutator(next);
@@ -212,7 +186,7 @@ export function AdminDashboard({
     setIsDirty(true);
     setStatusTone("idle");
     setStatusMessage("هناك تغييرات جديدة لم تُحفظ بعد.");
-  }
+  };
 
   async function handleSave() {
     setIsSaving(true);
@@ -240,7 +214,7 @@ export function AdminDashboard({
       setContent(payload.content);
       setIsDirty(false);
       setStatusTone("success");
-      setStatusMessage("تم حفظ التعديلات بنجاح، والموقع الرئيسي يقرأ منها مباشرة.");
+      setStatusMessage("تم حفظ التعديلات بنجاح.");
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "حدث خطأ غير متوقع أثناء الحفظ.";
@@ -253,30 +227,18 @@ export function AdminDashboard({
 
   function renderActiveSection() {
     switch (activeSection) {
-      case "site":
-        return <SiteSectionEditor content={content} mutateContent={mutateContent} />;
-      case "hero":
-        return <HeroSectionEditor content={content} mutateContent={mutateContent} />;
-      case "journey":
-        return (
-          <JourneySectionEditor content={content} mutateContent={mutateContent} />
-        );
-      case "pulse":
-        return <PulseSectionEditor content={content} mutateContent={mutateContent} />;
+      case "photos":
+        return <PhotosSectionEditor content={content} mutateContent={mutateContent} />;
+      case "works":
+        return <WorksSectionEditor content={content} mutateContent={mutateContent} />;
       case "honors":
-        return (
-          <HonorsSectionEditor content={content} mutateContent={mutateContent} />
-        );
+        return <HonorsSectionEditor content={content} mutateContent={mutateContent} />;
       case "news":
         return <NewsSectionEditor content={content} mutateContent={mutateContent} />;
-      case "quote":
-        return <QuoteSectionEditor content={content} mutateContent={mutateContent} />;
+      case "quotes":
+        return <QuotesSectionEditor content={content} mutateContent={mutateContent} />;
       case "audio":
         return <AudioSectionEditor content={content} mutateContent={mutateContent} />;
-      case "footer":
-        return (
-          <FooterSectionEditor content={content} mutateContent={mutateContent} />
-        );
     }
   }
 
@@ -296,15 +258,14 @@ export function AdminDashboard({
           <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
             <div className="max-w-3xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-[#d5bb90]/20 bg-[#d5bb90]/8 px-4 py-2 text-xs tracking-[0.2em] text-[#e2ccaa] uppercase">
-                <LayoutDashboard className="size-4" />
-                لوحة الإدارة
+                لوحة الأدمن
               </span>
               <h1 className="mt-5 font-display text-4xl text-[#fbf4e8] md:text-6xl">
-                إدارة موقع متعدد الصفحات من مكان واحد
+                إدارة خفيفة للعناصر فقط
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-8 text-[#c7c0b4] md:text-lg">
-                عدّل نصوص الصفحة الرئيسية والصفحات الداخلية وروابط التنقل، ثم
-                احفظها ليقرأها الموقع العام مباشرة من ملف المحتوى.
+                أضف أو احذف الصور والأعمال والتكريمات والأخبار والاقتباسات والصوتيات،
+                ثم احفظ التغييرات ليقرأها الموقع مباشرة.
               </p>
             </div>
 
@@ -349,17 +310,14 @@ export function AdminDashboard({
                 ) : statusTone === "error" ? (
                   <AlertCircle className="size-4" />
                 ) : (
-                  <Link2 className="size-4" />
+                  <Save className="size-4" />
                 )}
                 {statusMessage}
               </span>
             </div>
 
             <div className="rounded-[24px] border border-white/10 bg-[#0f141a] px-4 py-4 text-sm text-[#cabfad]">
-              <span className="inline-flex items-center gap-2">
-                <FileText className="size-4" />
-                {contentPath}
-              </span>
+              <span className="inline-flex items-center gap-2">{contentPath}</span>
             </div>
           </div>
         </section>
@@ -371,14 +329,12 @@ export function AdminDashboard({
                 <div>
                   <p className="text-sm text-[#e7dbc4]">أقسام التحرير</p>
                   <p className="mt-1 text-xs leading-6 text-[#a9a093]">
-                    تنقل سريع بين كل أجزاء الموقع.
+                    ستة تبويبات فقط، دون حقول نصوص طويلة أو إعدادات زائدة.
                   </p>
                 </div>
                 <span
                   className={`rounded-full px-3 py-1 text-xs ${
-                    isDirty
-                      ? "bg-amber-400/12 text-amber-100"
-                      : "bg-emerald-400/12 text-emerald-100"
+                    isDirty ? "bg-amber-400/12 text-amber-100" : "bg-emerald-400/12 text-emerald-100"
                   }`}
                 >
                   {isDirty ? "غير محفوظ" : "محفوظ"}
@@ -451,9 +407,7 @@ function SectionCard({
     <article className="rounded-[30px] border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_90px_rgba(0,0,0,0.24)] backdrop-blur-xl md:p-6">
       <div className="mb-5">
         <h2 className="font-display text-3xl text-[#f8f1e6]">{title}</h2>
-        <p className="mt-2 max-w-3xl text-sm leading-7 text-[#ada496]">
-          {description}
-        </p>
+        <p className="mt-2 max-w-3xl text-sm leading-7 text-[#ada496]">{description}</p>
       </div>
       {children}
     </article>
@@ -498,7 +452,7 @@ function AddItemButton({
     <button
       type="button"
       onClick={onClick}
-      className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 text-sm text-[#f4ecde] transition hover:border-white/16 hover:bg-white/[0.06]"
+      className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 text-sm text-[#f7efe3] transition hover:border-white/20 hover:bg-white/[0.06]"
     >
       <Plus className="size-4" />
       {label}
@@ -506,253 +460,87 @@ function AddItemButton({
   );
 }
 
-function FieldShell({
+function FieldLabel({
   label,
-  description,
-  children,
+  hint,
 }: {
   label: string;
-  description?: string;
-  children: ReactNode;
+  hint?: string;
 }) {
   return (
-    <div className="block">
-      <span className="text-sm text-[#efe5d4]">{label}</span>
-      {description ? (
-        <span className="mt-1 block text-xs leading-6 text-[#9d9588]">
-          {description}
-        </span>
-      ) : null}
-      <div className="mt-2">{children}</div>
+    <div className="mb-2">
+      <label className="text-sm text-[#f7efe3]">{label}</label>
+      {hint ? <p className="mt-1 text-xs text-[#9f9688]">{hint}</p> : null}
     </div>
   );
 }
 
-function TextField({
+function TextInput({
   label,
   value,
   onChange,
   placeholder,
-  description,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
-  description?: string;
 }) {
   return (
-    <FieldShell label={label} description={description}>
+    <div>
+      <FieldLabel label={label} />
       <input
-        type="text"
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-[18px] border border-white/10 bg-[#0a1015] px-4 py-3 text-sm text-[#f6efe2] outline-none transition focus:border-[#d2b27c]/40"
+        className="min-h-12 w-full rounded-[18px] border border-white/10 bg-black/10 px-4 text-sm text-[#f5ecdd] outline-none ring-0 placeholder:text-[#7f776b]"
       />
-    </FieldShell>
+    </div>
   );
 }
 
-function NumberField({
+function TextareaField({
   label,
   value,
   onChange,
-}: {
-  label: string;
-  value: number;
-  onChange: (value: number) => void;
-}) {
-  return (
-    <FieldShell label={label}>
-      <input
-        type="number"
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value || 0))}
-        className="w-full rounded-[18px] border border-white/10 bg-[#0a1015] px-4 py-3 text-sm text-[#f6efe2] outline-none transition focus:border-[#d2b27c]/40"
-      />
-    </FieldShell>
-  );
-}
-
-function TextAreaField({
-  label,
-  value,
-  onChange,
-  rows,
-  description,
+  rows = 4,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
-  rows: number;
-  description?: string;
+  rows?: number;
 }) {
   return (
-    <FieldShell label={label} description={description}>
+    <div>
+      <FieldLabel label={label} />
       <textarea
         value={value}
-        rows={rows}
         onChange={(event) => onChange(event.target.value)}
-        className="w-full rounded-[18px] border border-white/10 bg-[#0a1015] px-4 py-3 text-sm leading-7 text-[#f6efe2] outline-none transition focus:border-[#d2b27c]/40"
+        rows={rows}
+        className="w-full rounded-[18px] border border-white/10 bg-black/10 px-4 py-3 text-sm leading-7 text-[#f5ecdd] outline-none ring-0 placeholder:text-[#7f776b]"
       />
-    </FieldShell>
+    </div>
   );
 }
 
-function ImageField({
-  label,
-  value,
-  onChange,
-  description,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  description?: string;
-}) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadTone, setUploadTone] = useState<StatusTone>("idle");
-  const [uploadMessage, setUploadMessage] = useState<string | null>(null);
-
-  async function handleFileUpload(
-    event: ChangeEvent<HTMLInputElement>,
-  ) {
-    const file = event.target.files?.[0];
-
-    if (!file) {
-      return;
-    }
-
-    setIsUploading(true);
-    setUploadTone("idle");
-    setUploadMessage(`جار رفع ${file.name}...`);
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const response = await fetch("/api/upload-image", {
-        method: "POST",
-        body: formData,
-      });
-
-      const payload = (await response.json()) as {
-        path?: string;
-        message?: string;
-      };
-
-      if (!response.ok || !payload.path) {
-        throw new Error(payload.message ?? "تعذر رفع الصورة.");
-      }
-
-      onChange(payload.path);
-      setUploadTone("success");
-      setUploadMessage("تم رفع الصورة وتحديث المسار داخل لوحة الأدمن.");
-    } catch (error) {
-      setUploadTone("error");
-      setUploadMessage(
-        error instanceof Error ? error.message : "حدث خطأ غير متوقع أثناء رفع الصورة.",
-      );
-    } finally {
-      event.target.value = "";
-      setIsUploading(false);
-    }
-  }
-
-  return (
-    <FieldShell label={label} description={description}>
-      <div className="space-y-3">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-[24px] border border-white/10 bg-[#0a1015]">
-          {value ? (
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(\"${value}\")` }}
-            />
-          ) : null}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,16,21,0.18),rgba(10,16,21,0.88))]" />
-          <div className="relative flex h-full flex-col justify-end gap-2 p-4">
-            <p className="text-sm text-[#f6efe2]">
-              {value ? "معاينة الصورة الحالية" : "لا توجد صورة مضافة بعد"}
-            </p>
-            <p className="line-clamp-2 text-xs leading-6 text-[#b6ac9c]">
-              {value || "/uploads/example-image.jpg"}
-            </p>
-          </div>
-        </div>
-
-        <input
-          type="text"
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          placeholder="/uploads/example-image.jpg"
-          className="w-full rounded-[18px] border border-white/10 bg-[#0a1015] px-4 py-3 text-sm text-[#f6efe2] outline-none transition focus:border-[#d2b27c]/40"
-        />
-
-        <div className="flex flex-wrap gap-3">
-          <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 text-sm text-[#f4ecde] transition hover:border-white/16 hover:bg-white/[0.06]">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileUpload}
-              className="hidden"
-              disabled={isUploading}
-            />
-            {isUploading ? (
-              <LoaderCircle className="size-4 animate-spin" />
-            ) : (
-              <Plus className="size-4" />
-            )}
-            {isUploading ? "جار رفع الصورة..." : "رفع صورة جديدة"}
-          </label>
-
-          {value ? (
-            <a
-              href={value}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 bg-[#0f141a] px-4 text-sm text-[#d9ccba] transition hover:border-white/16 hover:bg-white/[0.05]"
-            >
-              فتح الصورة
-              <ArrowUpRight className="size-4" />
-            </a>
-          ) : null}
-        </div>
-
-        <p
-          className={`text-xs leading-6 ${
-            uploadTone === "success"
-              ? "text-emerald-200"
-              : uploadTone === "error"
-                ? "text-rose-200"
-                : "text-[#948a7c]"
-          }`}
-        >
-          {uploadMessage ??
-            "ارفع صورة مباشرة من جهازك أو ضع مسارًا داخليًا مثل /uploads/your-image.jpg"}
-        </p>
-      </div>
-    </FieldShell>
-  );
-}
-
-function SelectField<T extends string>({
+function SelectField({
   label,
   value,
   onChange,
   options,
 }: {
   label: string;
-  value: T;
-  onChange: (value: T) => void;
-  options: Array<{ value: T; label: string }>;
+  value: string;
+  onChange: (value: string) => void;
+  options: Array<{ value: string; label: string }>;
 }) {
   return (
-    <FieldShell label={label}>
+    <div>
+      <FieldLabel label={label} />
       <select
         value={value}
-        onChange={(event) => onChange(event.target.value as T)}
-        className="w-full rounded-[18px] border border-white/10 bg-[#0a1015] px-4 py-3 text-sm text-[#f6efe2] outline-none transition focus:border-[#d2b27c]/40"
+        onChange={(event) => onChange(event.target.value)}
+        className="min-h-12 w-full rounded-[18px] border border-white/10 bg-black/10 px-4 text-sm text-[#f5ecdd] outline-none ring-0"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -760,11 +548,191 @@ function SelectField<T extends string>({
           </option>
         ))}
       </select>
-    </FieldShell>
+    </div>
   );
 }
 
-function SiteSectionEditor({
+function ImageUploadField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  async function handleFileSelection(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setIsUploading(true);
+    setMessage("");
+
+    try {
+      const payload = await uploadFile(file, "/api/upload-image");
+      onChange(payload.path ?? "");
+      setMessage(payload.message ?? "تم رفع الصورة بنجاح.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "تعذر رفع الصورة.");
+    } finally {
+      setIsUploading(false);
+      event.target.value = "";
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      <TextInput
+        label={label}
+        value={value}
+        onChange={onChange}
+        placeholder="/uploads/image.jpg"
+      />
+
+      <div className="flex flex-wrap items-center gap-3">
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-[#f7efe3] transition hover:border-white/20 hover:bg-white/[0.06]">
+          {isUploading ? (
+            <LoaderCircle className="size-4 animate-spin" />
+          ) : (
+            <ImageIcon className="size-4" />
+          )}
+          {isUploading ? "جاري الرفع..." : "رفع صورة"}
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileSelection}
+          />
+        </label>
+
+        {value ? (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="inline-flex items-center gap-2 rounded-full border border-rose-400/20 bg-rose-400/8 px-4 py-2 text-sm text-rose-100"
+          >
+            <Trash2 className="size-4" />
+            حذف الصورة
+          </button>
+        ) : null}
+
+        {message ? <span className="text-xs text-[#bfb5a6]">{message}</span> : null}
+      </div>
+
+      <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#0a0d10]">
+        <div className="relative aspect-[16/10]">
+          {value ? (
+            <Image
+              src={value}
+              alt={label}
+              fill
+              sizes="(max-width: 1024px) 100vw, 40vw"
+              className="object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_30%_20%,rgba(221,186,134,0.18),transparent_24%),linear-gradient(180deg,#241a15_0%,#120d0a_100%)]">
+              <span className="text-sm text-[#bba68a]">لا توجد صورة مضافة</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AudioUploadField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  async function handleFileSelection(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setIsUploading(true);
+    setMessage("");
+
+    try {
+      const payload = await uploadFile(file, "/api/upload-audio");
+      onChange(payload.path ?? "");
+      setMessage(payload.message ?? "تم رفع الملف بنجاح.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "تعذر رفع الملف.");
+    } finally {
+      setIsUploading(false);
+      event.target.value = "";
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      <TextInput
+        label={label}
+        value={value}
+        onChange={onChange}
+        placeholder="/uploads/audio.mp3"
+      />
+
+      <div className="flex flex-wrap items-center gap-3">
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-[#f7efe3] transition hover:border-white/20 hover:bg-white/[0.06]">
+          {isUploading ? (
+            <LoaderCircle className="size-4 animate-spin" />
+          ) : (
+            <FileAudio2 className="size-4" />
+          )}
+          {isUploading ? "جاري الرفع..." : "رفع ملف صوتي"}
+          <input
+            type="file"
+            accept="audio/*"
+            className="hidden"
+            onChange={handleFileSelection}
+          />
+        </label>
+
+        {value ? (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="inline-flex items-center gap-2 rounded-full border border-rose-400/20 bg-rose-400/8 px-4 py-2 text-sm text-rose-100"
+          >
+            <Trash2 className="size-4" />
+            حذف الملف
+          </button>
+        ) : null}
+
+        {message ? <span className="text-xs text-[#bfb5a6]">{message}</span> : null}
+      </div>
+
+      <div className="rounded-[24px] border border-white/10 bg-[#0a0d10] p-4">
+        {value ? (
+          <audio controls preload="none" className="w-full" src={value}>
+            المتصفح الحالي لا يدعم تشغيل الصوتيات.
+          </audio>
+        ) : (
+          <p className="text-sm text-[#bba68a]">لا يوجد ملف صوتي مرفوع</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function PhotosSectionEditor({
   content,
   mutateContent,
 }: {
@@ -772,105 +740,35 @@ function SiteSectionEditor({
   mutateContent: MutateContent;
 }) {
   return (
-    <div className="space-y-5">
-      <SectionCard
-        title="هوية الموقع"
-        description="هذه القيم تُستخدم في الهيدر والعنوان والوصف العام للموقع."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <TextField
-            label="اسم الموقع"
-            value={content.site.brandName}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.site.brandName = value;
-              })
-            }
-          />
-          <TextField
-            label="السطر التعريفي"
-            value={content.site.tagline}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.site.tagline = value;
-              })
-            }
-          />
-          <TextField
-            label="عنوان الصفحة"
-            value={content.site.pageTitle}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.site.pageTitle = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="وصف الصفحة"
-            value={content.site.pageDescription}
-            rows={4}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.site.pageDescription = value;
-              })
-            }
-          />
-        </div>
-      </SectionCard>
-
-      <SectionCard
-        title="روابط التنقل"
-        description="تظهر هذه العناصر في شريط الهيدر أعلى الموقع."
-      >
-        <div className="space-y-4">
-          {content.navigationLinks.map((link, index) => (
-            <ArrayItemCard
-              key={link.id}
-              title={`رابط ${index + 1}`}
-              onRemove={() =>
-                mutateContent((draft) => {
-                  draft.navigationLinks.splice(index, 1);
-                })
-              }
-            >
-              <div className="grid gap-4 md:grid-cols-2">
-                <TextField
-                  label="النص"
-                  value={link.label}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.navigationLinks[index].label = value;
-                    })
-                  }
-                />
-                <TextField
-                  label="الرابط"
-                  value={link.href}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.navigationLinks[index].href = value;
-                    })
-                  }
-                />
-              </div>
-            </ArrayItemCard>
-          ))}
-        </div>
-
-        <AddItemButton
-          label="إضافة رابط جديد"
-          onClick={() =>
+    <SectionCard
+      title="الصور الثابتة"
+      description="هنا تدير صورة الواجهة وصورة الكاتب. أما صور الأعمال والتكريمات والأخبار فتدار من بطاقات العناصر نفسها."
+    >
+      <div className="grid gap-6 lg:grid-cols-2">
+        <ImageUploadField
+          label="صورة الواجهة"
+          value={content.photos.heroImage}
+          onChange={(value) =>
             mutateContent((draft) => {
-              draft.navigationLinks.push(createLinkItem("nav"));
+              draft.photos.heroImage = value;
             })
           }
         />
-      </SectionCard>
-    </div>
+        <ImageUploadField
+          label="صورة الكاتب"
+          value={content.photos.writerImage}
+          onChange={(value) =>
+            mutateContent((draft) => {
+              draft.photos.writerImage = value;
+            })
+          }
+        />
+      </div>
+    </SectionCard>
   );
 }
 
-function HeroSectionEditor({
+function WorksSectionEditor({
   content,
   mutateContent,
 }: {
@@ -878,458 +776,89 @@ function HeroSectionEditor({
   mutateContent: MutateContent;
 }) {
   return (
-    <div className="space-y-5">
-      <SectionCard
-        title="المحتوى الأساسي"
-        description="هذه المنطقة تضبط أول انطباع يظهر للزائر."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <TextField
-            label="الكلمة الصغيرة"
-            value={content.hero.sectionKicker}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.sectionKicker = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="العنوان الرئيسي"
-            value={content.hero.title}
-            rows={3}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.title = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="الوصف القصير"
-            value={content.hero.subtitle}
-            rows={3}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.subtitle = value;
-              })
-            }
-          />
-          <TextField
-            label="نص حبة الصوت"
-            value={content.hero.introPillLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.introPillLabel = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="وصف الهيرو"
-            value={content.hero.introCaption}
-            rows={4}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.introCaption = value;
-              })
-            }
-          />
-          <TextField
-            label="نص زر التمرير"
-            value={content.hero.scrollPrompt}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.scrollPrompt = value;
-              })
-            }
-          />
-        </div>
-      </SectionCard>
+    <SectionCard
+      title="الأعمال"
+      description="أضف الكتب والأعمال المتنوعة أو احذفها. العنصر الجديد يضاف في الأعلى."
+    >
+      <div className="space-y-4">
+        <AddItemButton
+          label="إضافة عمل"
+          onClick={() =>
+            mutateContent((draft) => {
+              draft.works.unshift(createWorkItem());
+            })
+          }
+        />
 
-      <SectionCard
-        title="الأزرار والملاحظات"
-        description="يمكنك ضبط الروابط الداخلية والملاحظات فوق الصورة."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <TextField
-            label="نص الزر الأساسي"
-            value={content.hero.primaryActionLabel}
-            onChange={(value) =>
+        {content.works.map((item, index) => (
+          <ArrayItemCard
+            key={item.id}
+            title={item.title || `عمل ${content.works.length - index}`}
+            onRemove={() =>
               mutateContent((draft) => {
-                draft.hero.primaryActionLabel = value;
+                draft.works.splice(index, 1);
               })
             }
-          />
-          <TextField
-            label="رابط الزر الأساسي"
-            value={content.hero.primaryActionHref}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.primaryActionHref = value;
-              })
-            }
-          />
-          <TextField
-            label="نص الزر الثانوي"
-            value={content.hero.secondaryActionLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.secondaryActionLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="رابط الزر الثانوي"
-            value={content.hero.secondaryActionHref}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.secondaryActionHref = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="الملاحظة العلوية"
-            value={content.hero.visualNoteTop}
-            rows={3}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.visualNoteTop = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="الملاحظة السفلية"
-            value={content.hero.visualNoteBottom}
-            rows={3}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.visualNoteBottom = value;
-              })
-            }
-          />
-          <TextField
-            label="نص الصوت على الجوال"
-            value={content.hero.audioPillMobileLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.audioPillMobileLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="نص الصوت على الديسكتوب"
-            value={content.hero.audioPillDesktopLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.audioPillDesktopLabel = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="ملاحظة الصورة على الجوال"
-            value={content.hero.mobileVisualNote}
-            rows={3}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.mobileVisualNote = value;
-              })
-            }
-          />
-          <div className="md:col-span-2">
-            <ImageField
-              label="صورة الهيرو"
-              value={content.hero.image}
-              description="هذه الصورة تظهر في الواجهة الرئيسية على سطح المكتب والجوال."
-              onChange={(value) =>
-                mutateContent((draft) => {
-                  draft.hero.image = value;
-                })
-              }
-            />
-          </div>
-          <TextField
-            label="بديل صورة الهيرو"
-            value={content.hero.heroImageAlt}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.heroImageAlt = value;
-              })
-            }
-          />
-          <TextField
-            label="بديل صورة الهيرو للجوال"
-            value={content.hero.mobileHeroImageAlt}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.hero.mobileHeroImageAlt = value;
-              })
-            }
-          />
-        </div>
-      </SectionCard>
-    </div>
-  );
-}
-
-function JourneySectionEditor({
-  content,
-  mutateContent,
-}: {
-  content: SiteContent;
-  mutateContent: MutateContent;
-}) {
-  return (
-    <div className="space-y-5">
-      <SectionCard
-        title="إعدادات قسم المسارات"
-        description="تتحكم بهذه النصوص في العنوان والوصف أعلى بطاقات الأعمال."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <TextField
-            label="العنوان الجانبي"
-            value={content.journey.eyebrow}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.journey.eyebrow = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="العنوان الرئيسي"
-            value={content.journey.title}
-            rows={3}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.journey.title = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="الوصف"
-            value={content.journey.description}
-            rows={4}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.journey.description = value;
-              })
-            }
-          />
-          <TextField
-            label="وسم البطاقة"
-            value={content.journey.cardKicker}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.journey.cardKicker = value;
-              })
-            }
-          />
-        </div>
-      </SectionCard>
-
-      <SectionCard
-        title="بطاقات المسارات"
-        description="أضف أو عدّل أي مسار. سيظهر الترتيب نفسه في الواجهة."
-      >
-        <div className="space-y-4">
-          {content.journey.entries.map((entry, index) => (
-            <ArrayItemCard
-              key={entry.id}
-              title={`مسار ${index + 1}`}
-              onRemove={() =>
-                mutateContent((draft) => {
-                  draft.journey.entries.splice(index, 1);
-                })
-              }
-            >
-              <div className="grid gap-4 md:grid-cols-2">
-                <TextField
-                  label="العنوان"
-                  value={entry.title}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.journey.entries[index].title = value;
-                    })
-                  }
-                />
-                <SelectField
-                  label="الأيقونة"
-                  value={entry.icon}
-                  options={journeyIconOptions}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.journey.entries[index].icon =
-                        value as JourneyIconName;
-                    })
-                  }
-                />
-                <TextAreaField
+          >
+            <div className="grid gap-4 md:grid-cols-2">
+              <TextInput
+                label="العنوان"
+                value={item.title}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.works[index].title = value;
+                  })
+                }
+              />
+              <SelectField
+                label="النوع"
+                value={item.type}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.works[index].type = value as WorkType;
+                  })
+                }
+                options={Object.entries(workTypeLabels).map(([value, label]) => ({
+                  value,
+                  label,
+                }))}
+              />
+              <div className="md:col-span-2">
+                <TextareaField
                   label="الوصف"
-                  value={entry.description}
-                  rows={4}
+                  value={item.description}
                   onChange={(value) =>
                     mutateContent((draft) => {
-                      draft.journey.entries[index].description = value;
-                    })
-                  }
-                />
-                <div className="md:col-span-2">
-                  <ImageField
-                    label="صورة المسار"
-                    value={entry.image}
-                    description="ارفع صورة للكتاب أو الديوان أو المسار الأدبي نفسه."
-                    onChange={(value) =>
-                      mutateContent((draft) => {
-                        draft.journey.entries[index].image = value;
-                      })
-                    }
-                  />
-                </div>
-                <TextField
-                  label="نص زر البطاقة"
-                  value={entry.ctaLabel}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.journey.entries[index].ctaLabel = value;
-                    })
-                  }
-                />
-                <TextField
-                  label="رابط البطاقة"
-                  value={entry.ctaHref}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.journey.entries[index].ctaHref = value;
+                      draft.works[index].description = value;
                     })
                   }
                 />
               </div>
-            </ArrayItemCard>
-          ))}
-        </div>
-
-        <AddItemButton
-          label="إضافة مسار"
-          onClick={() =>
-            mutateContent((draft) => {
-              draft.journey.entries.push(createJourneyEntry());
-            })
-          }
-        />
-      </SectionCard>
-    </div>
-  );
-}
-
-function PulseSectionEditor({
-  content,
-  mutateContent,
-}: {
-  content: SiteContent;
-  mutateContent: MutateContent;
-}) {
-  return (
-    <div className="space-y-5">
-      <SectionCard
-        title="قسم نبض الكاتب"
-        description="هذا القسم يقدم الهوية الشعورية للكاتب داخل الموقع."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <TextField
-            label="العنوان الجانبي"
-            value={content.pulse.eyebrow}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.pulse.eyebrow = value;
-              })
-            }
-          />
-          <TextField
-            label="العنوان"
-            value={content.pulse.title}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.pulse.title = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="النص الرئيسي"
-            value={content.pulse.description}
-            rows={5}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.pulse.description = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="النص الثانوي"
-            value={content.pulse.note}
-            rows={4}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.pulse.note = value;
-              })
-            }
-          />
-          <TextField
-            label="اسم الشارة"
-            value={content.pulse.badgeLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.pulse.badgeLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="السطر الجانبي"
-            value={content.pulse.aside}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.pulse.aside = value;
-              })
-            }
-          />
-          <TextField
-            label="سطر النبض السفلي"
-            value={content.pulse.pulseCaption}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.pulse.pulseCaption = value;
-              })
-            }
-          />
-          <div className="md:col-span-2">
-            <ImageField
-              label="صورة الشاعر"
-              value={content.pulse.image}
-              description="هذه الصورة تظهر في صفحة نبض الكاتب وفي الجزء البصري الخاص بالشاعر."
-              onChange={(value) =>
-                mutateContent((draft) => {
-                  draft.pulse.image = value;
-                })
-              }
-            />
-          </div>
-          <TextField
-            label="بديل الصورة"
-            value={content.pulse.imageAlt}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.pulse.imageAlt = value;
-              })
-            }
-          />
-          <TextField
-            label="بديل الصورة للجوال"
-            value={content.pulse.mobileImageAlt}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.pulse.mobileImageAlt = value;
-              })
-            }
-          />
-        </div>
-      </SectionCard>
-    </div>
+              <TextInput
+                label="الرابط"
+                value={item.href}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.works[index].href = value;
+                  })
+                }
+              />
+              <div className="md:col-span-2">
+                <ImageUploadField
+                  label="صورة العمل"
+                  value={item.image}
+                  onChange={(value) =>
+                    mutateContent((draft) => {
+                      draft.works[index].image = value;
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </ArrayItemCard>
+        ))}
+      </div>
+    </SectionCard>
   );
 }
 
@@ -1341,124 +870,76 @@ function HonorsSectionEditor({
   mutateContent: MutateContent;
 }) {
   return (
-    <div className="space-y-5">
-      <SectionCard
-        title="مقدمة التكريمات"
-        description="تحكم في عنوان القسم ووصفه قبل الخط الزمني."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <TextField
-            label="العنوان الجانبي"
-            value={content.honors.eyebrow}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.honors.eyebrow = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="العنوان الرئيسي"
-            value={content.honors.title}
-            rows={3}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.honors.title = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="الوصف"
-            value={content.honors.description}
-            rows={4}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.honors.description = value;
-              })
-            }
-          />
-          <TextField
-            label="بادئة العنصر"
-            value={content.honors.itemLabelPrefix}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.honors.itemLabelPrefix = value;
-              })
-            }
-          />
-        </div>
-      </SectionCard>
-
-      <SectionCard
-        title="عناصر الخط الزمني"
-        description="كل عنصر يمثل سنة أو محطة تكريم مستقلة."
-      >
-        <div className="space-y-4">
-          {content.honors.items.map((item, index) => (
-            <ArrayItemCard
-              key={item.id}
-              title={`تكريم ${index + 1}`}
-              onRemove={() =>
-                mutateContent((draft) => {
-                  draft.honors.items.splice(index, 1);
-                })
-              }
-            >
-              <div className="grid gap-4 md:grid-cols-2">
-                <TextField
-                  label="السنة"
-                  value={item.year}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.honors.items[index].year = value;
-                    })
-                  }
-                />
-                <TextField
-                  label="العنوان"
-                  value={item.title}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.honors.items[index].title = value;
-                    })
-                  }
-                />
-                <TextAreaField
-                  label="القصة"
-                  value={item.story}
-                  rows={4}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.honors.items[index].story = value;
-                    })
-                  }
-                />
-                <div className="md:col-span-2">
-                  <ImageField
-                    label="صورة التكريم"
-                    value={item.image}
-                    description="يمكنك رفع صورة للشهادة أو الدرع أو لحظة التكريم."
-                    onChange={(value) =>
-                      mutateContent((draft) => {
-                        draft.honors.items[index].image = value;
-                      })
-                    }
-                  />
-                </div>
-              </div>
-            </ArrayItemCard>
-          ))}
-        </div>
-
+    <SectionCard
+      title="التكريمات"
+      description="كل تكريم يحتوي على سنة وعنوان ووصف وصورة اختيارية."
+    >
+      <div className="space-y-4">
         <AddItemButton
           label="إضافة تكريم"
           onClick={() =>
             mutateContent((draft) => {
-              draft.honors.items.push(createHonorItem());
+              draft.honors.unshift(createHonorItem());
             })
           }
         />
-      </SectionCard>
-    </div>
+
+        {content.honors.map((item, index) => (
+          <ArrayItemCard
+            key={item.id}
+            title={item.title || `تكريم ${content.honors.length - index}`}
+            onRemove={() =>
+              mutateContent((draft) => {
+                draft.honors.splice(index, 1);
+              })
+            }
+          >
+            <div className="grid gap-4 md:grid-cols-2">
+              <TextInput
+                label="السنة"
+                value={item.year}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.honors[index].year = value;
+                  })
+                }
+              />
+              <TextInput
+                label="العنوان"
+                value={item.title}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.honors[index].title = value;
+                  })
+                }
+              />
+              <div className="md:col-span-2">
+                <TextareaField
+                  label="الوصف"
+                  value={item.story}
+                  onChange={(value) =>
+                    mutateContent((draft) => {
+                      draft.honors[index].story = value;
+                    })
+                  }
+                />
+              </div>
+              <div className="md:col-span-2">
+                <ImageUploadField
+                  label="صورة التكريم"
+                  value={item.image}
+                  onChange={(value) =>
+                    mutateContent((draft) => {
+                      draft.honors[index].image = value;
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </ArrayItemCard>
+        ))}
+      </div>
+    </SectionCard>
   );
 }
 
@@ -1470,145 +951,89 @@ function NewsSectionEditor({
   mutateContent: MutateContent;
 }) {
   return (
-    <div className="space-y-5">
-      <SectionCard
-        title="مقدمة الأخبار"
-        description="الوصف هنا يظهر أعلى بطاقات الأخبار في الواجهة العامة."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <TextField
-            label="العنوان الجانبي"
-            value={content.news.eyebrow}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.news.eyebrow = value;
-              })
-            }
-          />
-          <TextField
-            label="العنوان الرئيسي"
-            value={content.news.title}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.news.title = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="الوصف"
-            value={content.news.description}
-            rows={4}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.news.description = value;
-              })
-            }
-          />
-          <TextField
-            label="نص اقرأ المزيد"
-            value={content.news.readMoreLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.news.readMoreLabel = value;
-              })
-            }
-          />
-        </div>
-      </SectionCard>
-
-      <SectionCard
-        title="بطاقات الأخبار"
-        description="أضف مسار الصورة من داخل `public` مثل `/art/news-clouds.svg`."
-      >
-        <div className="space-y-4">
-          {content.news.items.map((item, index) => (
-            <ArrayItemCard
-              key={item.id}
-              title={`خبر ${index + 1}`}
-              onRemove={() =>
-                mutateContent((draft) => {
-                  draft.news.items.splice(index, 1);
-                })
-              }
-            >
-              <div className="grid gap-4 md:grid-cols-2">
-                <TextField
-                  label="التاريخ"
-                  value={item.date}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.news.items[index].date = value;
-                    })
-                  }
-                />
-                <TextField
-                  label="العنوان"
-                  value={item.title}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.news.items[index].title = value;
-                    })
-                  }
-                />
-                <TextAreaField
-                  label="الوصف"
-                  value={item.description}
-                  rows={4}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.news.items[index].description = value;
-                    })
-                  }
-                />
-                <TextField
-                  label="الرابط"
-                  value={item.href}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.news.items[index].href = value;
-                    })
-                  }
-                />
-                <TextField
-                  label="الصورة"
-                  value={item.image}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.news.items[index].image = value;
-                    })
-                  }
-                />
-                <div className="md:col-span-2">
-                  <ImageField
-                    label="رفع صورة الخبر"
-                    value={item.image}
-                    description="ارفع صورة الخبر مباشرة من جهازك أو عدّل المسار يدويًا."
-                    onChange={(value) =>
-                      mutateContent((draft) => {
-                        draft.news.items[index].image = value;
-                      })
-                    }
-                  />
-                </div>
-              </div>
-            </ArrayItemCard>
-          ))}
-        </div>
-
+    <SectionCard
+      title="الأخبار"
+      description="أضف خبرًا بعنوان وتاريخ ووصف وصورة ورابط."
+    >
+      <div className="space-y-4">
         <AddItemButton
           label="إضافة خبر"
           onClick={() =>
             mutateContent((draft) => {
-              draft.news.items.push(createNewsItem());
+              draft.news.unshift(createNewsItem());
             })
           }
         />
-      </SectionCard>
-    </div>
+
+        {content.news.map((item, index) => (
+          <ArrayItemCard
+            key={item.id}
+            title={item.title || `خبر ${content.news.length - index}`}
+            onRemove={() =>
+              mutateContent((draft) => {
+                draft.news.splice(index, 1);
+              })
+            }
+          >
+            <div className="grid gap-4 md:grid-cols-2">
+              <TextInput
+                label="التاريخ"
+                value={item.date}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.news[index].date = value;
+                  })
+                }
+              />
+              <TextInput
+                label="العنوان"
+                value={item.title}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.news[index].title = value;
+                  })
+                }
+              />
+              <div className="md:col-span-2">
+                <TextareaField
+                  label="الوصف"
+                  value={item.description}
+                  onChange={(value) =>
+                    mutateContent((draft) => {
+                      draft.news[index].description = value;
+                    })
+                  }
+                />
+              </div>
+              <TextInput
+                label="الرابط"
+                value={item.href}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.news[index].href = value;
+                  })
+                }
+              />
+              <div className="md:col-span-2">
+                <ImageUploadField
+                  label="صورة الخبر"
+                  value={item.image}
+                  onChange={(value) =>
+                    mutateContent((draft) => {
+                      draft.news[index].image = value;
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </ArrayItemCard>
+        ))}
+      </div>
+    </SectionCard>
   );
 }
 
-function QuoteSectionEditor({
+function QuotesSectionEditor({
   content,
   mutateContent,
 }: {
@@ -1616,90 +1041,56 @@ function QuoteSectionEditor({
   mutateContent: MutateContent;
 }) {
   return (
-    <div className="space-y-5">
-      <SectionCard
-        title="قسم الاقتباس"
-        description="يمكنك تغيير الاقتباس الكبير وبطاقة المشاركة الجاهزة."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <TextField
-            label="العنوان الجانبي"
-            value={content.quote.eyebrow}
-            onChange={(value) =>
+    <SectionCard
+      title="الاقتباسات"
+      description="اقتباسات قصيرة مع وصف مختصر اختياري يظهر داخل البطاقة."
+    >
+      <div className="space-y-4">
+        <AddItemButton
+          label="إضافة اقتباس"
+          onClick={() =>
+            mutateContent((draft) => {
+              draft.quotes.unshift(createQuoteItem());
+            })
+          }
+        />
+
+        {content.quotes.map((item, index) => (
+          <ArrayItemCard
+            key={item.id}
+            title={item.text || `اقتباس ${content.quotes.length - index}`}
+            onRemove={() =>
               mutateContent((draft) => {
-                draft.quote.eyebrow = value;
+                draft.quotes.splice(index, 1);
               })
             }
-          />
-          <TextField
-            label="العنوان الرئيسي"
-            value={content.quote.title}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.quote.title = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="الاقتباس"
-            value={content.quote.quote}
-            rows={4}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.quote.quote = value;
-              })
-            }
-          />
-          <TextField
-            label="زر المشاركة"
-            value={content.quote.shareLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.quote.shareLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="زر تحويله لصورة"
-            value={content.quote.imageActionLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.quote.imageActionLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="عنوان البطاقة"
-            value={content.quote.cardLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.quote.cardLabel = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="اقتباس البطاقة"
-            value={content.quote.cardQuote}
-            rows={4}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.quote.cardQuote = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="وصف البطاقة"
-            value={content.quote.cardCaption}
-            rows={3}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.quote.cardCaption = value;
-              })
-            }
-          />
-        </div>
-      </SectionCard>
-    </div>
+          >
+            <div className="grid gap-4">
+              <TextareaField
+                label="نص الاقتباس"
+                value={item.text}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.quotes[index].text = value;
+                  })
+                }
+                rows={5}
+              />
+              <TextareaField
+                label="وصف مختصر"
+                value={item.caption}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.quotes[index].caption = value;
+                  })
+                }
+                rows={3}
+              />
+            </div>
+          </ArrayItemCard>
+        ))}
+      </div>
+    </SectionCard>
   );
 }
 
@@ -1711,392 +1102,76 @@ function AudioSectionEditor({
   mutateContent: MutateContent;
 }) {
   return (
-    <div className="space-y-5">
-      <SectionCard
-        title="التجربة الصوتية"
-        description="كل القيم هنا تتحكم بواجهة المشغل والمحتوى النصي المصاحب له."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <TextField
-            label="العنوان الجانبي"
-            value={content.audio.eyebrow}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.eyebrow = value;
-              })
-            }
-          />
-          <TextField
-            label="العنوان"
-            value={content.audio.title}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.title = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="الوصف"
-            value={content.audio.description}
-            rows={4}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.description = value;
-              })
-            }
-          />
-          <TextField
-            label="وسم المشهد"
-            value={content.audio.stageLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.stageLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="السطر الهادئ"
-            value={content.audio.ambientLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.ambientLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="عنوان المقطع"
-            value={content.audio.trackTitle}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.trackTitle = value;
-              })
-            }
-          />
-          <TextField
-            label="المدة الظاهرة"
-            value={content.audio.duration}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.duration = value;
-              })
-            }
-          />
-          <NumberField
-            label="إجمالي الثواني"
-            value={content.audio.totalSeconds}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.totalSeconds = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="وصف المقطع"
-            value={content.audio.trackDescription}
-            rows={4}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.trackDescription = value;
-              })
-            }
-          />
-          <TextField
-            label="زر تشغيل"
-            value={content.audio.playLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.playLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="زر إيقاف"
-            value={content.audio.pauseLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.pauseLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="زر التالي"
-            value={content.audio.nextLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.nextLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="عنوان ملاحظة الاستماع"
-            value={content.audio.listeningNoteTitle}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.listeningNoteTitle = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="نص ملاحظة الاستماع"
-            value={content.audio.listeningNoteBody}
-            rows={3}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.listeningNoteBody = value;
-              })
-            }
-          />
-          <TextField
-            label="عنوان ما بعد المقطع"
-            value={content.audio.afterTrackTitle}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.afterTrackTitle = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="نص ما بعد المقطع"
-            value={content.audio.afterTrackBody}
-            rows={3}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.afterTrackBody = value;
-              })
-            }
-          />
-          <TextField
-            label="وصف زر التشغيل"
-            value={content.audio.playAriaLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.playAriaLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="وصف زر الإيقاف"
-            value={content.audio.pauseAriaLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.audio.pauseAriaLabel = value;
-              })
-            }
-          />
-        </div>
-      </SectionCard>
-    </div>
-  );
-}
+    <SectionCard
+      title="الصوتيات"
+      description="ارفع ملفات صوتية حقيقية، وسيعرضها الموقع كمكتبة تشغيل مباشرة."
+    >
+      <div className="space-y-4">
+        <AddItemButton
+          label="إضافة مقطع صوتي"
+          onClick={() =>
+            mutateContent((draft) => {
+              draft.audioTracks.unshift(createAudioTrack());
+            })
+          }
+        />
 
-function FooterSectionEditor({
-  content,
-  mutateContent,
-}: {
-  content: SiteContent;
-  mutateContent: MutateContent;
-}) {
-  return (
-    <div className="space-y-5">
-      <SectionCard
-        title="الرسالة الختامية"
-        description="هذه المنطقة تظهر في أسفل الصفحة وتبني الانطباع الأخير."
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <TextField
-            label="السطر الأول"
-            value={content.footer.headlineFirstLine}
-            onChange={(value) =>
+        {content.audioTracks.map((item, index) => (
+          <ArrayItemCard
+            key={item.id}
+            title={item.title || `صوتية ${content.audioTracks.length - index}`}
+            onRemove={() =>
               mutateContent((draft) => {
-                draft.footer.headlineFirstLine = value;
+                draft.audioTracks.splice(index, 1);
               })
             }
-          />
-          <TextField
-            label="السطر الثاني"
-            value={content.footer.headlineSecondLine}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.footer.headlineSecondLine = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="الوصف"
-            value={content.footer.description}
-            rows={4}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.footer.description = value;
-              })
-            }
-          />
-          <TextField
-            label="عنوان الروابط السريعة"
-            value={content.footer.quickLinksTitle}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.footer.quickLinksTitle = value;
-              })
-            }
-          />
-          <TextField
-            label="عنوان الرسالة الشهرية"
-            value={content.footer.newsletterTitle}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.footer.newsletterTitle = value;
-              })
-            }
-          />
-          <TextAreaField
-            label="وصف الرسالة الشهرية"
-            value={content.footer.newsletterDescription}
-            rows={3}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.footer.newsletterDescription = value;
-              })
-            }
-          />
-          <TextField
-            label="Placeholder البريد"
-            value={content.footer.emailPlaceholder}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.footer.emailPlaceholder = value;
-              })
-            }
-          />
-          <TextField
-            label="زر الاشتراك"
-            value={content.footer.newsletterButtonLabel}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.footer.newsletterButtonLabel = value;
-              })
-            }
-          />
-          <TextField
-            label="حقوق النشر"
-            value={content.footer.copyright}
-            onChange={(value) =>
-              mutateContent((draft) => {
-                draft.footer.copyright = value;
-              })
-            }
-          />
-        </div>
-      </SectionCard>
-
-      <SectionCard
-        title="الروابط السريعة"
-        description="تظهر هذه القائمة بجانب نموذج الاشتراك."
-      >
-        <div className="space-y-4">
-          {content.footer.quickLinks.map((link, index) => (
-            <ArrayItemCard
-              key={link.id}
-              title={`رابط سريع ${index + 1}`}
-              onRemove={() =>
-                mutateContent((draft) => {
-                  draft.footer.quickLinks.splice(index, 1);
-                })
-              }
-            >
-              <div className="grid gap-4 md:grid-cols-2">
-                <TextField
-                  label="النص"
-                  value={link.label}
+          >
+            <div className="grid gap-4 md:grid-cols-2">
+              <TextInput
+                label="العنوان"
+                value={item.title}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.audioTracks[index].title = value;
+                  })
+                }
+              />
+              <TextInput
+                label="المدة الظاهرة"
+                value={item.durationLabel}
+                onChange={(value) =>
+                  mutateContent((draft) => {
+                    draft.audioTracks[index].durationLabel = value;
+                  })
+                }
+                placeholder="2:35"
+              />
+              <div className="md:col-span-2">
+                <TextareaField
+                  label="الوصف"
+                  value={item.description}
                   onChange={(value) =>
                     mutateContent((draft) => {
-                      draft.footer.quickLinks[index].label = value;
-                    })
-                  }
-                />
-                <TextField
-                  label="الرابط"
-                  value={link.href}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.footer.quickLinks[index].href = value;
+                      draft.audioTracks[index].description = value;
                     })
                   }
                 />
               </div>
-            </ArrayItemCard>
-          ))}
-        </div>
-
-        <AddItemButton
-          label="إضافة رابط سريع"
-          onClick={() =>
-            mutateContent((draft) => {
-              draft.footer.quickLinks.push(createLinkItem("footer"));
-            })
-          }
-        />
-      </SectionCard>
-
-      <SectionCard
-        title="روابط السوشيال"
-        description="اختر الاسم والرابط والأيقونة المناسبة لكل منصة."
-      >
-        <div className="space-y-4">
-          {content.footer.socialLinks.map((link, index) => (
-            <ArrayItemCard
-              key={link.id}
-              title={`منصة ${index + 1}`}
-              onRemove={() =>
-                mutateContent((draft) => {
-                  draft.footer.socialLinks.splice(index, 1);
-                })
-              }
-            >
-              <div className="grid gap-4 md:grid-cols-2">
-                <TextField
-                  label="الاسم"
-                  value={link.label}
+              <div className="md:col-span-2">
+                <AudioUploadField
+                  label="الملف الصوتي"
+                  value={item.file}
                   onChange={(value) =>
                     mutateContent((draft) => {
-                      draft.footer.socialLinks[index].label = value;
-                    })
-                  }
-                />
-                <SelectField
-                  label="الأيقونة"
-                  value={link.icon}
-                  options={socialIconOptions}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.footer.socialLinks[index].icon =
-                        value as SocialIconName;
-                    })
-                  }
-                />
-                <TextField
-                  label="الرابط"
-                  value={link.href}
-                  onChange={(value) =>
-                    mutateContent((draft) => {
-                      draft.footer.socialLinks[index].href = value;
+                      draft.audioTracks[index].file = value;
                     })
                   }
                 />
               </div>
-            </ArrayItemCard>
-          ))}
-        </div>
-
-        <AddItemButton
-          label="إضافة منصة"
-          onClick={() =>
-            mutateContent((draft) => {
-              draft.footer.socialLinks.push(createSocialLink());
-            })
-          }
-        />
-      </SectionCard>
-    </div>
+            </div>
+          </ArrayItemCard>
+        ))}
+      </div>
+    </SectionCard>
   );
 }

@@ -1,25 +1,12 @@
-export type LinkItem = {
+export type WorkType = "poetry" | "books" | "theater" | "biography";
+
+export type WorkItem = {
   id: string;
-  label: string;
-  href: string;
-};
-
-export type JourneyIconName =
-  | "feather"
-  | "book-open"
-  | "drama"
-  | "user-round";
-
-export type SocialIconName = "instagram" | "youtube" | "send" | "mail";
-
-export type JourneyEntry = {
-  id: string;
-  icon: JourneyIconName;
+  type: WorkType;
   title: string;
   description: string;
   image: string;
-  ctaLabel: string;
-  ctaHref: string;
+  href: string;
 };
 
 export type HonorItem = {
@@ -39,112 +26,28 @@ export type NewsItem = {
   image: string;
 };
 
-export type SocialLink = LinkItem & {
-  icon: SocialIconName;
+export type QuoteItem = {
+  id: string;
+  text: string;
+  caption: string;
+};
+
+export type AudioTrack = {
+  id: string;
+  title: string;
+  description: string;
+  file: string;
+  durationLabel: string;
 };
 
 export type SiteContent = {
-  site: {
-    brandName: string;
-    tagline: string;
-    pageTitle: string;
-    pageDescription: string;
+  photos: {
+    heroImage: string;
+    writerImage: string;
   };
-  navigationLinks: LinkItem[];
-  hero: {
-    sectionKicker: string;
-    title: string;
-    subtitle: string;
-    image: string;
-    primaryActionLabel: string;
-    primaryActionHref: string;
-    secondaryActionLabel: string;
-    secondaryActionHref: string;
-    audioPillMobileLabel: string;
-    audioPillDesktopLabel: string;
-    introPillLabel: string;
-    introCaption: string;
-    visualNoteTop: string;
-    visualNoteBottom: string;
-    mobileVisualNote: string;
-    scrollPrompt: string;
-    heroImageAlt: string;
-    mobileHeroImageAlt: string;
-  };
-  journey: {
-    eyebrow: string;
-    title: string;
-    description: string;
-    cardKicker: string;
-    entries: JourneyEntry[];
-  };
-  pulse: {
-    eyebrow: string;
-    title: string;
-    description: string;
-    image: string;
-    note: string;
-    badgeLabel: string;
-    aside: string;
-    pulseCaption: string;
-    imageAlt: string;
-    mobileImageAlt: string;
-  };
-  honors: {
-    eyebrow: string;
-    title: string;
-    description: string;
-    itemLabelPrefix: string;
-    items: HonorItem[];
-  };
-  news: {
-    eyebrow: string;
-    title: string;
-    description: string;
-    readMoreLabel: string;
-    items: NewsItem[];
-  };
-  quote: {
-    eyebrow: string;
-    title: string;
-    quote: string;
-    shareLabel: string;
-    imageActionLabel: string;
-    cardLabel: string;
-    cardQuote: string;
-    cardCaption: string;
-  };
-  audio: {
-    eyebrow: string;
-    title: string;
-    description: string;
-    stageLabel: string;
-    ambientLabel: string;
-    trackTitle: string;
-    duration: string;
-    totalSeconds: number;
-    trackDescription: string;
-    playLabel: string;
-    pauseLabel: string;
-    nextLabel: string;
-    listeningNoteTitle: string;
-    listeningNoteBody: string;
-    afterTrackTitle: string;
-    afterTrackBody: string;
-    playAriaLabel: string;
-    pauseAriaLabel: string;
-  };
-  footer: {
-    headlineFirstLine: string;
-    headlineSecondLine: string;
-    description: string;
-    quickLinksTitle: string;
-    newsletterTitle: string;
-    newsletterDescription: string;
-    emailPlaceholder: string;
-    newsletterButtonLabel: string;
-    quickLinks: LinkItem[];
-    socialLinks: SocialLink[];
-    copyright: string;
-  };
+  works: WorkItem[];
+  honors: HonorItem[];
+  news: NewsItem[];
+  quotes: QuoteItem[];
+  audioTracks: AudioTrack[];
 };
