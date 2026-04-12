@@ -1,0 +1,268 @@
+{
+  "site": {
+    "brandName": "سالم الورّاق",
+    "tagline": "كاتب وشاعر يعبر من الورق إلى الذاكرة",
+    "pageTitle": "سالم الورّاق | عالم الكلمة",
+    "pageDescription": "تجربة أدبية عربية غامرة لشاعر وكاتب يفتح للزائر أبواب الشعر والمسرح والسيرة والذاكرة."
+  },
+  "navigationLinks": [
+    {
+      "id": "nav-journey",
+      "label": "المسارات",
+      "href": "#journey"
+    },
+    {
+      "id": "nav-pulse",
+      "label": "نبض الكاتب",
+      "href": "#pulse"
+    },
+    {
+      "id": "nav-honors",
+      "label": "التكريمات",
+      "href": "#honors"
+    },
+    {
+      "id": "nav-news",
+      "label": "الأخبار",
+      "href": "#news"
+    },
+    {
+      "id": "nav-quote",
+      "label": "الاقتباس",
+      "href": "#quote"
+    },
+    {
+      "id": "nav-audio",
+      "label": "الصوت",
+      "href": "#audio"
+    }
+  ],
+  "hero": {
+    "sectionKicker": "الدخول إلى عالم سالم الورّاق",
+    "title": "أنا لا أكتب… أنا أترك أثراً لمن سيأتي بعدي",
+    "subtitle": "مرحباً بك في عالمي، حيث تتنفس الكلمات وتتحول إلى تجربة",
+    "primaryActionLabel": "ابدأ الرحلة",
+    "primaryActionHref": "#pulse",
+    "secondaryActionLabel": "تصفح الأعمال",
+    "secondaryActionHref": "#journey",
+    "audioPillMobileLabel": "تجربة صوتية",
+    "audioPillDesktopLabel": "تجربة صوتية متاحة",
+    "introPillLabel": "استمع إلى افتتاحية صوتية تُمهّد للدخول",
+    "introCaption": "صمّم هذا الفضاء ليُقرأ على مهل، كأن كل مقطع فيه نافذة صغيرة على حياةٍ تُصاغ باللغة.",
+    "visualNoteTop": "في هذا الركن تُصغي الجدران لما تتركه القصائد من ضوءٍ خافت.",
+    "visualNoteBottom": "مخطوطات، مصابيح، ومسافة صامتة تجعل الصفحة أقرب إلى مشهدٍ حي.",
+    "mobileVisualNote": "هنا تبدأ الرحلة من ضوءٍ خافت، لا من لافتة صاخبة.",
+    "scrollPrompt": "مرّر لتبدأ الرحلة",
+    "heroImageAlt": "مشهد فني لكاتب في فضاء أدبي هادئ",
+    "mobileHeroImageAlt": "مشهد بصري أدبي"
+  },
+  "journey": {
+    "eyebrow": "المسارات الرئيسية",
+    "title": "أبواب تُفضي إلى أكثر من قراءة",
+    "description": "لا تُعرض الأعمال هنا بوصفها ملفات مفصولة، بل كمسارات لكل واحد منها إيقاعه، وملمسه، والباب الذي يفتحه في نفس القارئ.",
+    "cardKicker": "مسار مفتوح",
+    "entries": [
+      {
+        "id": "journey-poetry",
+        "icon": "feather",
+        "title": "الشعر",
+        "description": "كلمات تنبض بالبوح، تقرأ وجع الإنسان وتعيد صياغته شعراً",
+        "ctaLabel": "ادخل المسار",
+        "ctaHref": "#"
+      },
+      {
+        "id": "journey-books",
+        "icon": "book-open",
+        "title": "المؤلفات",
+        "description": "كتب وُلدت من التأمل، وسافرت في ذاكرة القرّاء",
+        "ctaLabel": "ادخل المسار",
+        "ctaHref": "#"
+      },
+      {
+        "id": "journey-theater",
+        "icon": "drama",
+        "title": "النصوص المسرحية",
+        "description": "نصوص كُتبت لتُرى كما تُقرأ، وتُحسّ قبل أن تُفسَّر",
+        "ctaLabel": "ادخل المسار",
+        "ctaHref": "#"
+      },
+      {
+        "id": "journey-biography",
+        "icon": "user-round",
+        "title": "السيرة الذاتية",
+        "description": "ليست سيرة أحداث، بل سيرة أثرٍ تركته الحياة في اللغة",
+        "ctaLabel": "ادخل المسار",
+        "ctaHref": "#"
+      }
+    ]
+  },
+  "pulse": {
+    "eyebrow": "مقطع داخلي",
+    "title": "نبض الكاتب",
+    "description": "هذا الموقع ليس أرشيفاً… بل محاولة لفهم كيف يفكر الكاتب. هنا لا أقدّم سيرةً جاهزة، بل أترك للقارئ أثراً من الأسئلة، والبحث، والانكسارات، واللحظات التي صنعت الكلمة.",
+    "note": "كل صفحة هنا تميل إلى التأمل أكثر من الشرح، وإلى الإصغاء أكثر من الإعلان.",
+    "badgeLabel": "سالم الورّاق",
+    "aside": "لأن ما يكتبه الكاتب لا ينتهي عند الصفحة",
+    "pulseCaption": "الكلمة تبدأ كسؤال... ثم تمضي كأثر",
+    "imageAlt": "صورة فنية باهتة للكاتب",
+    "mobileImageAlt": "صورة فنية للكاتب"
+  },
+  "honors": {
+    "eyebrow": "رحلة التكريمات",
+    "title": "التكريمات… حكايات وراء كل إنجاز",
+    "description": "كل تكريم هنا ليس رقماً يضاف إلى السيرة، بل لحظة التقت فيها التجربة بمن رآها، واعترف بما تركته من أثر.",
+    "itemLabelPrefix": "محطة",
+    "items": [
+      {
+        "id": "honor-2008",
+        "year": "2008",
+        "title": "جائزة الشاعر الشاب",
+        "story": "كانت البداية التي لفتت الأنظار إلى صوته الخاص"
+      },
+      {
+        "id": "honor-2012",
+        "year": "2012",
+        "title": "جائزة أفضل نص مسرحي",
+        "story": "لحظة عبر فيها النص من الورق إلى الذاكرة"
+      },
+      {
+        "id": "honor-2016",
+        "year": "2016",
+        "title": "وسام الثقافة",
+        "story": "تكريم لمسار لم يكن سهلاً، لكنه كان صادقاً"
+      },
+      {
+        "id": "honor-2021",
+        "year": "2021",
+        "title": "جائزة الإبداع العربي",
+        "story": "محطة أكدت أن الكلمة الصادقة تصل أبعد مما نظن"
+      }
+    ]
+  },
+  "news": {
+    "eyebrow": "الأخبار",
+    "title": "الأخبار",
+    "description": "حركة جديدة حول الكلمة: إصدار، أمسية، وتأمل مكتوب يواصل الحوار مع القرّاء.",
+    "readMoreLabel": "اقرأ المزيد",
+    "items": [
+      {
+        "id": "news-clouds",
+        "date": "08 نيسان 2026",
+        "title": "إصدار ديوان جديد بعنوان \"خرائط الغيم\"",
+        "description": "ديوان جديد يواصل أسئلة الذاكرة والغياب، ويقترب من الهشاشة بوصفها شكلاً آخر للقوة.",
+        "href": "#",
+        "image": "/art/news-clouds.svg"
+      },
+      {
+        "id": "news-evening",
+        "date": "22 آذار 2026",
+        "title": "أمسية شعرية في دار الثقافة",
+        "description": "لقاء حيّ يجاور القصيدة بالصوت، ويعيد للمنبر دفئه وللإنصات معناه الأصيل.",
+        "href": "#",
+        "image": "/art/news-evening.svg"
+      },
+      {
+        "id": "news-time",
+        "date": "11 شباط 2026",
+        "title": "مقال جديد: \"عن الكتابة والزمن\"",
+        "description": "تأمل جديد في علاقة الكاتب بالوقت، وكيف تتحول السنوات إلى طبقات داخل الجملة.",
+        "href": "#",
+        "image": "/art/news-time.svg"
+      }
+    ]
+  },
+  "quote": {
+    "eyebrow": "اقتباس اليوم",
+    "title": "اقتباس اليوم",
+    "quote": "الكتابة لا تغيّر العالم، لكنها تغيّر من يقرأ",
+    "shareLabel": "مشاركة",
+    "imageActionLabel": "حوّل الاقتباس إلى صورة",
+    "cardLabel": "Quote Card",
+    "cardQuote": "الكتابة لا تغيّر العالم، لكنها تغيّر من يقرأ",
+    "cardCaption": "واجهة جاهزة لتوليد بطاقة مرئية قابلة للمشاركة"
+  },
+  "audio": {
+    "eyebrow": "التجربة الصوتية",
+    "title": "التجربة الصوتية",
+    "description": "استمع إلى قصائد ومقاطع مختارة بصوت يضيف للنص بعداً آخر",
+    "stageLabel": "صوت القصيدة",
+    "ambientLabel": "طبقة صوتية هادئة تترك للنص مجاله",
+    "trackTitle": "قصيدة: ما تبقى من الحلم",
+    "duration": "2:35",
+    "totalSeconds": 155,
+    "trackDescription": "استمع إلى مقطع يرافقه صمت محسوب، ومسافة تترك للكلمات أن تُتمّ معناها في الداخل.",
+    "playLabel": "تشغيل",
+    "pauseLabel": "إيقاف",
+    "nextLabel": "التالي",
+    "listeningNoteTitle": "ملاحظة الاستماع",
+    "listeningNoteBody": "من الأفضل الإصغاء في مساحة هادئة، حيث يكون الصمت جزءاً من الإيقاع.",
+    "afterTrackTitle": "بعد هذا المقطع",
+    "afterTrackBody": "قراءة من \"خرائط الغيم\" ومشهد قصير من النص المسرحي القادم.",
+    "playAriaLabel": "تشغيل المقطع",
+    "pauseAriaLabel": "إيقاف المقطع"
+  },
+  "footer": {
+    "headlineFirstLine": "ليس كل من قرأ… فهم",
+    "headlineSecondLine": "وليس كل من فهم… نسي",
+    "description": "خاتمة هادئة تترك الباب موارباً لعودة أخرى، ولرسالة تصل في وقتها، لا في عجلة الإعلان.",
+    "quickLinksTitle": "روابط سريعة",
+    "newsletterTitle": "رسالة شهرية",
+    "newsletterDescription": "نشرة خفيفة تضم جديد الأمسيات، والإصدارات، ومقتطفات مختارة.",
+    "emailPlaceholder": "بريدك الإلكتروني",
+    "newsletterButtonLabel": "اشترك بهدوء",
+    "quickLinks": [
+      {
+        "id": "footer-home",
+        "label": "الصفحة الرئيسية",
+        "href": "#home"
+      },
+      {
+        "id": "footer-journey",
+        "label": "الشعر",
+        "href": "#journey"
+      },
+      {
+        "id": "footer-honors",
+        "label": "التكريمات",
+        "href": "#honors"
+      },
+      {
+        "id": "footer-news",
+        "label": "الأخبار",
+        "href": "#news"
+      },
+      {
+        "id": "footer-audio",
+        "label": "الصوتيات",
+        "href": "#audio"
+      }
+    ],
+    "socialLinks": [
+      {
+        "id": "social-instagram",
+        "label": "Instagram",
+        "href": "#",
+        "icon": "instagram"
+      },
+      {
+        "id": "social-youtube",
+        "label": "YouTube",
+        "href": "#",
+        "icon": "youtube"
+      },
+      {
+        "id": "social-telegram",
+        "label": "Telegram",
+        "href": "#",
+        "icon": "send"
+      },
+      {
+        "id": "social-email",
+        "label": "Email",
+        "href": "mailto:hello@example.com",
+        "icon": "mail"
+      }
+    ],
+    "copyright": "© 2026 سالم الورّاق. جميع الحقوق محفوظة."
+  }
+}

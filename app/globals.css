@@ -1,0 +1,294 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0f0b08;
+  --background-soft: #17120f;
+  --panel: rgba(36, 28, 22, 0.76);
+  --panel-strong: rgba(53, 41, 32, 0.9);
+  --foreground: #f5ecdc;
+  --muted: #d2c0a5;
+  --muted-strong: #ab987d;
+  --accent: #bc9a66;
+  --accent-soft: #e3cfab;
+  --line: rgba(220, 196, 158, 0.14);
+  --shadow-soft: 0 24px 90px rgba(0, 0, 0, 0.34);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--foreground);
+  font-family: var(--font-body), sans-serif;
+  text-rendering: optimizeLegibility;
+  background:
+    radial-gradient(circle at top right, rgba(182, 143, 86, 0.18), transparent 28%),
+    radial-gradient(circle at 12% 18%, rgba(107, 76, 44, 0.24), transparent 22%),
+    linear-gradient(180deg, #0a0705 0%, #100b08 34%, #0d0907 100%);
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+body::before {
+  opacity: 0.22;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.016) 1px, transparent 1px);
+  background-size: 4px 4px, 5px 5px;
+  mix-blend-mode: soft-light;
+}
+
+body::after {
+  background:
+    radial-gradient(circle at 50% 10%, transparent 0%, transparent 35%, rgba(0, 0, 0, 0.34) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, rgba(0, 0, 0, 0.18) 100%);
+}
+
+* {
+  border-color: var(--line);
+}
+
+::selection {
+  background: rgba(188, 154, 102, 0.28);
+  color: #fff7eb;
+}
+
+a,
+button {
+  transition:
+    color 220ms ease,
+    background-color 220ms ease,
+    border-color 220ms ease,
+    transform 320ms ease,
+    opacity 220ms ease;
+}
+
+img {
+  user-select: none;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display), serif;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    color: var(--muted);
+  }
+
+  input::placeholder {
+    color: rgba(232, 220, 199, 0.45);
+  }
+}
+
+@layer utilities {
+  .page-shell {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+  }
+
+  .ambient-glow {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(88px);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .paper-panel {
+    border: 1px solid var(--line);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 100%),
+      rgba(24, 18, 14, 0.72);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(18px);
+  }
+
+  .section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.78rem;
+    line-height: 1;
+    letter-spacing: 0.22em;
+    color: rgba(227, 207, 171, 0.72);
+  }
+
+  .section-kicker::before {
+    content: "";
+    height: 1px;
+    width: 3rem;
+    background: linear-gradient(90deg, transparent, rgba(227, 207, 171, 0.7));
+  }
+
+  .hero-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 3.5rem;
+    padding-inline: 1.5rem;
+    border-radius: 9999px;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .hero-button-primary {
+    border: 1px solid rgba(207, 176, 121, 0.4);
+    background: linear-gradient(135deg, rgba(188, 154, 102, 0.95), rgba(129, 91, 51, 0.92));
+    color: #1a120d;
+    box-shadow: 0 16px 40px rgba(114, 79, 44, 0.28);
+  }
+
+  .hero-button-primary:hover {
+    transform: translateY(-2px);
+  }
+
+  .hero-button-secondary {
+    border: 1px solid rgba(223, 202, 169, 0.16);
+    background: rgba(255, 255, 255, 0.03);
+    color: #efe4d3;
+  }
+
+  .hero-button-secondary:hover {
+    border-color: rgba(223, 202, 169, 0.32);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .sound-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(223, 202, 169, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+    padding: 0.7rem 1rem;
+    font-size: 0.86rem;
+    color: rgba(239, 228, 211, 0.9);
+    backdrop-filter: blur(14px);
+  }
+
+  .sound-dot {
+    position: relative;
+    display: inline-flex;
+    height: 0.55rem;
+    width: 0.55rem;
+    border-radius: 9999px;
+    background: #cfab71;
+    box-shadow: 0 0 16px rgba(207, 171, 113, 0.8);
+    animation: breathe 3.2s ease-in-out infinite;
+  }
+
+  .editorial-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #eadcc5;
+  }
+
+  .editorial-link:hover {
+    color: #f5ecdc;
+    transform: translateX(-4px);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .pulse-line {
+    position: relative;
+    height: 1px;
+    width: 100%;
+    overflow: hidden;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(223, 202, 169, 0.08) 0%,
+        rgba(223, 202, 169, 0.22) 48%,
+        rgba(223, 202, 169, 0.08) 100%
+      );
+  }
+
+  .pulse-line::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -10%;
+    height: 0.4rem;
+    width: 5rem;
+    transform: translateY(-50%);
+    border-radius: 9999px;
+    background: linear-gradient(90deg, transparent, rgba(207, 171, 113, 0.95), transparent);
+    filter: blur(2px);
+    animation: traverse 6s linear infinite;
+  }
+
+  .wave-bar {
+    transform-origin: center bottom;
+    border-radius: 9999px;
+    background: linear-gradient(180deg, rgba(227, 207, 171, 0.96), rgba(117, 82, 48, 0.45));
+  }
+
+  .wave-bar-play {
+    animation: wave 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(0.92);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes traverse {
+  0% {
+    right: -10%;
+  }
+
+  100% {
+    right: 110%;
+  }
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: scaleY(0.5);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
