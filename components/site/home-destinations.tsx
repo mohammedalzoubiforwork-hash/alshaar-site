@@ -27,17 +27,17 @@ const iconMap = {
 
 const toneMap = {
   writer:
-    "bg-[radial-gradient(circle_at_top_right,rgba(212,180,121,0.18),transparent_32%),linear-gradient(180deg,rgba(31,24,20,0.96),rgba(18,14,11,0.92))]",
+    "bg-[radial-gradient(circle_at_top_right,rgba(255,180,95,0.2),transparent_32%),linear-gradient(180deg,rgba(18,34,52,0.96),rgba(9,19,30,0.92))]",
   journey:
-    "bg-[radial-gradient(circle_at_18%_18%,rgba(146,123,87,0.14),transparent_28%),linear-gradient(180deg,rgba(27,22,19,0.95),rgba(16,13,11,0.9))]",
+    "bg-[radial-gradient(circle_at_18%_18%,rgba(121,221,212,0.16),transparent_28%),linear-gradient(180deg,rgba(16,31,48,0.95),rgba(9,19,30,0.9))]",
   honors:
-    "bg-[radial-gradient(circle_at_82%_20%,rgba(208,162,104,0.14),transparent_26%),linear-gradient(180deg,rgba(29,21,17,0.95),rgba(17,13,11,0.9))]",
+    "bg-[radial-gradient(circle_at_82%_20%,rgba(255,141,108,0.18),transparent_26%),linear-gradient(180deg,rgba(20,34,50,0.95),rgba(10,19,29,0.9))]",
   news:
-    "bg-[radial-gradient(circle_at_24%_80%,rgba(112,140,165,0.12),transparent_26%),linear-gradient(180deg,rgba(22,21,23,0.95),rgba(13,12,14,0.92))]",
+    "bg-[radial-gradient(circle_at_24%_80%,rgba(121,221,212,0.14),transparent_26%),linear-gradient(180deg,rgba(18,32,48,0.95),rgba(8,18,28,0.92))]",
   quote:
-    "bg-[radial-gradient(circle_at_88%_78%,rgba(214,177,119,0.14),transparent_28%),linear-gradient(180deg,rgba(30,24,18,0.95),rgba(18,14,11,0.9))]",
+    "bg-[radial-gradient(circle_at_88%_78%,rgba(255,180,95,0.16),transparent_28%),linear-gradient(180deg,rgba(20,34,49,0.95),rgba(10,19,29,0.9))]",
   audio:
-    "bg-[radial-gradient(circle_at_20%_20%,rgba(110,137,160,0.14),transparent_28%),linear-gradient(180deg,rgba(20,23,27,0.95),rgba(13,15,18,0.92))]",
+    "bg-[radial-gradient(circle_at_20%_20%,rgba(121,221,212,0.18),transparent_28%),linear-gradient(180deg,rgba(17,31,46,0.95),rgba(8,18,28,0.92))]",
 } as const;
 
 type HomeDestinationsProps = {
@@ -49,13 +49,13 @@ export function HomeDestinations({ pages }: HomeDestinationsProps) {
     <section className="relative py-24 md:py-32">
       <Container>
         <Reveal className="max-w-3xl">
-          <span className="section-kicker">خرائط الموقع</span>
+          <span className="section-kicker">خرائط القراءة</span>
           <h2 className="mt-6 text-4xl leading-[1.2] text-[#f7ede1] md:text-5xl lg:text-6xl">
-            ليس قسماً داخل صفحة، بل صفحات لها شخصيتها الخاصة
+            كل محور هنا صفحة كاملة لا مجرد قسم عابر
           </h2>
           <p className="mt-6 max-w-2xl text-base leading-8 text-[#cfbea7]/88 md:text-lg md:leading-9">
-            انتقل إلى كل محور كأنه فصل مستقل: بإيقاعه، ومساحته، وطريقته في
-            السرد والظهور.
+            تنتقل بين محاور الموقع كما لو أنك تعبر فصولًا متجاورة: لكل صفحة إيقاعها
+            وصورتها وطريقتها في تقديم النص.
           </p>
         </Reveal>
 
@@ -73,11 +73,11 @@ export function HomeDestinations({ pages }: HomeDestinationsProps) {
                     toneMap[page.id],
                   )}
                 >
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.06),transparent_28%)] opacity-0 transition duration-500 group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_28%)] opacity-0 transition duration-500 group-hover:opacity-100" />
                   <div className="relative flex h-full flex-col">
                     <div className="flex items-start justify-between gap-4">
                       <span className="story-chip">{page.label}</span>
-                      <div className="flex size-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-[#e8d6bb]">
+                      <div className="flex size-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-[#fff0cf]">
                         <Icon className="size-6" />
                       </div>
                     </div>
@@ -96,7 +96,7 @@ export function HomeDestinations({ pages }: HomeDestinationsProps) {
 
                     <div className="mt-auto pt-12">
                       <Link href={page.href} className="editorial-link text-sm md:text-base">
-                        ادخل الصفحة
+                        افتح الصفحة
                         <ArrowLeft className="size-4" />
                       </Link>
                     </div>

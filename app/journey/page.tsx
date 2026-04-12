@@ -21,7 +21,7 @@ export default async function JourneyPage() {
       eyebrow={journeyCopy.eyebrow}
       title={journeyCopy.title}
       description={journeyCopy.description}
-      accent="هنا تتوزع الأعمال على بطاقات واضحة بدل أن تضيع كعناوين داخل صفحة واحدة طويلة."
+      accent="تظهر الأعمال هنا كبطاقات واضحة تمنح كل عنوان حضوره وصورته ومساحته الخاصة."
       actionLabel="تابع إلى الأخبار"
       actionHref="/news"
     >
@@ -32,7 +32,7 @@ export default async function JourneyPage() {
           <div className="grid gap-6 md:grid-cols-3">
             <Reveal>
               <article className="mesh-panel rounded-[30px] p-6">
-                <p className="text-xs text-[#bca98d]">عدد الأعمال</p>
+                <p className="text-xs text-[#bca98d]">إجمالي الأعمال</p>
                 <p className="mt-4 font-display text-5xl text-[#f7efe3]">
                   {content.works.length}
                 </p>
@@ -40,7 +40,7 @@ export default async function JourneyPage() {
             </Reveal>
             <Reveal delay={0.08}>
               <article className="mesh-panel rounded-[30px] p-6">
-                <p className="text-xs text-[#bca98d]">أول عمل</p>
+                <p className="text-xs text-[#bca98d]">أول عنوان</p>
                 <p className="mt-4 font-display text-3xl text-[#f7efe3]">
                   {content.works[0]?.title ?? "لا يوجد"}
                 </p>
@@ -48,7 +48,7 @@ export default async function JourneyPage() {
             </Reveal>
             <Reveal delay={0.16}>
               <article className="mesh-panel rounded-[30px] p-6">
-                <p className="text-xs text-[#bca98d]">آخر عمل</p>
+                <p className="text-xs text-[#bca98d]">آخر عنوان</p>
                 <p className="mt-4 font-display text-3xl text-[#f7efe3]">
                   {content.works.at(-1)?.title ?? "لا يوجد"}
                 </p>

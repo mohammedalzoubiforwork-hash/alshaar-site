@@ -22,7 +22,7 @@ export default async function NewsPage() {
       eyebrow={newsCopy.eyebrow}
       title={newsCopy.title}
       description={newsCopy.description}
-      accent="صفحة الأخبار مخصصة للتحديثات فقط، مع مساحة بصرية تسمح للخبر أن يظهر كحدث لا كعنصر بين عناصر كثيرة."
+      accent="هذه الصفحة مخصصة للأخبار وحدها، ليظهر كل تحديث كحدث مستقل لا كعنصر هامشي."
       actionLabel="اقرأ الاقتباسات"
       actionHref="/quote"
     >
@@ -32,13 +32,13 @@ export default async function NewsPage() {
         <Container>
           <Reveal>
             <article className="mesh-panel rounded-[34px] p-7 md:p-9">
-              <span className="story-chip">الخبر الأحدث</span>
+              <span className="story-chip">الخبر الأبرز</span>
               <h2 className="mt-5 font-display text-4xl text-[#f7efe3] md:text-5xl">
                 {featured?.title ?? "لا توجد أخبار بعد"}
               </h2>
               <p className="mt-4 text-base leading-8 text-[#cfbea7]/84 md:text-lg">
                 {featured?.description ??
-                  "أضف خبرًا جديدًا من لوحة الأدمن ليظهر هنا كخبر مميز في أعلى الصفحة."}
+                  "أضف خبرًا جديدًا من لوحة الأدمن ليظهر هنا بوصفه الخبر الأبرز في أعلى الصفحة."}
               </p>
             </article>
           </Reveal>

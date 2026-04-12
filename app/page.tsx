@@ -29,15 +29,15 @@ export default async function Home() {
     <main className="page-shell">
       <div
         aria-hidden
-        className="ambient-glow right-[-10rem] top-[12rem] h-[26rem] w-[26rem] bg-[#876038]/18"
+        className="ambient-glow right-[-10rem] top-[12rem] h-[26rem] w-[26rem] bg-[#ff8d6c]/18"
       />
       <div
         aria-hidden
-        className="ambient-glow left-[-8rem] top-[52rem] h-[24rem] w-[24rem] bg-[#d4b07b]/10"
+        className="ambient-glow left-[-8rem] top-[52rem] h-[24rem] w-[24rem] bg-[#79ddd4]/10"
       />
       <div
         aria-hidden
-        className="ambient-glow right-[12%] top-[140rem] h-[28rem] w-[28rem] bg-[#6f4f30]/14"
+        className="ambient-glow right-[12%] top-[140rem] h-[28rem] w-[28rem] bg-[#ffb45f]/14"
       />
 
       <HeroSection heroImage={content.photos.heroImage} />
@@ -49,13 +49,13 @@ export default async function Home() {
           <Reveal>
             <div className="mesh-panel flex flex-col gap-5 rounded-[34px] p-6 md:flex-row md:items-center md:justify-between md:p-8">
               <div className="max-w-2xl">
-                <p className="section-kicker !mb-0">واجهة متعددة الصفحات</p>
+                <p className="section-kicker !mb-0">مقدمة واضحة</p>
                 <h2 className="mt-4 text-3xl text-[#f7efe3] md:text-4xl">
-                  البداية أصبحت أوضح وأغنى
+                  الرئيسية الآن أوضح وأكثر حيوية
                 </h2>
                 <p className="mt-4 text-base leading-8 text-[#cfbea7]/84 md:text-lg">
-                  الرئيسية تعرض لمحات حقيقية من صورة الكاتب والأعمال والتكريمات والأخبار
-                  والصوتيات، بينما يبقى لكل قسم صفحته المستقلة بتفاصيله الكاملة.
+                  تعرض الصفحة الرئيسية لمحات منتقاة من صورة الكاتب والأعمال والتكريمات
+                  والأخبار والصوتيات، بينما تحتفظ كل صفحة بتفاصيلها ومساحتها الخاصة.
                 </p>
               </div>
 
@@ -63,7 +63,7 @@ export default async function Home() {
                 href={writerPage?.href ?? "/writer"}
                 className="hero-button hero-button-primary self-start md:self-auto"
               >
-                افتح صفحة الكاتب
+                انتقل إلى صفحة الكاتب
                 <ArrowLeft className="size-4" />
               </Link>
             </div>
@@ -78,17 +78,17 @@ export default async function Home() {
           <Reveal>
             <div className="flex flex-col gap-4 rounded-[30px] border border-white/10 bg-white/[0.03] px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
               <div>
-                <p className="text-sm text-[#e7d7c1]">صفحة مستقلة للأعمال</p>
+                <p className="text-sm text-[#e7d7c1]">بوابة سريعة إلى الأعمال</p>
                 <p className="mt-2 text-base leading-8 text-[#cbbca5]/82">
-                  من هنا تنتقل إلى صفحة الأعمال الكاملة لمشاهدة كل العناصر التي تضيفها من
-                  الأدمن، مع صورها وأنواعها وروابطها.
+                  من هنا تصل إلى صفحة الأعمال الكاملة لترى كل ما تضيفه من الأدمن، من
+                  الصور والوصف إلى الروابط والأنواع.
                 </p>
               </div>
               <Link
                 href={journeyPage?.href ?? "/journey"}
                 className="editorial-link text-sm md:text-base"
               >
-                افتح صفحة الأعمال
+                اذهب إلى الأعمال
                 <ArrowLeft className="size-4" />
               </Link>
             </div>
@@ -103,17 +103,17 @@ export default async function Home() {
           <Reveal>
             <div className="flex flex-col gap-4 rounded-[30px] border border-white/10 bg-white/[0.03] px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
               <div>
-                <p className="text-sm text-[#e7d7c1]">صفحة التكريمات الكاملة</p>
+                <p className="text-sm text-[#e7d7c1]">بوابة سريعة إلى التكريمات</p>
                 <p className="mt-2 text-base leading-8 text-[#cbbca5]/82">
-                  الصفحة الكاملة تعرض بقية المحطات وتسمح بعرض صور الجوائز والشهادات
-                  والذكريات بدل الاكتفاء بالنص فقط.
+                  الصفحة الكاملة تعرض المحطات بصورة أوسع، وتمنح الجوائز والشهادات
+                  والذكريات حضورًا يليق بها.
                 </p>
               </div>
               <Link
                 href={honorsPage?.href ?? "/honors"}
                 className="editorial-link text-sm md:text-base"
               >
-                افتح صفحة التكريمات
+                اذهب إلى التكريمات
                 <ArrowLeft className="size-4" />
               </Link>
             </div>

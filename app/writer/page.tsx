@@ -22,7 +22,7 @@ export default async function WriterPage() {
       title={writerCopy.title}
       description={writerCopy.description}
       accent={writerCopy.note}
-      actionLabel="اقرأ التكريمات"
+      actionLabel="اذهب إلى التكريمات"
       actionHref="/honors"
     >
       <WriterPulse
@@ -36,7 +36,7 @@ export default async function WriterPage() {
           <div className="grid gap-6 lg:grid-cols-3">
             <Reveal>
               <article className="paper-panel rounded-[32px] p-6 md:p-8">
-                <span className="story-chip">اسم الواجهة</span>
+                <span className="story-chip">اسم الكاتب</span>
                 <p className="mt-5 font-display text-3xl text-[#f7efe3]">
                   {writerCopy.badgeLabel}
                 </p>
@@ -47,25 +47,25 @@ export default async function WriterPage() {
             </Reveal>
             <Reveal delay={0.08}>
               <article className="paper-panel rounded-[32px] p-6 md:p-8">
-                <span className="story-chip">توقيع الموقع</span>
+                <span className="story-chip">التوقيع الأدبي</span>
                 <p className="mt-5 font-display text-3xl text-[#f7efe3]">
                   {siteIdentity.tagline}
                 </p>
                 <p className="mt-4 text-base leading-8 text-[#cfbea7]/84">
-                  صفحة مستقلة تمنح صورة الكاتب مساحة أبطأ، وتترك السيرة تتشكل من النبرة
-                  لا من التراكم فقط.
+                  هذه الصفحة تمنح صورة الكاتب زمنًا أوسع، وتدع السيرة تتشكل من الملامح
+                  والنبرة قبل التفاصيل.
                 </p>
               </article>
             </Reveal>
             <Reveal delay={0.16}>
               <article className="paper-panel rounded-[32px] p-6 md:p-8">
-                <span className="story-chip">خيط داخلي</span>
+                <span className="story-chip">نبض الصفحة</span>
                 <p className="mt-5 font-display text-3xl text-[#f7efe3]">
                   {writerCopy.pulseCaption}
                 </p>
                 <p className="mt-4 text-base leading-8 text-[#cfbea7]/84">
-                  هذا السطر يعمل كنبض بصري ومعنوي، ويمنح الصفحة لحظة سكون قبل الانتقال
-                  لما بعدها.
+                  هذا السطر يعمل كنبض بصري ومعنوي، ويمنح الصفحة لحظة هدوء قبل العبور
+                  إلى بقية الفصول.
                 </p>
               </article>
             </Reveal>

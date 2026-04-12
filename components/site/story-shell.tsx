@@ -26,11 +26,11 @@ export function StoryShell({
     <main className="page-shell">
       <div
         aria-hidden
-        className="ambient-glow right-[-8rem] top-[12rem] h-[24rem] w-[24rem] bg-[#876038]/18 drift-slow"
+        className="ambient-glow right-[-8rem] top-[12rem] h-[24rem] w-[24rem] bg-[#ff8d6c]/18 drift-slow"
       />
       <div
         aria-hidden
-        className="ambient-glow left-[-6rem] top-[38rem] h-[22rem] w-[22rem] bg-[#6e8091]/12 float-slow"
+        className="ambient-glow left-[-6rem] top-[38rem] h-[22rem] w-[22rem] bg-[#79ddd4]/12 float-slow"
       />
       <SiteHeader />
       <PageHero

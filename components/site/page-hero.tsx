@@ -22,8 +22,8 @@ export function PageHero({
 }: PageHeroProps) {
   return (
     <section className="relative overflow-hidden py-16 md:py-20 lg:py-24">
-      <div aria-hidden className="ambient-glow right-[6%] top-12 h-52 w-52 bg-[#a98154]/16 float-slow" />
-      <div aria-hidden className="ambient-glow left-[8%] top-36 h-44 w-44 bg-[#5e7486]/14 drift-slow" />
+      <div aria-hidden className="ambient-glow right-[6%] top-12 h-52 w-52 bg-[#ff8d6c]/16 float-slow" />
+      <div aria-hidden className="ambient-glow left-[8%] top-36 h-44 w-44 bg-[#79ddd4]/14 drift-slow" />
 
       <Container>
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-end">
@@ -48,16 +48,16 @@ export function PageHero({
           <Reveal delay={0.08}>
             <div className="mesh-panel relative overflow-hidden rounded-[38px] p-6 md:p-8">
               <div className="soft-grid absolute inset-0 opacity-25" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,177,119,0.15),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(124,152,177,0.11),transparent_22%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,180,95,0.18),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(121,221,212,0.14),transparent_22%)]" />
               <div className="relative">
                 <span className="story-chip">صفحة مستقلة</span>
                 <p className="mt-5 font-display text-3xl leading-[1.5] text-[#f9f1e4] md:text-4xl">
-                  {accent ?? "كل صفحة هنا مصممة كفصل مستقل، لكن بروح واحدة ومزاج واحد."}
+                  {accent ?? "كل صفحة هنا فصل مستقل، لكنه ينتمي إلى روح واحدة وإيقاع بصري متماسك."}
                 </p>
-                <div className="mt-8 h-px w-full bg-[linear-gradient(90deg,rgba(255,255,255,0.02),rgba(214,177,119,0.35),rgba(255,255,255,0.02))]" />
+                <div className="mt-8 h-px w-full bg-[linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,180,95,0.35),rgba(121,221,212,0.22),rgba(255,255,255,0.02))]" />
                 <p className="mt-6 text-sm leading-8 text-[#c8b9a1]/78">
-                  تجربة أهدأ، صفحات أوضح، وانتقال بصري يترك للمحتوى أن يتقدم
-                  بهدوء بدل التزاحم في صفحة واحدة طويلة.
+                  تنقل أوضح، ألوان أكثر إشراقًا، ومساحة تمنح المحتوى حضورًا من دون
+                  ازدحام أو تشويش.
                 </p>
               </div>
             </div>

@@ -21,8 +21,8 @@ export default async function AudioPage() {
       eyebrow={audioCopy.eyebrow}
       title={audioCopy.title}
       description={audioCopy.description}
-      accent="الآن هذه الصفحة مكتبة صوتيات فعلية، لا مجرد محاكاة ثابتة لمقطع واحد."
-      actionLabel="عد إلى الاقتباسات"
+      accent="تحولت هذه الصفحة إلى مكتبة صوتية حقيقية، لا إلى واجهة تجريبية لمقطع واحد."
+      actionLabel="ارجع إلى الاقتباسات"
       actionHref="/quote"
     >
       <AudioExperience
@@ -36,7 +36,7 @@ export default async function AudioPage() {
           <div className="grid gap-6 md:grid-cols-2">
             <Reveal>
               <article className="mesh-panel rounded-[32px] p-6 md:p-8">
-                <span className="story-chip">ملفات حقيقية</span>
+                <span className="story-chip">ملفات أصلية</span>
                 <p className="mt-5 text-base leading-8 text-[#cfbea7]/84">
                   كل عنصر في هذه الصفحة يعتمد على ملف صوت مرفوع من الأدمن، ويمكن تشغيله
                   مباشرة من المتصفح.
@@ -45,10 +45,10 @@ export default async function AudioPage() {
             </Reveal>
             <Reveal delay={0.08}>
               <article className="mesh-panel rounded-[32px] p-6 md:p-8">
-                <span className="story-chip">واجهة هادئة</span>
+                <span className="story-chip">واجهة مرنة</span>
                 <p className="mt-5 text-base leading-8 text-[#cfbea7]/84">
-                  حتى عند غياب الملفات، تبقى الصفحة محافظة على شكل مهني ورسالة واضحة بدل
-                  أن تتحول إلى فراغ مربك.
+                  حتى عند غياب الملفات، تبقى الصفحة محافظة على شكل مهني ورسالة واضحة
+                  بدل أن تتحول إلى فراغ مربك.
                 </p>
               </article>
             </Reveal>

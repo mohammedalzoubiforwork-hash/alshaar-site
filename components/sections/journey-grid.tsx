@@ -23,10 +23,10 @@ const layoutMap = [
 ];
 
 const toneMap = [
-  "bg-[radial-gradient(circle_at_top_right,rgba(201,159,98,0.16),transparent_38%),linear-gradient(180deg,rgba(38,28,22,0.94),rgba(23,17,13,0.88))]",
-  "bg-[radial-gradient(circle_at_12%_18%,rgba(186,141,86,0.12),transparent_28%),linear-gradient(180deg,rgba(28,22,19,0.94),rgba(17,13,10,0.9))]",
-  "bg-[radial-gradient(circle_at_88%_22%,rgba(150,116,74,0.16),transparent_24%),linear-gradient(180deg,rgba(30,23,18,0.94),rgba(18,13,10,0.9))]",
-  "bg-[radial-gradient(circle_at_78%_78%,rgba(214,182,131,0.1),transparent_22%),linear-gradient(180deg,rgba(33,25,20,0.94),rgba(19,14,11,0.9))]",
+  "bg-[radial-gradient(circle_at_top_right,rgba(255,180,95,0.18),transparent_38%),linear-gradient(180deg,rgba(18,34,52,0.94),rgba(9,19,30,0.88))]",
+  "bg-[radial-gradient(circle_at_12%_18%,rgba(121,221,212,0.14),transparent_28%),linear-gradient(180deg,rgba(16,31,47,0.94),rgba(8,18,29,0.9))]",
+  "bg-[radial-gradient(circle_at_88%_22%,rgba(255,141,108,0.18),transparent_24%),linear-gradient(180deg,rgba(19,34,50,0.94),rgba(9,19,30,0.9))]",
+  "bg-[radial-gradient(circle_at_78%_78%,rgba(255,180,95,0.12),transparent_22%),linear-gradient(180deg,rgba(18,32,48,0.94),rgba(8,18,28,0.9))]",
 ];
 
 type JourneyGridProps = {
@@ -76,7 +76,7 @@ export function JourneyGrid({
                       toneMap[index % toneMap.length],
                     )}
                   >
-                    <div className="absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100 bg-[radial-gradient(circle_at_top_right,rgba(223,202,169,0.08),transparent_32%)]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_32%)] opacity-0 transition duration-500 group-hover:opacity-100" />
                     <span className="absolute left-6 top-6 font-display text-6xl text-white/[0.04] md:text-8xl">
                       0{index + 1}
                     </span>
@@ -92,11 +92,11 @@ export function JourneyGrid({
                             className="object-cover transition duration-700 group-hover:scale-[1.04]"
                           />
                         ) : (
-                          <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_22%,rgba(226,191,139,0.16),transparent_24%),radial-gradient(circle_at_76%_70%,rgba(255,255,255,0.08),transparent_20%),linear-gradient(180deg,rgba(36,27,21,0.96),rgba(16,12,9,0.96))]" />
+                          <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_22%,rgba(255,180,95,0.16),transparent_24%),radial-gradient(circle_at_76%_70%,rgba(121,221,212,0.1),transparent_20%),linear-gradient(180deg,rgba(20,36,54,0.96),rgba(8,18,28,0.96))]" />
                         )}
-                        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,5,4,0.08),rgba(7,5,4,0.74))]" />
+                        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,12,20,0.08),rgba(6,12,20,0.74))]" />
                       </div>
-                      <div className="absolute right-5 top-5 flex size-14 items-center justify-center rounded-full border border-white/10 bg-black/30 text-[#ead4af] backdrop-blur-sm">
+                      <div className="absolute right-5 top-5 flex size-14 items-center justify-center rounded-full border border-white/10 bg-black/30 text-[#fff0cf] backdrop-blur-sm">
                         <Icon className="size-6" />
                       </div>
                     </div>
@@ -104,8 +104,8 @@ export function JourneyGrid({
                     <div className="relative mt-7 flex items-start justify-between gap-4">
                       <span className="section-kicker !mb-0">{workTypeLabels[entry.type]}</span>
                       {!hasEntryImage ? (
-                        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[11px] text-[#cdb793]">
-                          أضف صورة من الأدمن
+                        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[11px] text-[#dce7ee]">
+                          أضف صورة من لوحة الأدمن
                         </span>
                       ) : null}
                     </div>

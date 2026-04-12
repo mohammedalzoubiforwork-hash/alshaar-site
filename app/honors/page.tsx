@@ -21,7 +21,7 @@ export default async function HonorsPage() {
       eyebrow={honorsCopy.eyebrow}
       title={honorsCopy.title}
       description={honorsCopy.description}
-      accent="الخط الزمني هنا مستقل، لذلك تظهر الإنجازات كتجربة سردية كاملة لا كفقرة عابرة."
+      accent="كل تكريم هنا يأخذ مكانه الطبيعي في خط زمني أنيق، لا كجملة عابرة بين بقية الأقسام."
       actionLabel="انتقل إلى الأخبار"
       actionHref="/news"
     >
@@ -39,8 +39,8 @@ export default async function HonorsPage() {
                   </p>
                 </div>
                 <p className="text-base leading-8 text-[#cfbea7]/84 md:text-lg">
-                  كل محطة من هذه المحطات تملك الآن بطاقة مستقلة وصورة خاصة بها، مع مساحة
-                  كافية لرؤية ما وراء التاريخ والعنوان.
+                  كل محطة تظهر هنا ببطاقة مستقلة وصورة مرافقة، لتبدو الذاكرة أكثر
+                  حضورًا من مجرد تاريخ وعنوان.
                 </p>
               </div>
             </article>

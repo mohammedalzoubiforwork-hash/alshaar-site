@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import { Aref_Ruqaa, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import { siteIdentity } from "@/lib/site-config";
 import "./globals.css";
-
-const displayFont = Aref_Ruqaa({
-  variable: "--font-display",
-  subsets: ["arabic"],
-  weight: ["400", "700"],
-});
 
 const bodyFont = IBM_Plex_Sans_Arabic({
   variable: "--font-body",
@@ -29,7 +23,7 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
-      className={`${displayFont.variable} ${bodyFont.variable} h-full antialiased`}
+      className={`${bodyFont.variable} h-full antialiased`}
     >
       <body className="min-h-full">{children}</body>
     </html>

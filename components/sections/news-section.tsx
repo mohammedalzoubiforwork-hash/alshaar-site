@@ -50,13 +50,13 @@ export function NewsSection({
                           className="object-cover transition duration-700 group-hover:scale-[1.04]"
                         />
                       ) : (
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(221,186,134,0.18),transparent_24%),radial-gradient(circle_at_78%_74%,rgba(255,255,255,0.08),transparent_18%),linear-gradient(180deg,#241a15_0%,#120d0a_100%)]" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,180,95,0.18),transparent_24%),radial-gradient(circle_at_78%_74%,rgba(121,221,212,0.1),transparent_18%),linear-gradient(180deg,#14314b_0%,#091522_100%)]" />
                       )}
-                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,5,4,0.1),rgba(10,7,5,0.56))]" />
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,12,20,0.1),rgba(6,12,20,0.56))]" />
                     </div>
 
                     <div className="flex flex-1 flex-col p-6 md:p-7">
-                      <div className="flex items-center gap-2 text-sm text-[#cab18a]">
+                      <div className="flex items-center gap-2 text-sm text-[#ffe6b7]">
                         <CalendarDays className="size-4" />
                         <span>{item.date}</span>
                       </div>
@@ -83,7 +83,7 @@ export function NewsSection({
             <article className="paper-panel rounded-[34px] p-8 text-center">
               <p className="font-display text-3xl text-[#f8eee2]">لا توجد أخبار بعد</p>
               <p className="mt-4 text-base leading-8 text-[#cfbea7]/84">
-                أضف أول خبر من لوحة الأدمن ليظهر هنا مباشرة.
+                أضف أول خبر من لوحة الأدمن ليظهر هنا فورًا.
               </p>
             </article>
           </div>

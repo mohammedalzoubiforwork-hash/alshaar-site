@@ -33,14 +33,14 @@ export function HeroSection({ heroImage }: HeroSectionProps) {
       <motion.div
         aria-hidden
         style={{ y: glowY }}
-        className="ambient-glow left-[4%] top-[10%] h-72 w-72 bg-[#b58c59]/14"
+        className="ambient-glow left-[4%] top-[10%] h-72 w-72 bg-[#ff8d6c]/16"
       />
       <motion.div
         aria-hidden
         style={{ y: visualY }}
         className="absolute inset-y-[14%] left-[4%] hidden w-[44%] lg:block"
       >
-        <div className="relative h-full overflow-hidden rounded-[42px] border border-white/10 bg-[#15100d] shadow-[0_32px_120px_rgba(0,0,0,0.44)]">
+        <div className="relative h-full overflow-hidden rounded-[42px] border border-white/10 bg-[#0c1f31] shadow-[0_32px_120px_rgba(0,0,0,0.34)]">
           {hasHeroImage ? (
             <Image
               src={heroImage}
@@ -51,15 +51,15 @@ export function HeroSection({ heroImage }: HeroSectionProps) {
               className="object-cover object-center opacity-90"
             />
           ) : (
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_24%,rgba(217,180,119,0.3),transparent_22%),radial-gradient(circle_at_78%_64%,rgba(255,255,255,0.08),transparent_20%),linear-gradient(180deg,#231a14_0%,#110c09_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_24%,rgba(255,180,95,0.28),transparent_22%),radial-gradient(circle_at_78%_64%,rgba(121,221,212,0.12),transparent_20%),linear-gradient(180deg,#14314b_0%,#091522_100%)]" />
           )}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,5,4,0.22),rgba(9,7,5,0.74))]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_22%,rgba(215,170,107,0.14),transparent_22%),radial-gradient(circle_at_25%_72%,rgba(255,255,255,0.06),transparent_18%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,12,20,0.18),rgba(7,13,22,0.72))]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_22%,rgba(255,180,95,0.16),transparent_22%),radial-gradient(circle_at_25%_72%,rgba(121,221,212,0.08),transparent_18%)]" />
           <div className="absolute right-6 top-6 max-w-[16rem] rounded-[26px] border border-white/10 bg-black/18 p-4 backdrop-blur-md">
-            <p className="text-xs leading-6 text-[#f1e4d0]/82">{heroCopy.visualNoteTop}</p>
+            <p className="text-xs leading-6 text-[#fff1d8]/84">{heroCopy.visualNoteTop}</p>
           </div>
           <div className="absolute bottom-6 left-6 max-w-[18rem] rounded-[26px] border border-white/10 bg-white/[0.05] p-4 backdrop-blur-md">
-            <p className="text-xs leading-6 text-[#f1e4d0]/72">
+            <p className="text-xs leading-6 text-[#eef9ff]/74">
               {heroCopy.visualNoteBottom}
             </p>
           </div>
@@ -85,10 +85,10 @@ export function HeroSection({ heroImage }: HeroSectionProps) {
             className="relative z-10 max-w-3xl"
           >
             <span className="section-kicker">{heroCopy.sectionKicker}</span>
-            <h1 className="text-balance mt-7 text-5xl leading-[1.18] text-[#fbf3e8] md:text-7xl lg:text-[5.7rem] lg:leading-[1.1]">
+            <h1 className="text-balance mt-7 text-5xl leading-[1.18] text-[#fff7ee] md:text-7xl lg:text-[5.7rem] lg:leading-[1.1]">
               {heroCopy.title}
             </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-9 text-[#d6c6b1]/82 md:text-xl md:leading-10">
+            <p className="mt-7 max-w-2xl text-lg leading-9 text-[#dbe8ef]/84 md:text-xl md:leading-10">
               {heroCopy.subtitle}
             </p>
 
@@ -116,7 +116,7 @@ export function HeroSection({ heroImage }: HeroSectionProps) {
                 </div>
                 {heroCopy.introPillLabel}
               </div>
-              <p className="max-w-md text-sm leading-7 text-[#bca98d]/82">
+              <p className="max-w-md text-sm leading-7 text-[#d4e2eb]/82">
                 {heroCopy.introCaption}
               </p>
             </div>
@@ -129,7 +129,7 @@ export function HeroSection({ heroImage }: HeroSectionProps) {
             className="relative min-h-[420px] lg:hidden"
             style={{ y: visualY }}
           >
-            <div className="absolute inset-0 overflow-hidden rounded-[38px] border border-white/10 bg-[#15100d] shadow-[0_24px_90px_rgba(0,0,0,0.38)]">
+            <div className="absolute inset-0 overflow-hidden rounded-[38px] border border-white/10 bg-[#0c1f31] shadow-[0_24px_90px_rgba(0,0,0,0.3)]">
               {hasHeroImage ? (
                 <Image
                   src={heroImage}
@@ -140,12 +140,12 @@ export function HeroSection({ heroImage }: HeroSectionProps) {
                   className="object-cover opacity-90"
                 />
               ) : (
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_24%,rgba(217,180,119,0.3),transparent_22%),radial-gradient(circle_at_82%_68%,rgba(255,255,255,0.08),transparent_18%),linear-gradient(180deg,#231a14_0%,#110c09_100%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_24%,rgba(255,180,95,0.28),transparent_22%),radial-gradient(circle_at_82%_68%,rgba(121,221,212,0.12),transparent_18%),linear-gradient(180deg,#14314b_0%,#091522_100%)]" />
               )}
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,5,4,0.2),rgba(10,7,5,0.72))]" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,12,20,0.18),rgba(7,13,22,0.72))]" />
             </div>
             <div className="absolute left-5 top-5 max-w-[14rem] rounded-[24px] border border-white/10 bg-black/18 p-4 backdrop-blur-md">
-              <p className="text-xs leading-6 text-[#f1e4d0]/78">
+              <p className="text-xs leading-6 text-[#fff1d8]/82">
                 {heroCopy.mobileVisualNote}
               </p>
             </div>

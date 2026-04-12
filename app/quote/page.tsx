@@ -21,7 +21,7 @@ export default async function QuotePage() {
       eyebrow={quoteCopy.eyebrow}
       title={quoteCopy.title}
       description={quoteCopy.description}
-      accent="بدل اقتباس ثابت واحد، أصبحت هذه الصفحة مساحة مفتوحة لمجموعة اقتباسات قابلة للإضافة والحذف."
+      accent="هنا تصبح الاقتباسات مساحة متجددة يمكن توسيعها أو حذفها من دون أن يفقد التصميم توازنه."
       actionLabel="استمع إلى الصوتيات"
       actionHref="/audio"
     >
@@ -37,19 +37,19 @@ export default async function QuotePage() {
           <div className="grid gap-6 md:grid-cols-2">
             <Reveal>
               <article className="paper-panel rounded-[32px] p-6 md:p-8">
-                <span className="story-chip">بطاقات متعددة</span>
+                <span className="story-chip">تنوع الاقتباسات</span>
                 <p className="mt-5 text-base leading-8 text-[#cfbea7]/84">
-                  كل اقتباس تضيفه من الأدمن يمكن أن يظهر هنا ضمن بطاقات مستقلة، بدل
-                  الاعتماد على اقتباس واحد ثابت داخل التصميم.
+                  يمكن لكل اقتباس تضيفه من الأدمن أن يظهر هنا في بطاقة مستقلة، من دون
+                  أن يفقد التصميم انسجامه.
                 </p>
               </article>
             </Reveal>
             <Reveal delay={0.08}>
               <article className="paper-panel rounded-[32px] p-6 md:p-8">
-                <span className="story-chip">حالة الفراغ</span>
+                <span className="story-chip">حالة فارغة أنيقة</span>
                 <p className="mt-5 text-base leading-8 text-[#cfbea7]/84">
-                  إذا حذفت كل الاقتباسات، تبقى الصفحة أنيقة مع رسالة Empty State هادئة
-                  بدل أن تبدو مكسورة أو فارغة بشكل سيئ.
+                  حتى إذا حذفت جميع الاقتباسات، تبقى الصفحة متوازنة مع رسالة واضحة بدل
+                  أن تبدو فارغة أو مكسورة.
                 </p>
               </article>
             </Reveal>

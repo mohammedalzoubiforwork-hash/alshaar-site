@@ -31,7 +31,7 @@ export function QuoteSection({
           <div className="grid gap-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-stretch">
             <Reveal>
               <div className="paper-panel relative h-full overflow-hidden rounded-[42px] p-7 md:p-10 lg:p-12">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,177,119,0.09),transparent_18%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_34%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,180,95,0.12),transparent_18%),radial-gradient(circle_at_bottom_left,rgba(121,221,212,0.08),transparent_22%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_34%)]" />
                 <div className="relative">
                   {showHeading ? (
                     <>
@@ -53,7 +53,7 @@ export function QuoteSection({
 
                   <div className="mt-6 rounded-[24px] border border-white/10 bg-white/[0.03] p-5">
                     <p className="text-sm leading-7 text-[#cfbea7]/84">
-                      {featuredQuote.caption || "اقتباس مميز من صفحة الاقتباسات."}
+                      {featuredQuote.caption || "اقتباس مختار من صفحة الاقتباسات."}
                     </p>
                   </div>
 
@@ -82,9 +82,9 @@ export function QuoteSection({
                         index === 0 && "min-h-[220px]",
                       )}
                     >
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(214,177,119,0.08),transparent_18%)]" />
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,180,95,0.08),transparent_18%),radial-gradient(circle_at_bottom_right,rgba(121,221,212,0.06),transparent_20%)]" />
                       <div className="relative">
-                        <div className="flex items-center gap-3 text-[#dec7a2]">
+                        <div className="flex items-center gap-3 text-[#fff0cf]">
                           <QuoteIcon className="size-4" />
                           <span className="text-sm">اقتباس إضافي</span>
                         </div>
@@ -103,10 +103,10 @@ export function QuoteSection({
                   <article className="paper-panel flex min-h-[220px] items-center justify-center rounded-[34px] p-8 text-center">
                     <div>
                       <p className="font-display text-3xl text-[#f8eee2]">
-                        اقتباس واحد مضاف حاليًا
+                        يوجد اقتباس واحد حاليًا
                       </p>
                       <p className="mt-4 text-base leading-8 text-[#cfbea7]/84">
-                        أضف اقتباسات أخرى من الأدمن لتظهر هنا كبطاقات إضافية.
+                        أضف اقتباسات أخرى من لوحة الأدمن لتظهر هنا كبطاقات إضافية.
                       </p>
                     </div>
                   </article>

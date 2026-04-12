@@ -37,7 +37,7 @@ export function AudioExperience({
             {audioTracks.map((track, index) => (
               <Reveal key={track.id} delay={index * 0.08}>
                 <article className="paper-panel relative overflow-hidden rounded-[38px] p-7 md:p-9">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,177,119,0.08),transparent_20%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_40%)]" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(121,221,212,0.12),transparent_20%),radial-gradient(circle_at_bottom_left,rgba(255,180,95,0.08),transparent_24%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_40%)]" />
                   <div className="relative">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <span className="sound-pill">
@@ -45,7 +45,7 @@ export function AudioExperience({
                         {audioCopy.stageLabel}
                       </span>
                       {track.durationLabel ? (
-                        <span className="rounded-full border border-white/10 px-4 py-2 text-sm text-[#dfccb0]/82">
+                        <span className="rounded-full border border-white/10 px-4 py-2 text-sm text-[#fff0cf]/84">
                           {track.durationLabel}
                         </span>
                       ) : null}
@@ -64,7 +64,7 @@ export function AudioExperience({
                           المتصفح الحالي لا يدعم تشغيل الصوتيات.
                         </audio>
                       ) : (
-                        <div className="flex items-center gap-3 text-sm text-[#cfbea7]/76">
+                        <div className="flex items-center gap-3 text-sm text-[#dce7ee]/78">
                           <PlayCircle className="size-4" />
                           الملف الصوتي غير متاح بعد.
                         </div>
