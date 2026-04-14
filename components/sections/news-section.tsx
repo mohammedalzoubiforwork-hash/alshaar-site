@@ -39,7 +39,7 @@ export function NewsSection({
 
               return (
                 <Reveal key={item.id} delay={index * 0.08}>
-                  <article className="paper-panel group flex h-full flex-col overflow-hidden rounded-[24px] sm:rounded-[28px] md:rounded-[32px]">
+                  <article className="paper-panel flex h-full flex-col overflow-hidden rounded-[24px] sm:rounded-[28px] md:rounded-[32px]">
                     <div className="relative aspect-[4/3] overflow-hidden sm:aspect-[16/10] lg:aspect-[4/5]">
                       {hasNewsImage ? (
                         <Image
@@ -49,7 +49,7 @@ export function NewsSection({
                           loading="lazy"
                           quality={72}
                           sizes="(max-width: 640px) calc(100vw - 2rem), (max-width: 1024px) 50vw, 33vw"
-                          className="object-cover object-top transition duration-700 group-hover:scale-[1.04] sm:object-center"
+                          className="object-cover object-top sm:object-center"
                         />
                       ) : (
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,180,95,0.18),transparent_24%),radial-gradient(circle_at_78%_74%,rgba(121,221,212,0.1),transparent_18%),linear-gradient(180deg,#14314b_0%,#091522_100%)]" />

@@ -50,7 +50,7 @@ export function SiteFooter() {
                         <Link
                           href={link.href}
                           prefetch={false}
-                          className="text-[#dce7ee]/78 hover:text-[#fff6ec]"
+                          className="text-[#dce7ee]/78"
                         >
                           {link.label}
                         </Link>
@@ -67,7 +67,7 @@ export function SiteFooter() {
                       <Link
                         key={link.label}
                         href={link.href}
-                        className="flex size-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-[#fff0cf] hover:border-[#79ddd4]/28 hover:bg-white/[0.06]"
+                        className="flex size-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-[#fff0cf]"
                         aria-label={link.label}
                       >
                         <Icon className="size-4" />

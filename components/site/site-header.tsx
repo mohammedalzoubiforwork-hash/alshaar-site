@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { SoundToggle } from "@/components/site/sound-toggle";
 import { navigationLinks, siteIdentity } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
@@ -61,8 +60,7 @@ export function SiteHeader({
             </ul>
           </nav>
 
-          <div className="hidden items-center gap-3 lg:flex">
-            <SoundToggle />
+          <div className="hidden items-center lg:flex">
             <Link
               href="/admin"
               prefetch={false}
@@ -85,7 +83,6 @@ export function SiteHeader({
             </Link>
 
             <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-              <SoundToggle className="shrink-0" />
               <Link
                 href="/admin"
                 prefetch={false}

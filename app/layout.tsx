@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Amiri, Noto_Naskh_Arabic } from "next/font/google";
-import { SiteEffectsProvider } from "@/components/site/site-effects-provider";
 import { siteIdentity } from "@/lib/site-config";
 import "./globals.css";
 
@@ -34,9 +33,7 @@ export default function RootLayout({
       dir="rtl"
       className={`${bodyFont.variable} ${displayFont.variable} h-full antialiased`}
     >
-      <body className="min-h-full">
-        <SiteEffectsProvider>{children}</SiteEffectsProvider>
-      </body>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

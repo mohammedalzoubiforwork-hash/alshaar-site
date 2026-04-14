@@ -60,11 +60,11 @@ export function HomeDestinations({ pages }: HomeDestinationsProps) {
               <Reveal key={page.id} delay={index * 0.06}>
                 <article
                   className={cn(
-                    "route-card group relative h-full overflow-hidden rounded-[24px] p-4 transition-transform duration-300 ease-out motion-safe:hover:-translate-y-2 sm:rounded-[28px] sm:p-5 md:rounded-[34px] md:p-8",
+                    "route-card relative h-full overflow-hidden rounded-[24px] p-4 sm:rounded-[28px] sm:p-5 md:rounded-[34px] md:p-8",
                     toneMap[page.id],
                   )}
                 >
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_28%)] opacity-0 transition duration-500 group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_28%)]" />
                   <div className="relative flex h-full flex-col">
                     <div className="flex items-start justify-between gap-4">
                       <span className="story-chip">{page.label}</span>

@@ -72,11 +72,11 @@ export function JourneyGrid({
                 >
                   <article
                     className={cn(
-                      "paper-panel group relative flex h-full flex-col overflow-hidden rounded-[24px] p-4 sm:rounded-[28px] sm:p-5 md:rounded-[34px] md:p-8",
+                      "paper-panel relative flex h-full flex-col overflow-hidden rounded-[24px] p-4 sm:rounded-[28px] sm:p-5 md:rounded-[34px] md:p-8",
                       toneMap[index % toneMap.length],
                     )}
                   >
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_32%)] opacity-0 transition duration-500 group-hover:opacity-100" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_32%)]" />
                     <span className="absolute left-4 top-4 font-display text-4xl text-white/[0.04] sm:left-5 sm:top-5 sm:text-5xl md:left-6 md:top-6 md:text-8xl">
                       0{index + 1}
                     </span>
@@ -91,7 +91,7 @@ export function JourneyGrid({
                             loading="lazy"
                             quality={72}
                             sizes="(max-width: 640px) calc(100vw - 2rem), (max-width: 1280px) 50vw, 33vw"
-                            className="object-cover object-top transition duration-700 group-hover:scale-[1.04] sm:object-center"
+                            className="object-cover object-top sm:object-center"
                           />
                         ) : (
                           <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_22%,rgba(255,180,95,0.16),transparent_24%),radial-gradient(circle_at_76%_70%,rgba(121,221,212,0.1),transparent_20%),linear-gradient(180deg,rgba(20,36,54,0.96),rgba(8,18,28,0.96))]" />
