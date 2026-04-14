@@ -2,6 +2,7 @@ import { Headphones, PlayCircle } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { resolveSiteAssetPath } from "@/lib/site-asset-path";
 import { audioCopy } from "@/lib/site-config";
 import type { AudioTrack } from "@/lib/site-content-types";
 import { cn } from "@/lib/utils";
@@ -58,7 +59,12 @@ export function AudioExperience({
 
                     <div className="mt-5 rounded-[22px] border border-white/10 bg-white/[0.03] p-3 sm:mt-6 sm:p-4 md:mt-8 md:rounded-[28px]">
                       {track.file ? (
-                        <audio controls preload="none" className="w-full" src={track.file}>
+                        <audio
+                          controls
+                          preload="none"
+                          className="w-full"
+                          src={resolveSiteAssetPath(track.file)}
+                        >
                           المتصفح الحالي لا يدعم تشغيل الصوتيات.
                         </audio>
                       ) : (

@@ -43,7 +43,10 @@ function pathValue(value: unknown, fallback: string) {
     return "";
   }
 
-  return value.startsWith("/") || value.startsWith("http://") || value.startsWith("https://")
+  return value.startsWith("/") ||
+    value.startsWith("http://") ||
+    value.startsWith("https://") ||
+    value.startsWith("data:")
     ? value
     : fallback;
 }

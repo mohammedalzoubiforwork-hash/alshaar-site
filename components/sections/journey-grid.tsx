@@ -23,10 +23,10 @@ const layoutMap = [
 ];
 
 const toneMap = [
-  "bg-[radial-gradient(circle_at_top_right,rgba(255,180,95,0.18),transparent_38%),linear-gradient(180deg,rgba(18,34,52,0.94),rgba(9,19,30,0.88))]",
-  "bg-[radial-gradient(circle_at_12%_18%,rgba(121,221,212,0.14),transparent_28%),linear-gradient(180deg,rgba(16,31,47,0.94),rgba(8,18,29,0.9))]",
-  "bg-[radial-gradient(circle_at_88%_22%,rgba(255,141,108,0.18),transparent_24%),linear-gradient(180deg,rgba(19,34,50,0.94),rgba(9,19,30,0.9))]",
-  "bg-[radial-gradient(circle_at_78%_78%,rgba(255,180,95,0.12),transparent_22%),linear-gradient(180deg,rgba(18,32,48,0.94),rgba(8,18,28,0.9))]",
+  "bg-[radial-gradient(circle_at_top_right,rgba(255,180,95,0.24),transparent_38%),radial-gradient(circle_at_18%_82%,rgba(255,157,182,0.1),transparent_22%),linear-gradient(180deg,rgba(20,38,58,0.94),rgba(9,19,30,0.88))]",
+  "bg-[radial-gradient(circle_at_12%_18%,rgba(121,221,212,0.2),transparent_28%),radial-gradient(circle_at_84%_72%,rgba(144,203,255,0.1),transparent_20%),linear-gradient(180deg,rgba(17,35,53,0.94),rgba(8,18,29,0.9))]",
+  "bg-[radial-gradient(circle_at_88%_22%,rgba(255,141,108,0.24),transparent_24%),radial-gradient(circle_at_18%_76%,rgba(255,197,109,0.12),transparent_20%),linear-gradient(180deg,rgba(21,38,56,0.94),rgba(9,19,30,0.9))]",
+  "bg-[radial-gradient(circle_at_78%_78%,rgba(255,180,95,0.18),transparent_22%),radial-gradient(circle_at_18%_18%,rgba(121,221,212,0.14),transparent_20%),linear-gradient(180deg,rgba(18,34,52,0.94),rgba(8,18,28,0.9))]",
 ];
 
 type JourneyGridProps = {

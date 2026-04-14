@@ -17,11 +17,15 @@ export function HeroSection({ heroImage }: HeroSectionProps) {
     <section id="home" className="relative isolate overflow-clip sm:min-h-[100svh] lg:min-h-screen">
       <div
         aria-hidden
-        className="ambient-glow left-[4%] top-[10%] h-72 w-72 bg-[#ff8d6c]/22 drift-slow"
+        className="ambient-glow left-[2%] top-[8%] h-80 w-80 bg-[#ff8d6c]/26 drift-slow"
       />
       <div
         aria-hidden
-        className="ambient-glow right-[10%] top-[8%] h-64 w-64 bg-[#7ee6dc]/18 float-slow"
+        className="ambient-glow right-[8%] top-[8%] h-72 w-72 bg-[#7ee6dc]/22 float-slow"
+      />
+      <div
+        aria-hidden
+        className="ambient-glow right-[28%] top-[32%] h-64 w-64 bg-[#ffcf78]/14"
       />
       <SiteHeader currentPath="/" className="relative" showMobileQuickLinks={false} />
 
@@ -32,7 +36,7 @@ export function HeroSection({ heroImage }: HeroSectionProps) {
             y={32}
             className="order-2 relative min-h-[11rem] overflow-hidden rounded-[28px] aspect-[16/9] sm:min-h-[22rem] sm:rounded-[38px] lg:order-1 lg:min-h-[36rem] lg:rounded-[42px] lg:aspect-auto xl:min-h-[42rem]"
           >
-            <div className="hero-frame absolute inset-0 rounded-[28px] border border-white/10 bg-[#0c1f31] sm:rounded-[38px] lg:rounded-[42px]">
+            <div className="hero-frame absolute inset-0 rounded-[28px] border border-white/12 bg-[#10253a] sm:rounded-[38px] lg:rounded-[42px]">
               {hasHeroImage ? (
                 <Image
                   src={heroImage}
@@ -41,23 +45,31 @@ export function HeroSection({ heroImage }: HeroSectionProps) {
                   priority
                   quality={78}
                   sizes="(max-width: 640px) calc(100vw - 2rem), (max-width: 1024px) calc(100vw - 3rem), 44vw"
-                  className="object-cover object-top opacity-90 sm:object-center"
+                  className="object-cover object-top opacity-92 saturate-[1.08] sm:object-center"
                 />
               ) : (
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_24%,rgba(255,180,95,0.28),transparent_22%),radial-gradient(circle_at_78%_64%,rgba(121,221,212,0.12),transparent_20%),linear-gradient(180deg,#14314b_0%,#091522_100%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_24%,rgba(255,180,95,0.34),transparent_22%),radial-gradient(circle_at_78%_64%,rgba(121,221,212,0.16),transparent_20%),radial-gradient(circle_at_58%_18%,rgba(255,157,182,0.12),transparent_18%),linear-gradient(180deg,#163652_0%,#0a1828_100%)]" />
               )}
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,12,20,0.18),rgba(7,13,22,0.72))]" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_22%,rgba(255,180,95,0.16),transparent_22%),radial-gradient(circle_at_25%_72%,rgba(121,221,212,0.08),transparent_18%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,12,20,0.14),rgba(7,13,22,0.68))]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_22%,rgba(255,180,95,0.22),transparent_22%),radial-gradient(circle_at_25%_72%,rgba(121,221,212,0.12),transparent_18%),radial-gradient(circle_at_14%_18%,rgba(255,157,182,0.1),transparent_18%)]" />
             </div>
           </Reveal>
 
           <Reveal delay={0.12} y={28} className="order-1 relative z-10 max-w-3xl lg:order-2">
+            <div
+              aria-hidden
+              className="absolute -right-6 top-0 -z-10 h-40 w-40 rounded-full bg-[#ff9b7c]/16 blur-3xl"
+            />
+            <div
+              aria-hidden
+              className="absolute left-[12%] top-24 -z-10 h-44 w-44 rounded-full bg-[#82eadf]/12 blur-3xl"
+            />
             <span className="section-kicker">{heroCopy.sectionKicker}</span>
-            <h1 className="text-balance mt-3 text-[clamp(2.3rem,10vw,4.7rem)] leading-[1.18] text-[#fff7ee] sm:mt-5 md:mt-7 md:text-7xl lg:text-[5.7rem] lg:leading-[1.1]">
+            <h1 className="text-balance mt-3 text-[clamp(2.3rem,10vw,4.7rem)] leading-[1.18] text-[#fff9f2] drop-shadow-[0_0_28px_rgba(255,182,118,0.12)] sm:mt-5 md:mt-7 md:text-7xl lg:text-[5.7rem] lg:leading-[1.1]">
               {heroCopy.title}
             </h1>
             {heroCopy.subtitle ? (
-              <p className="mt-3 max-w-xl text-[0.98rem] leading-7 text-[#dbe8ef]/84 sm:mt-6 sm:text-base sm:leading-8 md:mt-7 md:text-xl md:leading-10">
+              <p className="mt-3 max-w-xl text-[0.98rem] leading-7 text-[#e3edf3]/88 sm:mt-6 sm:text-base sm:leading-8 md:mt-7 md:text-xl md:leading-10">
                 {heroCopy.subtitle}
               </p>
             ) : null}

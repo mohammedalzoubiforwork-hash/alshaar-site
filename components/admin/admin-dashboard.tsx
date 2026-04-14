@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { type ChangeEvent, type ReactNode, useState } from "react";
+import { type ChangeEvent, type ReactNode, useEffect, useState } from "react";
 import {
   AlertCircle,
   ArrowUpRight,
@@ -18,6 +18,21 @@ import {
   Trophy,
   UserRound,
 } from "lucide-react";
+import {
+  isBrowserContentMode,
+  readEditableBrowserSiteContent,
+  writeEditableBrowserSiteContent,
+} from "@/components/site/browser-site-content";
+import {
+  clearGitHubAccessToken,
+  getGitHubRepositoryLabel,
+  readGitHubAccessToken,
+  readGitHubSiteContent,
+  saveGitHubSiteContent,
+  uploadGitHubMediaFile,
+  writeGitHubAccessToken,
+} from "@/components/site/github-repo-storage";
+import { resolveSiteAssetPath } from "@/lib/site-asset-path";
 import { workTypeLabels } from "@/lib/site-config";
 import type {
   AudioTrack,
@@ -32,8 +47,10 @@ import type {
 type AdminDashboardProps = {
   initialContent: SiteContent;
   contentPath: string;
+  storageMode?: StorageMode;
 };
 
+type StorageMode = "server" | "github";
 type SectionId = "writer" | "photos" | "works" | "honors" | "news" | "quotes" | "audio";
 type StatusTone = "idle" | "success" | "error";
 type MutateOptions = {
@@ -150,7 +167,34 @@ function createAudioTrack(): AudioTrack {
   };
 }
 
-async function uploadFile(file: File, endpoint: string) {
+function getIdleStatusMessage(storageMode: StorageMode) {
+  return storageMode === "github"
+    ? "اربط رمز GitHub أولًا، وبعدها سيحفظ الأدمن المحتوى داخل المستودع مباشرة ويعيد نشر GitHub Pages."
+    : "التعديلات غير محفوظة حتى تضغط زر الحفظ.";
+}
+
+function getContentLocationLabel(
+  contentPath: string,
+  storageMode: StorageMode,
+) {
+  return storageMode === "github"
+    ? `GitHub · ${getGitHubRepositoryLabel()}`
+    : contentPath;
+}
+
+async function uploadFile(
+  file: File,
+  endpoint: string,
+  storageMode: StorageMode,
+) {
+  if (storageMode === "github") {
+    return await uploadGitHubMediaFile(
+      file,
+      endpoint.includes("audio") ? "audio" : "image",
+      readGitHubAccessToken(),
+    );
+  }
+
   const formData = new FormData();
   formData.append("file", file);
 
@@ -174,15 +218,17 @@ async function uploadFile(file: File, endpoint: string) {
 export function AdminDashboard({
   initialContent,
   contentPath,
+  storageMode = isBrowserContentMode() ? "github" : "server",
 }: AdminDashboardProps) {
+  const isGitHubStorageMode = storageMode === "github";
   const [content, setContent] = useState(initialContent);
   const [activeSection, setActiveSection] = useState<SectionId>("writer");
   const [statusTone, setStatusTone] = useState<StatusTone>("idle");
-  const [statusMessage, setStatusMessage] = useState(
-    "التعديلات غير محفوظة حتى تضغط زر الحفظ.",
-  );
+  const [statusMessage, setStatusMessage] = useState(getIdleStatusMessage(storageMode));
   const [isSaving, setIsSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const [githubToken, setGitHubToken] = useState("");
+  const [isSyncingGitHub, setIsSyncingGitHub] = useState(false);
 
   const stats = [
     { label: "الأعمال", value: content.works.length },
@@ -190,6 +236,36 @@ export function AdminDashboard({
     { label: "الأخبار", value: content.news.length },
     { label: "الصوتيات", value: content.audioTracks.length },
   ];
+
+  async function syncGitHubContent(token: string, options?: { silent?: boolean }) {
+    if (!isGitHubStorageMode || !token.trim()) {
+      return;
+    }
+
+    setIsSyncingGitHub(true);
+
+    if (!options?.silent) {
+      setStatusTone("idle");
+      setStatusMessage("جارٍ جلب آخر نسخة من GitHub...");
+    }
+
+    try {
+      const githubContent = await readGitHubSiteContent(token);
+      const previewContent = await writeEditableBrowserSiteContent(githubContent);
+
+      setContent(previewContent);
+      setIsDirty(false);
+      setStatusTone("success");
+      setStatusMessage("تمت مزامنة المحتوى الحالي من GitHub بنجاح.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "تعذر مزامنة المحتوى من GitHub.";
+      setStatusTone("error");
+      setStatusMessage(message);
+    } finally {
+      setIsSyncingGitHub(false);
+    }
+  }
 
   async function persistContent(
     nextContent: SiteContent,
@@ -200,9 +276,29 @@ export function AdminDashboard({
   ) {
     setIsSaving(true);
     setStatusTone("idle");
-    setStatusMessage(options?.savingMessage ?? "جاري حفظ المحتوى في ملف البيانات...");
+    setStatusMessage(
+      options?.savingMessage ??
+        (storageMode === "github"
+          ? "جارٍ حفظ المحتوى داخل GitHub وإطلاق نشر GitHub Pages..."
+          : "جاري حفظ المحتوى في ملف البيانات..."),
+    );
 
     try {
+      if (storageMode === "github") {
+        const nextStoredContent = await saveGitHubSiteContent(nextContent, githubToken);
+        await writeEditableBrowserSiteContent(nextStoredContent);
+
+        setContent(nextStoredContent);
+        setIsDirty(false);
+        setStatusTone("success");
+        setStatusMessage(
+          options?.successMessage ??
+            "تم حفظ التعديلات في GitHub. سيحدّث GitHub Pages الموقع بعد اكتمال النشر.",
+        );
+
+        return;
+      }
+
       const response = await fetch("/api/content", {
         method: "PUT",
         headers: {
@@ -234,6 +330,92 @@ export function AdminDashboard({
       setIsSaving(false);
     }
   }
+
+  useEffect(() => {
+    let isActive = true;
+
+    async function syncInitialContent() {
+      if (storageMode === "github") {
+        const savedToken = readGitHubAccessToken();
+        const browserContent = await readEditableBrowserSiteContent(initialContent);
+
+        if (!isActive) {
+          return;
+        }
+
+        setContent(browserContent);
+        setGitHubToken(savedToken);
+        setIsDirty(false);
+        setStatusTone("idle");
+        setStatusMessage(getIdleStatusMessage(storageMode));
+
+        setIsSyncingGitHub(true);
+
+        try {
+          const githubContent = await readGitHubSiteContent(savedToken);
+
+          if (!isActive) {
+            return;
+          }
+
+          const previewContent = await writeEditableBrowserSiteContent(githubContent);
+
+          if (!isActive) {
+            return;
+          }
+
+          setContent(previewContent);
+          setStatusTone("success");
+          setStatusMessage(
+            savedToken
+              ? "تمت مزامنة آخر نسخة محفوظة من GitHub."
+              : "تم تحميل أحدث نسخة منشورة من المستودع على GitHub.",
+          );
+        } catch (error) {
+          if (!isActive) {
+            return;
+          }
+
+          if (savedToken) {
+            const message =
+              error instanceof Error ? error.message : "تعذر مزامنة المحتوى من GitHub.";
+            setStatusTone("error");
+            setStatusMessage(message);
+          }
+        } finally {
+          if (isActive) {
+            setIsSyncingGitHub(false);
+          }
+        }
+
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/content", {
+          cache: "no-store",
+        });
+
+        const payload = (await response.json()) as {
+          content?: SiteContent;
+        };
+
+        if (!response.ok || !payload.content || !isActive) {
+          return;
+        }
+
+        setContent(payload.content);
+      } catch {
+        // Keep the server-rendered fallback when the API is unavailable.
+      }
+    }
+
+    void syncInitialContent();
+
+    return () => {
+      isActive = false;
+    };
+  }, [initialContent, storageMode]);
 
   const mutateContent: MutateContent = (mutator, options) => {
     const next = structuredClone(content);
@@ -294,14 +476,15 @@ export function AdminDashboard({
           <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
             <div className="max-w-3xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-[#d5bb90]/20 bg-[#d5bb90]/8 px-4 py-2 text-xs text-[#e2ccaa]">
-                لوحة الأدمن
+                {isGitHubStorageMode ? "لوحة الإدارة عبر GitHub" : "لوحة الأدمن"}
               </span>
               <h1 className="mt-5 font-display text-4xl text-[#fbf4e8] md:text-6xl">
                 إدارة خفيفة للعناصر فقط
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-8 text-[#c7c0b4] md:text-lg">
-                أضف أو احذف الصور والأعمال والتكريمات والأخبار والاقتباسات والصوتيات،
-                ثم احفظ التغييرات ليقرأها الموقع مباشرة.
+                {isGitHubStorageMode
+                  ? "عدّل النصوص والصور والصوتيات ثم احفظ التغييرات داخل المستودع مباشرة. بعد كل حفظ سيعيد GitHub Pages نشر الموقع بدل السيرفر القديم."
+                  : "أضف أو احذف الصور والأعمال والتكريمات والأخبار والاقتباسات والصوتيات، ثم احفظ التغييرات ليقرأها الموقع مباشرة."}
               </p>
             </div>
 
@@ -353,9 +536,78 @@ export function AdminDashboard({
             </div>
 
             <div className="rounded-[24px] border border-white/10 bg-[#0f141a] px-4 py-4 text-sm text-[#cabfad]">
-              <span className="inline-flex items-center gap-2">{contentPath}</span>
+              <span className="inline-flex items-center gap-2">
+                {getContentLocationLabel(contentPath, storageMode)}
+              </span>
             </div>
           </div>
+
+          {isGitHubStorageMode ? (
+            <div className="mt-4 rounded-[24px] border border-white/10 bg-[#0f141a] p-4 md:p-5">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div className="max-w-2xl">
+                  <p className="text-sm text-[#f3e7d0]">ربط GitHub</p>
+                  <p className="mt-1 text-sm leading-7 text-[#b7ad9f]">
+                    أدخل رمز GitHub Personal Access Token بصلاحية
+                    {" "}
+                    <span className="text-[#f3e7d0]">Contents: Read and write</span>
+                    {" "}
+                    لهذا المستودع فقط. الرمز يُحفَظ على هذا الجهاز ولا يُرسل إلا إلى GitHub.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextToken = writeGitHubAccessToken(githubToken);
+                      setGitHubToken(nextToken);
+
+                      if (!nextToken) {
+                        setStatusTone("error");
+                        setStatusMessage("أدخل رمز GitHub صالحًا أولًا.");
+                        return;
+                      }
+
+                      void syncGitHubContent(nextToken);
+                    }}
+                    disabled={isSaving || isSyncingGitHub}
+                    className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-5 text-sm text-[#f3ede2] transition hover:border-white/20 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {isSyncingGitHub ? "جارٍ الربط..." : "حفظ الرمز وربط GitHub"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      clearGitHubAccessToken();
+                      setGitHubToken("");
+                      setStatusTone("idle");
+                      setStatusMessage(getIdleStatusMessage(storageMode));
+                    }}
+                    disabled={isSaving || isSyncingGitHub}
+                    className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/10 bg-transparent px-5 text-sm text-[#cbbca7] transition hover:border-white/20 hover:bg-white/[0.03] disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    نسيان الرمز
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
+                <input
+                  type="password"
+                  value={githubToken}
+                  onChange={(event) => setGitHubToken(event.target.value)}
+                  placeholder="github_pat_..."
+                  autoComplete="off"
+                  spellCheck={false}
+                  className="min-h-12 w-full rounded-[18px] border border-white/10 bg-black/10 px-4 text-sm tracking-[0.08em] text-[#f5ecdd] outline-none ring-0 placeholder:tracking-normal placeholder:text-[#7f776b]"
+                />
+                <div className="inline-flex min-h-12 items-center rounded-[18px] border border-white/10 bg-black/10 px-4 text-sm text-[#cbbca7]">
+                  {getGitHubRepositoryLabel()}
+                </div>
+              </div>
+            </div>
+          ) : null}
         </section>
 
         <div className="mt-6 grid gap-6 xl:grid-cols-[310px_minmax(0,1fr)]">
@@ -601,6 +853,7 @@ function ImageUploadField({
 }) {
   const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState("");
+  const storageMode: StorageMode = isBrowserContentMode() ? "github" : "server";
 
   async function handleFileSelection(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -613,7 +866,7 @@ function ImageUploadField({
     setMessage("");
 
     try {
-      const payload = await uploadFile(file, "/api/upload-image");
+      const payload = await uploadFile(file, "/api/upload-image", storageMode);
       if (onCommit) {
         onCommit(payload.path ?? "");
       } else {
@@ -681,7 +934,7 @@ function ImageUploadField({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 key={value}
-                src={value}
+                src={resolveSiteAssetPath(value)}
                 alt={label}
                 className="h-full w-full object-cover"
               />
@@ -710,6 +963,7 @@ function AudioUploadField({
 }) {
   const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState("");
+  const storageMode: StorageMode = isBrowserContentMode() ? "github" : "server";
 
   async function handleFileSelection(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -722,7 +976,7 @@ function AudioUploadField({
     setMessage("");
 
     try {
-      const payload = await uploadFile(file, "/api/upload-audio");
+      const payload = await uploadFile(file, "/api/upload-audio", storageMode);
       if (onCommit) {
         onCommit(payload.path ?? "");
       } else {
@@ -784,7 +1038,12 @@ function AudioUploadField({
 
       <div className="rounded-[24px] border border-white/10 bg-[#0a0d10] p-4">
         {value ? (
-          <audio controls preload="none" className="w-full" src={value}>
+          <audio
+            controls
+            preload="none"
+            className="w-full"
+            src={resolveSiteAssetPath(value)}
+          >
             المتصفح الحالي لا يدعم تشغيل الصوتيات.
           </audio>
         ) : (

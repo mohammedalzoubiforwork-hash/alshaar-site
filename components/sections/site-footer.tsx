@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Camera, Mail, Send, Video } from "lucide-react";
+import { Camera, Mail, Send, Settings2, Video } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import {
@@ -74,6 +74,14 @@ export function SiteFooter() {
                       </Link>
                     );
                   })}
+                  <Link
+                    href="/admin"
+                    prefetch={false}
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 text-sm text-[#fff0cf]"
+                  >
+                    <Settings2 className="size-4" />
+                    <span>إدارة</span>
+                  </Link>
                 </div>
               </div>
             </div>

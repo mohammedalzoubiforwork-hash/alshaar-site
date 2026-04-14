@@ -24,7 +24,7 @@ export function WriterPulse({
   return (
     <section id={id} className={cn("relative py-14 sm:py-16 md:py-24", className)}>
       <Container>
-        <div className="paper-panel relative overflow-hidden rounded-[28px] border border-white/10 bg-[#102438]/84 sm:rounded-[32px] md:rounded-[42px]">
+        <div className="paper-panel relative overflow-hidden rounded-[28px] border border-white/10 bg-[linear-gradient(135deg,rgba(255,197,109,0.08),transparent_32%),linear-gradient(180deg,rgba(18,41,61,0.9),rgba(10,28,44,0.84))] sm:rounded-[32px] md:rounded-[42px]">
           <div className="absolute inset-y-0 left-0 hidden w-[38%] lg:block">
             {hasWriterImage ? (
               <Image
@@ -39,10 +39,10 @@ export function WriterPulse({
             ) : (
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(255,180,95,0.22),transparent_22%),linear-gradient(180deg,#173551_0%,#0b1826_100%)]" />
             )}
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,17,27,0.08),rgba(7,17,27,0.7))]" />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,17,27,0.04),rgba(7,17,27,0.68))]" />
           </div>
 
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(255,180,95,0.14),transparent_18%),radial-gradient(circle_at_18%_82%,rgba(121,221,212,0.08),transparent_18%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_38%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(255,180,95,0.2),transparent_18%),radial-gradient(circle_at_18%_82%,rgba(121,221,212,0.1),transparent_18%),radial-gradient(circle_at_54%_20%,rgba(255,157,182,0.08),transparent_16%),linear-gradient(180deg,rgba(255,255,255,0.03),transparent_38%)]" />
 
           <div className="relative grid gap-0 lg:grid-cols-[0.88fr_1.12fr]">
             <div className="relative aspect-[4/3] min-h-0 overflow-hidden lg:hidden">
@@ -83,7 +83,7 @@ export function WriterPulse({
               </p>
 
               <div className="mt-7 flex flex-wrap items-start gap-3 sm:mt-8 sm:items-center sm:gap-4 md:mt-10">
-                <span className="rounded-full border border-[#ffb45f]/22 bg-[#ffb45f]/10 px-4 py-2 text-sm text-[#fff0cf]">
+                <span className="rounded-full border border-[#ffb45f]/28 bg-[linear-gradient(135deg,rgba(255,180,95,0.16),rgba(255,157,182,0.08))] px-4 py-2 text-sm text-[#fff0cf]">
                   {writerCopy.badgeLabel}
                 </span>
                 <span className="text-sm text-[#d2e0e8]/78">{writerCopy.aside}</span>

@@ -8,6 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 const buildDir = path.join(rootDir, ".github-pages-build");
 const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "alshaar-site";
+const defaultRepository = process.env.GITHUB_REPOSITORY ?? `mohammedalzoubiforwork-hash/${repoName}`;
 
 const excludedEntries = new Set([
   ".git",
@@ -35,32 +36,6 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-`;
-
-const githubPagesAdminPage = `export default function AdminPage() {
-  return (
-    <main className="page-shell">
-      <section className="mx-auto flex min-h-[60vh] w-full max-w-[960px] items-center px-4 py-12 sm:px-6">
-        <div className="glass-panel w-full rounded-[32px] px-6 py-10 text-center sm:px-10">
-          <p className="text-sm text-[#d6e7ef]/72">GitHub Pages</p>
-          <h1 className="mt-4 font-display text-3xl text-[#fff7ef] sm:text-4xl">
-            لوحة الإدارة غير متاحة هنا
-          </h1>
-          <p className="mx-auto mt-4 max-w-[32rem] text-base leading-8 text-[#d6e7ef]/84">
-            هذه النسخة مخصصة لعرض الموقع مباشرة من GitHub Pages. ميزات الإدارة والرفع الديناميكي
-            تحتاج استضافة تدعم الخادم مثل Netlify أو أي بيئة Node كاملة.
-          </p>
-          <a
-            href="../"
-            className="hero-button mx-auto mt-8 inline-flex min-h-12 min-w-[12rem] items-center justify-center"
-          >
-            العودة إلى الموقع
-          </a>
-        </div>
-      </section>
-    </main>
-  );
-}
 `;
 
 async function copyProject() {
@@ -94,10 +69,6 @@ async function linkNodeModules() {
 async function prepareStaticOnlyFiles() {
   await rm(path.join(buildDir, "app", "api"), { recursive: true, force: true });
   await rm(path.join(buildDir, "app", "media"), { recursive: true, force: true });
-
-  const adminDir = path.join(buildDir, "app", "admin");
-  await mkdir(adminDir, { recursive: true });
-  await writeFile(path.join(adminDir, "page.tsx"), githubPagesAdminPage, "utf8");
   await writeFile(path.join(buildDir, "next.config.ts"), githubPagesNextConfig, "utf8");
 
   const contentPath = path.join(buildDir, "content", "site-content.json");
@@ -119,7 +90,11 @@ function runBuild() {
       env: {
         ...process.env,
         GITHUB_PAGES: "true",
-        GITHUB_REPOSITORY: process.env.GITHUB_REPOSITORY ?? `local/${repoName}`,
+        GITHUB_REPOSITORY: defaultRepository,
+        NEXT_PUBLIC_STATIC_SITE: "true",
+        NEXT_PUBLIC_GITHUB_REPOSITORY: defaultRepository,
+        NEXT_PUBLIC_GITHUB_BRANCH: process.env.GITHUB_REF_NAME ?? "main",
+        NEXT_PUBLIC_SITE_BASE_PATH: `/${repoName}`,
       },
       stdio: "inherit",
     });

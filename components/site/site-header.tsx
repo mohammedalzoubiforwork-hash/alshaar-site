@@ -19,15 +19,16 @@ export function SiteHeader({
 }: SiteHeaderProps) {
   const desktopLinkClass = (href: string) =>
     cn(
-      "rounded-full px-4 py-2 hover:bg-white/[0.1] hover:text-[#fffdf7]",
-      isActiveLink(href, currentPath) && "bg-white/[0.12] text-[#fffdf7]",
+      "rounded-full px-4 py-2 text-[#edf7fb]/86 transition-colors hover:bg-white/[0.12] hover:text-[#fffdf7]",
+      isActiveLink(href, currentPath) &&
+        "border border-[#ffd497]/24 bg-[linear-gradient(135deg,rgba(255,197,109,0.18),rgba(255,146,120,0.1))] text-[#fffdf7]",
     );
 
   const mobileLinkClass = (href: string) =>
     cn(
-      "flex min-h-12 items-center justify-center rounded-[20px] border border-white/10 bg-[#14324c]/68 px-3 py-3 text-center text-sm font-medium leading-6 text-[#eef8fb]/90",
+      "flex min-h-12 items-center justify-center rounded-[20px] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02)),linear-gradient(135deg,rgba(130,234,223,0.12),rgba(255,197,109,0.06))] px-3 py-3 text-center text-sm font-medium leading-6 text-[#eef8fb]/90",
       isActiveLink(href, currentPath) &&
-        "border-[#7ee6dc]/34 bg-[#1b4160] text-[#fffdf7]",
+        "border-[#82eadf]/42 bg-[linear-gradient(135deg,rgba(130,234,223,0.2),rgba(144,203,255,0.1))] text-[#fffdf7]",
     );
 
   return (
@@ -60,15 +61,6 @@ export function SiteHeader({
             </ul>
           </nav>
 
-          <div className="hidden items-center lg:flex">
-            <Link
-              href="/admin"
-              prefetch={false}
-              className="hero-button hero-button-secondary min-h-11"
-            >
-              إدارة
-            </Link>
-          </div>
         </div>
 
         <div className="space-y-4 lg:hidden">
@@ -82,15 +74,6 @@ export function SiteHeader({
               </p>
             </Link>
 
-            <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-              <Link
-                href="/admin"
-                prefetch={false}
-                className="inline-flex min-h-11 min-w-[7.5rem] items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-4 text-sm text-[#f3fbff]"
-              >
-                إدارة
-              </Link>
-            </div>
           </div>
 
           {showMobileQuickLinks ? (
