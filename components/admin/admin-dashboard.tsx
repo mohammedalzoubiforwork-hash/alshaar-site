@@ -203,10 +203,19 @@ async function uploadFile(
     body: formData,
   });
 
-  const payload = (await response.json()) as {
+  const responseText = await response.text();
+  let payload: {
     path?: string;
     message?: string;
-  };
+  } = {};
+
+  try {
+    payload = responseText ? (JSON.parse(responseText) as typeof payload) : {};
+  } catch {
+    payload = {
+      message: responseText || "تعذر رفع الملف الآن. حاول مرة أخرى بعد قليل.",
+    };
+  }
 
   if (!response.ok || !payload.path) {
     throw new Error(payload.message ?? "تعذر رفع الملف.");

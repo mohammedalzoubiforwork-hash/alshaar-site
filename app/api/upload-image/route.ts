@@ -1,7 +1,6 @@
 import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { NextResponse } from "next/server";
-import sharp from "sharp";
 import { saveMediaFile } from "@/lib/site-storage";
 
 export const dynamic = "force-dynamic";
@@ -64,6 +63,7 @@ async function optimizeImageFile(file: File) {
   }
 
   try {
+    const sharp = (await import("sharp")).default;
     const inputBuffer = Buffer.from(await file.arrayBuffer());
     const transformer = sharp(inputBuffer, {
       animated: true,
