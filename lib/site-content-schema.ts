@@ -180,6 +180,10 @@ function normalizeAudioTrack(value: unknown, index: number): AudioTrack {
 }
 
 const defaultSiteContent: SiteContent = {
+  writer: {
+    biography:
+      "هنا تظهر السيرة الذاتية أو النبذة التعريفية بالشاعر، ويمكن تعديلها من لوحة الأدمن.",
+  },
   photos: {
     heroImage: "/art/hero-scene.svg",
     writerImage: "/art/writer-portrait.svg",
@@ -325,6 +329,12 @@ function migrateLegacySiteContent(record: Record<string, unknown>): SiteContent 
     : cloneValue(defaultSiteContent.audioTracks);
 
   return {
+    writer: {
+      biography: stringValue(
+        pulse.description,
+        defaultSiteContent.writer.biography,
+      ),
+    },
     photos: {
       heroImage: pathValue(hero.image, defaultSiteContent.photos.heroImage),
       writerImage: pathValue(pulse.image, defaultSiteContent.photos.writerImage),
@@ -367,6 +377,7 @@ export const defaultSiteContentValue = cloneSiteContent(defaultSiteContent);
 export function normalizeSiteContent(value: unknown): SiteContent {
   const record = isRecord(value) ? value : {};
   const hasNewShape =
+    "writer" in record ||
     "photos" in record ||
     "works" in record ||
     "honors" in record ||
@@ -379,8 +390,12 @@ export function normalizeSiteContent(value: unknown): SiteContent {
   }
 
   const photos = isRecord(record.photos) ? record.photos : {};
+  const writer = isRecord(record.writer) ? record.writer : {};
 
   return {
+    writer: {
+      biography: stringValue(writer.biography, defaultSiteContent.writer.biography),
+    },
     photos: {
       heroImage: pathValue(photos.heroImage, defaultSiteContent.photos.heroImage),
       writerImage: pathValue(

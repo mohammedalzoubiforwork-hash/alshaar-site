@@ -25,11 +25,11 @@ export function SectionHeading({
       )}
     >
       <span className="section-kicker">{eyebrow}</span>
-      <h2 className="mt-6 text-4xl leading-[1.2] text-[#fff4e8] md:text-5xl lg:text-6xl">
+      <h2 className="mt-4 text-[clamp(1.95rem,8.7vw,3.35rem)] leading-[1.2] text-[#fff4e8] sm:mt-5 md:mt-6 md:text-5xl lg:text-6xl">
         {title}
       </h2>
       {description ? (
-        <p className="mt-6 max-w-2xl text-base leading-8 text-[#dbe7ee]/84 md:text-lg md:leading-9">
+        <p className="mt-4 max-w-2xl text-[0.98rem] leading-7 text-[#dbe7ee]/84 sm:mt-5 sm:leading-8 md:mt-6 md:text-lg md:leading-9">
           {description}
         </p>
       ) : null}

@@ -68,6 +68,10 @@ function getLocalUploadPath(key: string) {
   return path.join(localUploadsPath, key);
 }
 
+async function readUploadFile(file: File) {
+  return await file.arrayBuffer();
+}
+
 function contentTypeFromKey(key: string) {
   const extension = path.extname(key).toLowerCase();
 
@@ -152,9 +156,10 @@ export async function saveMediaFile({
   file: File;
 }) {
   const contentType = file.type || contentTypeFromKey(key);
+  const data = await readUploadFile(file);
 
   if (isBlobStorageEnabled()) {
-    await getMediaStore().set(key, file, {
+    await getMediaStore().set(key, data, {
       metadata: {
         contentType,
         originalName: file.name,
@@ -162,7 +167,7 @@ export async function saveMediaFile({
     });
   } else {
     const filePath = getLocalUploadPath(key);
-    const buffer = Buffer.from(await file.arrayBuffer());
+    const buffer = Buffer.from(data);
 
     await mkdir(path.dirname(filePath), { recursive: true });
     await writeFile(filePath, buffer);

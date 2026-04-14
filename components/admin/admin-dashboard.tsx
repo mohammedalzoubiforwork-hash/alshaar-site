@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { type ChangeEvent, type ReactNode, useState } from "react";
 import {
@@ -17,6 +16,7 @@ import {
   Save,
   Trash2,
   Trophy,
+  UserRound,
 } from "lucide-react";
 import { workTypeLabels } from "@/lib/site-config";
 import type {
@@ -34,9 +34,17 @@ type AdminDashboardProps = {
   contentPath: string;
 };
 
-type SectionId = "photos" | "works" | "honors" | "news" | "quotes" | "audio";
+type SectionId = "writer" | "photos" | "works" | "honors" | "news" | "quotes" | "audio";
 type StatusTone = "idle" | "success" | "error";
-type MutateContent = (mutator: (draft: SiteContent) => void) => void;
+type MutateOptions = {
+  save?: boolean;
+  savingMessage?: string;
+  successMessage?: string;
+};
+type MutateContent = (
+  mutator: (draft: SiteContent) => void,
+  options?: MutateOptions,
+) => void;
 
 const sectionItems: Array<{
   id: SectionId;
@@ -44,6 +52,12 @@ const sectionItems: Array<{
   description: string;
   icon: typeof ImageIcon;
 }> = [
+  {
+    id: "writer",
+    label: "نبض الكاتب",
+    description: "السيرة الذاتية والنص الظاهر في قسم الكاتب",
+    icon: UserRound,
+  },
   {
     id: "photos",
     label: "الصور",
@@ -162,7 +176,7 @@ export function AdminDashboard({
   contentPath,
 }: AdminDashboardProps) {
   const [content, setContent] = useState(initialContent);
-  const [activeSection, setActiveSection] = useState<SectionId>("photos");
+  const [activeSection, setActiveSection] = useState<SectionId>("writer");
   const [statusTone, setStatusTone] = useState<StatusTone>("idle");
   const [statusMessage, setStatusMessage] = useState(
     "التعديلات غير محفوظة حتى تضغط زر الحفظ.",
@@ -177,21 +191,16 @@ export function AdminDashboard({
     { label: "الصوتيات", value: content.audioTracks.length },
   ];
 
-  const mutateContent: MutateContent = (mutator) => {
-    setContent((current) => {
-      const next = structuredClone(current);
-      mutator(next);
-      return next;
-    });
-    setIsDirty(true);
-    setStatusTone("idle");
-    setStatusMessage("هناك تغييرات جديدة لم تُحفظ بعد.");
-  };
-
-  async function handleSave() {
+  async function persistContent(
+    nextContent: SiteContent,
+    options?: {
+      savingMessage?: string;
+      successMessage?: string;
+    },
+  ) {
     setIsSaving(true);
     setStatusTone("idle");
-    setStatusMessage("جاري حفظ المحتوى في ملف البيانات...");
+    setStatusMessage(options?.savingMessage ?? "جاري حفظ المحتوى في ملف البيانات...");
 
     try {
       const response = await fetch("/api/content", {
@@ -199,7 +208,7 @@ export function AdminDashboard({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(content),
+        body: JSON.stringify(nextContent),
       });
 
       const payload = (await response.json()) as {
@@ -214,10 +223,11 @@ export function AdminDashboard({
       setContent(payload.content);
       setIsDirty(false);
       setStatusTone("success");
-      setStatusMessage("تم حفظ التعديلات بنجاح.");
+      setStatusMessage(options?.successMessage ?? "تم حفظ التعديلات بنجاح.");
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "حدث خطأ غير متوقع أثناء الحفظ.";
+      setIsDirty(true);
       setStatusTone("error");
       setStatusMessage(message);
     } finally {
@@ -225,8 +235,34 @@ export function AdminDashboard({
     }
   }
 
+  const mutateContent: MutateContent = (mutator, options) => {
+    const next = structuredClone(content);
+    mutator(next);
+    setContent(next);
+    setIsDirty(true);
+    setStatusTone("idle");
+    setStatusMessage(
+      options?.save
+        ? options.savingMessage ?? "جاري حفظ التعديل..."
+        : "هناك تغييرات جديدة لم تُحفظ بعد.",
+    );
+
+    if (options?.save) {
+      void persistContent(next, {
+        savingMessage: options.savingMessage,
+        successMessage: options.successMessage,
+      });
+    }
+  };
+
+  async function handleSave() {
+    await persistContent(content);
+  }
+
   function renderActiveSection() {
     switch (activeSection) {
+      case "writer":
+        return <WriterSectionEditor content={content} mutateContent={mutateContent} />;
       case "photos":
         return <PhotosSectionEditor content={content} mutateContent={mutateContent} />;
       case "works":
@@ -257,7 +293,7 @@ export function AdminDashboard({
         <section className="rounded-[34px] border border-white/10 bg-white/[0.03] p-6 shadow-[0_24px_120px_rgba(0,0,0,0.32)] backdrop-blur-xl md:p-8">
           <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
             <div className="max-w-3xl">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#d5bb90]/20 bg-[#d5bb90]/8 px-4 py-2 text-xs tracking-[0.2em] text-[#e2ccaa] uppercase">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#d5bb90]/20 bg-[#d5bb90]/8 px-4 py-2 text-xs text-[#e2ccaa]">
                 لوحة الأدمن
               </span>
               <h1 className="mt-5 font-display text-4xl text-[#fbf4e8] md:text-6xl">
@@ -329,7 +365,7 @@ export function AdminDashboard({
                 <div>
                   <p className="text-sm text-[#e7dbc4]">أقسام التحرير</p>
                   <p className="mt-1 text-xs leading-6 text-[#a9a093]">
-                    ستة تبويبات فقط، دون حقول نصوص طويلة أو إعدادات زائدة.
+                    تبويبات واضحة ومباشرة لإدارة محتوى الموقع.
                   </p>
                 </div>
                 <span
@@ -556,10 +592,12 @@ function ImageUploadField({
   label,
   value,
   onChange,
+  onCommit,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  onCommit?: (value: string) => void;
 }) {
   const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState("");
@@ -576,7 +614,11 @@ function ImageUploadField({
 
     try {
       const payload = await uploadFile(file, "/api/upload-image");
-      onChange(payload.path ?? "");
+      if (onCommit) {
+        onCommit(payload.path ?? "");
+      } else {
+        onChange(payload.path ?? "");
+      }
       setMessage(payload.message ?? "تم رفع الصورة بنجاح.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "تعذر رفع الصورة.");
@@ -614,7 +656,13 @@ function ImageUploadField({
         {value ? (
           <button
             type="button"
-            onClick={() => onChange("")}
+            onClick={() => {
+              if (onCommit) {
+                onCommit("");
+              } else {
+                onChange("");
+              }
+            }}
             className="inline-flex items-center gap-2 rounded-full border border-rose-400/20 bg-rose-400/8 px-4 py-2 text-sm text-rose-100"
           >
             <Trash2 className="size-4" />
@@ -628,13 +676,16 @@ function ImageUploadField({
       <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#0a0d10]">
         <div className="relative aspect-[16/10]">
           {value ? (
-            <Image
-              src={value}
-              alt={label}
-              fill
-              sizes="(max-width: 1024px) 100vw, 40vw"
-              className="object-cover"
-            />
+            <>
+              {/* Deliberately use a plain img here so freshly uploaded admin previews refresh immediately. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                key={value}
+                src={value}
+                alt={label}
+                className="h-full w-full object-cover"
+              />
+            </>
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_30%_20%,rgba(221,186,134,0.18),transparent_24%),linear-gradient(180deg,#241a15_0%,#120d0a_100%)]">
               <span className="text-sm text-[#bba68a]">لا توجد صورة مضافة</span>
@@ -650,10 +701,12 @@ function AudioUploadField({
   label,
   value,
   onChange,
+  onCommit,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  onCommit?: (value: string) => void;
 }) {
   const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState("");
@@ -670,7 +723,11 @@ function AudioUploadField({
 
     try {
       const payload = await uploadFile(file, "/api/upload-audio");
-      onChange(payload.path ?? "");
+      if (onCommit) {
+        onCommit(payload.path ?? "");
+      } else {
+        onChange(payload.path ?? "");
+      }
       setMessage(payload.message ?? "تم رفع الملف بنجاح.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "تعذر رفع الملف.");
@@ -708,7 +765,13 @@ function AudioUploadField({
         {value ? (
           <button
             type="button"
-            onClick={() => onChange("")}
+            onClick={() => {
+              if (onCommit) {
+                onCommit("");
+              } else {
+                onChange("");
+              }
+            }}
             className="inline-flex items-center gap-2 rounded-full border border-rose-400/20 bg-rose-400/8 px-4 py-2 text-sm text-rose-100"
           >
             <Trash2 className="size-4" />
@@ -753,6 +816,18 @@ function PhotosSectionEditor({
               draft.photos.heroImage = value;
             })
           }
+          onCommit={(value) =>
+            mutateContent(
+              (draft) => {
+                draft.photos.heroImage = value;
+              },
+              {
+                save: true,
+                savingMessage: "جاري حفظ صورة الواجهة...",
+                successMessage: "تم تحديث صورة الواجهة وحفظها.",
+              },
+            )
+          }
         />
         <ImageUploadField
           label="صورة الكاتب"
@@ -762,6 +837,67 @@ function PhotosSectionEditor({
               draft.photos.writerImage = value;
             })
           }
+          onCommit={(value) =>
+            mutateContent(
+              (draft) => {
+                draft.photos.writerImage = value;
+              },
+              {
+                save: true,
+                savingMessage: "جاري حفظ صورة الكاتب...",
+                successMessage: "تم تحديث صورة الكاتب وحفظها.",
+              },
+            )
+          }
+        />
+      </div>
+    </SectionCard>
+  );
+}
+
+function WriterSectionEditor({
+  content,
+  mutateContent,
+}: {
+  content: SiteContent;
+  mutateContent: MutateContent;
+}) {
+  return (
+    <SectionCard
+      title="نبض الكاتب"
+      description="النص وصورة الكاتب هنا يظهران داخل قسم نبض الكاتب في الصفحة الرئيسية وصفحة الكاتب."
+    >
+      <div className="grid gap-6">
+        <ImageUploadField
+          label="صورة الكاتب في نبض الكاتب"
+          value={content.photos.writerImage}
+          onChange={(value) =>
+            mutateContent((draft) => {
+              draft.photos.writerImage = value;
+            })
+          }
+          onCommit={(value) =>
+            mutateContent(
+              (draft) => {
+                draft.photos.writerImage = value;
+              },
+              {
+                save: true,
+                savingMessage: "جاري حفظ صورة نبض الكاتب...",
+                successMessage: "تم تحديث صورة نبض الكاتب وحفظها.",
+              },
+            )
+          }
+        />
+        <TextareaField
+          label="السيرة الذاتية"
+          value={content.writer.biography}
+          onChange={(value) =>
+            mutateContent((draft) => {
+              draft.writer.biography = value;
+            })
+          }
+          rows={8}
         />
       </div>
     </SectionCard>
@@ -852,6 +988,18 @@ function WorksSectionEditor({
                       draft.works[index].image = value;
                     })
                   }
+                  onCommit={(value) =>
+                    mutateContent(
+                      (draft) => {
+                        draft.works[index].image = value;
+                      },
+                      {
+                        save: true,
+                        savingMessage: "جاري حفظ صورة العمل...",
+                        successMessage: "تم تحديث صورة العمل وحفظها.",
+                      },
+                    )
+                  }
                 />
               </div>
             </div>
@@ -932,6 +1080,18 @@ function HonorsSectionEditor({
                     mutateContent((draft) => {
                       draft.honors[index].image = value;
                     })
+                  }
+                  onCommit={(value) =>
+                    mutateContent(
+                      (draft) => {
+                        draft.honors[index].image = value;
+                      },
+                      {
+                        save: true,
+                        savingMessage: "جاري حفظ صورة التكريم...",
+                        successMessage: "تم تحديث صورة التكريم وحفظها.",
+                      },
+                    )
                   }
                 />
               </div>
@@ -1022,6 +1182,18 @@ function NewsSectionEditor({
                     mutateContent((draft) => {
                       draft.news[index].image = value;
                     })
+                  }
+                  onCommit={(value) =>
+                    mutateContent(
+                      (draft) => {
+                        draft.news[index].image = value;
+                      },
+                      {
+                        save: true,
+                        savingMessage: "جاري حفظ صورة الخبر...",
+                        successMessage: "تم تحديث صورة الخبر وحفظها.",
+                      },
+                    )
                   }
                 />
               </div>
@@ -1165,6 +1337,18 @@ function AudioSectionEditor({
                     mutateContent((draft) => {
                       draft.audioTracks[index].file = value;
                     })
+                  }
+                  onCommit={(value) =>
+                    mutateContent(
+                      (draft) => {
+                        draft.audioTracks[index].file = value;
+                      },
+                      {
+                        save: true,
+                        savingMessage: "جاري حفظ الملف الصوتي...",
+                        successMessage: "تم تحديث الملف الصوتي وحفظه.",
+                      },
+                    )
                   }
                 />
               </div>

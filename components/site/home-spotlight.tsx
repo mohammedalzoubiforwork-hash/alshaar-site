@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, CalendarDays, PlayCircle } from "lucide-react";
+import { ArrowLeft, CalendarDays } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import type { AudioTrack, NewsItem, QuoteItem } from "@/lib/site-content-types";
@@ -22,49 +22,45 @@ export function HomeSpotlight({
   audioHref,
 }: HomeSpotlightProps) {
   return (
-    <section className="relative pb-24 md:pb-32">
+    <section className="relative pb-14 sm:pb-16 md:pb-24">
       <Container>
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+        <div className="grid gap-4 sm:gap-5 md:gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
           <Reveal>
-            <article className="mesh-panel relative overflow-hidden rounded-[38px] p-7 md:p-10">
+            <article className="mesh-panel relative overflow-hidden rounded-[28px] p-4 sm:rounded-[32px] sm:p-6 md:rounded-[38px] md:p-10">
               <div className="soft-grid absolute inset-0 opacity-20" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,180,95,0.18),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(121,221,212,0.12),transparent_24%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,191,104,0.24),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(126,230,220,0.16),transparent_24%)]" />
               <div className="relative">
-                <span className="section-kicker">اقتباس من قلب النص</span>
-                <p className="mt-8 font-display text-3xl leading-[1.85] text-[#fbf3e8] md:text-5xl md:leading-[1.7]">
-                  {featuredQuote ? `“${featuredQuote.text}”` : "لا يوجد اقتباس مضاف حتى الآن."}
+                <span className="section-kicker">اقتباس</span>
+                <p className="mt-5 font-display text-[1.7rem] leading-[1.8] text-[#fbf3e8] sm:mt-6 sm:text-[2.2rem] md:mt-8 md:text-5xl md:leading-[1.7]">
+                  {featuredQuote ? `“${featuredQuote.text}”` : "سيُضاف اقتباس قريبًا."}
                 </p>
-                <div className="mt-8 flex flex-wrap gap-4">
-                  <Link href={quoteHref} className="hero-button hero-button-primary">
-                    ادخل صفحة الاقتباسات
+                <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-4">
+                  <Link href={quoteHref} className="hero-button hero-button-primary w-full sm:w-auto">
+                    الاقتباسات
                     <ArrowLeft className="size-4" />
                   </Link>
-                  <Link href={audioHref} className="hero-button hero-button-secondary">
-                    استمع إلى المكتبة الصوتية
-                    <PlayCircle className="size-4" />
+                  <Link href={audioHref} className="hero-button hero-button-secondary w-full sm:w-auto">
+                    الصوتيات
+                    <ArrowLeft className="size-4" />
                   </Link>
                 </div>
               </div>
             </article>
           </Reveal>
 
-          <div className="grid gap-6">
+          <div className="grid gap-4 sm:gap-5 md:gap-6">
             <Reveal delay={0.08}>
-              <article className="paper-panel overflow-hidden rounded-[34px] p-6 md:p-8">
+              <article className="paper-panel overflow-hidden rounded-[26px] p-4 sm:rounded-[30px] sm:p-6 md:rounded-[34px] md:p-8">
                 <div className="flex items-center gap-3 text-sm text-[#d9bf97]">
                   <CalendarDays className="size-4" />
                   <span>{featuredNews?.date ?? "آخر تحديث"}</span>
                 </div>
-                <h3 className="mt-5 text-3xl leading-[1.3] text-[#faf1e5]">
-                  {featuredNews?.title ?? "لا توجد أخبار مضافة بعد"}
+                <h3 className="mt-4 text-[1.55rem] leading-[1.25] text-[#faf1e5] sm:text-[1.75rem] md:mt-5 md:text-3xl">
+                  {featuredNews?.title ?? "سيُضاف خبر قريبًا."}
                 </h3>
-                <p className="mt-4 text-base leading-8 text-[#cfbea7]/84">
-                  {featuredNews?.description ??
-                    "أضف خبرًا جديدًا من لوحة الأدمن ليظهر هنا ضمن الواجهة الرئيسية."}
-                </p>
-                <div className="mt-8">
+                <div className="mt-6 sm:mt-8">
                   <Link href={newsHref} className="editorial-link text-sm md:text-base">
-                    انتقل إلى صفحة الأخبار
+                    الأخبار
                     <ArrowLeft className="size-4" />
                   </Link>
                 </div>
@@ -72,21 +68,15 @@ export function HomeSpotlight({
             </Reveal>
 
             <Reveal delay={0.14}>
-              <article className="paper-panel overflow-hidden rounded-[34px] p-6 md:p-8">
-                <span className="story-chip">المشهد الصوتي</span>
-                <h3 className="mt-5 text-3xl leading-[1.3] text-[#faf1e5]">
-                  {featuredAudio?.title ?? "لا توجد مقاطع صوتية مضافة بعد"}
+              <article className="paper-panel overflow-hidden rounded-[26px] p-4 sm:rounded-[30px] sm:p-6 md:rounded-[34px] md:p-8">
+                <span className="story-chip">الصوتيات</span>
+                <h3 className="mt-4 text-[1.55rem] leading-[1.25] text-[#faf1e5] sm:text-[1.75rem] md:mt-5 md:text-3xl">
+                  {featuredAudio?.title ?? "سيُضاف مقطع صوتي قريبًا."}
                 </h3>
-                <p className="mt-4 text-base leading-8 text-[#cfbea7]/84">
-                  {featuredAudio?.description ??
-                    "ارفع أول ملف صوتي من لوحة الأدمن ليظهر هنا كمشهد مسموع من الصفحة الرئيسية."}
-                </p>
-                <div className="mt-6 flex items-center justify-between gap-3">
-                  <span className="sound-pill">
-                    {featuredAudio?.durationLabel || "بانتظار أول ملف"}
-                  </span>
+                <div className="mt-5 flex flex-col items-start gap-3 sm:mt-6 sm:flex-row sm:items-center sm:justify-between">
+                  <span className="sound-pill">{featuredAudio?.durationLabel || "قريبًا"}</span>
                   <Link href={audioHref} className="editorial-link text-sm md:text-base">
-                    انتقل إلى الصوتيات
+                    الصوتيات
                     <ArrowLeft className="size-4" />
                   </Link>
                 </div>

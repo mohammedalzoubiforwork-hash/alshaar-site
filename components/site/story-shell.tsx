@@ -7,7 +7,7 @@ type StoryShellProps = {
   eyebrow: string;
   title: string;
   description: string;
-  accent?: string;
+  currentPath: string;
   actionLabel?: string;
   actionHref?: string;
   children: ReactNode;
@@ -17,7 +17,7 @@ export function StoryShell({
   eyebrow,
   title,
   description,
-  accent,
+  currentPath,
   actionLabel,
   actionHref,
   children,
@@ -32,12 +32,11 @@ export function StoryShell({
         aria-hidden
         className="ambient-glow left-[-6rem] top-[38rem] h-[22rem] w-[22rem] bg-[#79ddd4]/12 float-slow"
       />
-      <SiteHeader />
+      <SiteHeader currentPath={currentPath} />
       <PageHero
         eyebrow={eyebrow}
         title={title}
         description={description}
-        accent={accent}
         actionLabel={actionLabel}
         actionHref={actionHref}
       />

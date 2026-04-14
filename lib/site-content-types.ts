@@ -41,6 +41,9 @@ export type AudioTrack = {
 };
 
 export type SiteContent = {
+  writer: {
+    biography: string;
+  };
   photos: {
     heroImage: string;
     writerImage: string;

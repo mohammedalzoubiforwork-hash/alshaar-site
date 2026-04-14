@@ -1,4 +1,7 @@
 {
+  "writer": {
+    "biography": "هنا تظهر السيرة الذاتية أو النبذة التعريفية بالشاعر، ويمكن تعديلها من لوحة الأدمن."
+  },
   "photos": {
     "heroImage": "/art/hero-scene.svg",
     "writerImage": "/art/writer-portrait.svg"

@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans_Arabic } from "next/font/google";
+import { Amiri, Noto_Naskh_Arabic } from "next/font/google";
+import { SiteEffectsProvider } from "@/components/site/site-effects-provider";
 import { siteIdentity } from "@/lib/site-config";
 import "./globals.css";
 
-const bodyFont = IBM_Plex_Sans_Arabic({
+const bodyFont = Noto_Naskh_Arabic({
   variable: "--font-body",
   subsets: ["arabic"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
+  fallback: ["serif"],
+});
+
+const displayFont = Amiri({
+  variable: "--font-heading",
+  subsets: ["arabic"],
+  weight: ["400", "700"],
+  fallback: ["serif"],
 });
 
 export const metadata: Metadata = {
@@ -23,9 +32,11 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
-      className={`${bodyFont.variable} h-full antialiased`}
+      className={`${bodyFont.variable} ${displayFont.variable} h-full antialiased`}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <SiteEffectsProvider>{children}</SiteEffectsProvider>
+      </body>
     </html>
   );
 }

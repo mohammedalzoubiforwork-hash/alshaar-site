@@ -82,7 +82,8 @@ export async function POST(request: Request) {
       path: result.path,
       message: "تم رفع الملف الصوتي بنجاح.",
     });
-  } catch {
+  } catch (error) {
+    console.error("upload audio failed", error);
     return NextResponse.json(
       { message: "تعذر رفع الملف الصوتي الآن. حاول مرة أخرى بعد قليل." },
       { status: 500 },

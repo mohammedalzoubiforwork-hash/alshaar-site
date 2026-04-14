@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 type WriterPulseProps = {
   writerImage: string;
+  biography: string;
   id?: string;
   className?: string;
   showHeading?: boolean;
@@ -13,6 +14,7 @@ type WriterPulseProps = {
 
 export function WriterPulse({
   writerImage,
+  biography,
   id = "pulse",
   className,
   showHeading = true,
@@ -20,16 +22,18 @@ export function WriterPulse({
   const hasWriterImage = writerImage.length > 0;
 
   return (
-    <section id={id} className={cn("relative py-24 md:py-32", className)}>
+    <section id={id} className={cn("relative py-14 sm:py-16 md:py-24", className)}>
       <Container>
-        <div className="paper-panel relative overflow-hidden rounded-[42px] border border-white/10 bg-[#102438]/84">
+        <div className="paper-panel relative overflow-hidden rounded-[28px] border border-white/10 bg-[#102438]/84 sm:rounded-[32px] md:rounded-[42px]">
           <div className="absolute inset-y-0 left-0 hidden w-[38%] lg:block">
             {hasWriterImage ? (
               <Image
                 src={writerImage}
                 alt={writerCopy.imageAlt}
                 fill
-                sizes="38vw"
+                loading="lazy"
+                quality={72}
+                sizes="(max-width: 1023px) 0px, 38vw"
                 className="object-cover object-center opacity-42"
               />
             ) : (
@@ -40,15 +44,17 @@ export function WriterPulse({
 
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(255,180,95,0.14),transparent_18%),radial-gradient(circle_at_18%_82%,rgba(121,221,212,0.08),transparent_18%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_38%)]" />
 
-          <div className="relative grid gap-8 lg:grid-cols-[0.88fr_1.12fr]">
-            <div className="relative min-h-[260px] lg:hidden">
+          <div className="relative grid gap-0 lg:grid-cols-[0.88fr_1.12fr]">
+            <div className="relative aspect-[4/3] min-h-0 overflow-hidden lg:hidden">
               {hasWriterImage ? (
                 <Image
                   src={writerImage}
                   alt={writerCopy.mobileImageAlt}
                   fill
-                  sizes="100vw"
-                  className="object-cover opacity-45"
+                  loading="lazy"
+                  quality={72}
+                  sizes="(max-width: 1023px) calc(100vw - 2rem), 0px"
+                  className="object-cover object-top opacity-45"
                 />
               ) : (
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_24%,rgba(255,180,95,0.22),transparent_24%),linear-gradient(180deg,#173551_0%,#0b1826_100%)]" />
@@ -58,41 +64,29 @@ export function WriterPulse({
 
             <div className="hidden lg:block" />
 
-            <Reveal className="relative z-10 p-7 md:p-10 lg:p-16">
+            <Reveal className="relative z-10 p-4 sm:p-6 md:p-10 lg:p-16">
               {showHeading ? (
                 <>
                   <span className="section-kicker">{writerCopy.eyebrow}</span>
-                  <h2 className="mt-6 text-4xl leading-[1.2] text-[#fff6ec] md:text-5xl lg:text-6xl">
+                  <h2 className="mt-4 text-[clamp(2rem,8.8vw,3.5rem)] leading-[1.18] text-[#fff6ec] sm:mt-5 md:mt-6 md:text-5xl lg:text-6xl">
                     {writerCopy.title}
                   </h2>
                 </>
               ) : null}
               <p
                 className={cn(
-                  "max-w-2xl text-lg leading-9 text-[#dce7ee]/84 md:text-xl md:leading-10",
+                  "max-w-2xl text-[0.98rem] leading-7 text-[#dce7ee]/84 sm:text-base sm:leading-8 md:text-xl md:leading-10",
                   showHeading ? "mt-8" : "mt-2",
                 )}
               >
-                {writerCopy.description}
+                {biography}
               </p>
 
-              <div className="mt-10 rounded-[28px] border border-white/10 bg-white/[0.04] px-5 py-4 text-sm leading-7 text-[#f0f8ff]/82 backdrop-blur-sm md:max-w-xl">
-                {writerCopy.note}
-              </div>
-
-              <div className="mt-12 flex flex-wrap items-center gap-4">
+              <div className="mt-7 flex flex-wrap items-start gap-3 sm:mt-8 sm:items-center sm:gap-4 md:mt-10">
                 <span className="rounded-full border border-[#ffb45f]/22 bg-[#ffb45f]/10 px-4 py-2 text-sm text-[#fff0cf]">
                   {writerCopy.badgeLabel}
                 </span>
                 <span className="text-sm text-[#d2e0e8]/78">{writerCopy.aside}</span>
-              </div>
-
-              <div className="mt-12">
-                <div className="pulse-line" />
-                <div className="mt-4 flex items-center gap-3 text-xs tracking-[0.16em] text-[#fff0cf]/78">
-                  <span className="sound-dot" />
-                  {writerCopy.pulseCaption}
-                </div>
               </div>
             </Reveal>
           </div>

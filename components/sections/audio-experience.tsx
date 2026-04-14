@@ -1,5 +1,3 @@
-"use client";
-
 import { Headphones, PlayCircle } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
@@ -22,7 +20,7 @@ export function AudioExperience({
   showHeading = true,
 }: AudioExperienceProps) {
   return (
-    <section id={id} className={cn("relative py-24 md:py-32", className)}>
+    <section id={id} className={cn("relative py-14 sm:py-16 md:py-24", className)}>
       <Container>
         {showHeading ? (
           <SectionHeading
@@ -33,13 +31,13 @@ export function AudioExperience({
         ) : null}
 
         {audioTracks.length > 0 ? (
-          <div className={cn("grid gap-6 lg:grid-cols-2", showHeading && "mt-14")}>
+          <div className={cn("grid gap-4 sm:gap-5 md:gap-6 lg:grid-cols-2", showHeading && "mt-10 sm:mt-12 md:mt-14")}>
             {audioTracks.map((track, index) => (
               <Reveal key={track.id} delay={index * 0.08}>
-                <article className="paper-panel relative overflow-hidden rounded-[38px] p-7 md:p-9">
+                <article className="paper-panel relative overflow-hidden rounded-[26px] p-4 sm:rounded-[30px] sm:p-6 md:rounded-[38px] md:p-9">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(121,221,212,0.12),transparent_20%),radial-gradient(circle_at_bottom_left,rgba(255,180,95,0.08),transparent_24%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_40%)]" />
                   <div className="relative">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                       <span className="sound-pill">
                         <Headphones className="size-4" />
                         {audioCopy.stageLabel}
@@ -51,14 +49,14 @@ export function AudioExperience({
                       ) : null}
                     </div>
 
-                    <h3 className="mt-6 text-3xl leading-[1.3] text-[#faf1e5] md:text-4xl">
+                    <h3 className="mt-5 text-[1.6rem] leading-[1.25] text-[#faf1e5] sm:text-[1.8rem] md:mt-6 md:text-4xl">
                       {track.title}
                     </h3>
-                    <p className="mt-4 text-base leading-8 text-[#cfbea7]/84 md:text-lg">
+                    <p className="mt-3 text-[0.96rem] leading-7 text-[#cfbea7]/84 sm:leading-8 md:mt-4 md:text-lg">
                       {track.description}
                     </p>
 
-                    <div className="mt-8 rounded-[28px] border border-white/10 bg-white/[0.03] p-4">
+                    <div className="mt-5 rounded-[22px] border border-white/10 bg-white/[0.03] p-3 sm:mt-6 sm:p-4 md:mt-8 md:rounded-[28px]">
                       {track.file ? (
                         <audio controls preload="none" className="w-full" src={track.file}>
                           المتصفح الحالي لا يدعم تشغيل الصوتيات.
@@ -77,7 +75,7 @@ export function AudioExperience({
           </div>
         ) : (
           <div className={cn(showHeading && "mt-14")}>
-            <article className="paper-panel rounded-[38px] p-8 text-center">
+            <article className="paper-panel rounded-[32px] p-6 text-center sm:rounded-[38px] sm:p-8">
               <p className="font-display text-4xl text-[#f8eee2]">{audioCopy.emptyTitle}</p>
               <p className="mt-4 text-base leading-8 text-[#cfbea7]/84">
                 {audioCopy.emptyDescription}

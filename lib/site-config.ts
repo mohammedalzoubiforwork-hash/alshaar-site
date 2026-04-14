@@ -13,11 +13,11 @@ export type StaticSocialLink = {
 };
 
 export const siteIdentity = {
-  brandName: "سالم الورّاق",
-  tagline: "شاعر وكاتب ينسج من الذاكرة نصًا، ومن اللغة أثرًا",
-  pageTitle: "سالم الورّاق | سيرة الكلمة",
+  brandName: "محمد سعيد الضنحاني",
+  tagline: "شاعر وكاتب",
+  pageTitle: "محمد سعيد الضنحاني | سيرة الكلمة",
   pageDescription:
-    "موقع أدبي عربي يقدّم أعمال سالم الورّاق وتكريماته وأخباره واقتباساته وصوتياته ضمن تجربة بصرية مضيئة ومتعددة الصفحات.",
+    "موقع محمد سعيد الضنحاني: الأعمال، التكريمات، الأخبار، الاقتباسات، والصوتيات.",
 };
 
 export const navigationLinks: StaticLink[] = [
@@ -42,97 +42,87 @@ export const footerSocialLinks: StaticSocialLink[] = [
 ];
 
 export const footerCopy = {
-  headlineFirstLine: "ليست كل قراءةٍ عبورًا",
-  headlineSecondLine: "وليست كل كلمةٍ تُنسى",
-  description:
-    "خاتمة هادئة تترك الباب مواربًا لعودة جديدة، وتمنح الأعمال والاقتباسات والصوتيات مساحة أخيرة من السكون الأنيق.",
+  headlineFirstLine: "محمد سعيد الضنحاني",
+  headlineSecondLine: "شاعر وكاتب",
+  description: "الأعمال، الأخبار، والاقتباسات في مكان واحد.",
   quickLinksTitle: "روابط سريعة",
   newsletterTitle: "رسالة أدبية",
   newsletterDescription:
     "رسالة خفيفة تصلك بكل جديد في الأعمال والأخبار والمقتطفات المختارة من عالم الكاتب.",
   emailPlaceholder: "بريدك الإلكتروني",
   newsletterButtonLabel: "اشترك الآن",
-  copyright: "© سالم الورّاق. جميع الحقوق محفوظة.",
+  copyright: "© محمد سعيد الضنحاني. جميع الحقوق محفوظة.",
 };
 
 export const heroCopy = {
-  sectionKicker: "مدخل إلى عالم سالم الورّاق",
+  sectionKicker: "محمد سعيد الضنحاني",
   title: "أنا لا أكتب كي أملأ الورق، بل لأترك أثرًا يبقى",
-  subtitle: "",
-  primaryActionLabel: "ابدأ من نبض الكاتب",
+  subtitle: "شاعر وكاتب",
+  primaryActionLabel: "صفحة الكاتب",
   primaryActionHref: "/writer",
-  secondaryActionLabel: "استعرض الأعمال",
+  secondaryActionLabel: "الأعمال",
   secondaryActionHref: "/journey",
   audioPillMobileLabel: "مكتبة صوتية",
-  introPillLabel: "تجربة أدبية متعددة الصفحات",
-  introCaption:
-    "لكل صفحة شخصيتها الخاصة، بينما تبقى لوحة الأدمن بسيطة لإدارة الصور والعناصر بسرعة ووضوح.",
-  visualNoteTop:
-    "صورة الواجهة قابلة للتغيير من لوحة الأدمن لتبقى البداية متجددة وحاضرة بصريًا.",
-  visualNoteBottom:
-    "الأعمال والأخبار والتكريمات والاقتباسات والصوتيات موزعة على صفحات مستقلة تمنح كل محور مساحته وهدوءه.",
-  mobileVisualNote: "من هذه الصورة تبدأ الحكاية، ثم ينساب المحتوى بهدوء عبر الصفحات.",
-  scrollPrompt: "استكشف صفحات الموقع",
+  introPillLabel: "محتوى مختار",
+  introCaption: "الأعمال، التكريمات، الأخبار، الاقتباسات، والصوتيات.",
+  visualNoteTop: "صورة الواجهة الرئيسية.",
+  visualNoteBottom: "محتوى واضح ومباشر.",
+  mobileVisualNote: "صورة الواجهة الرئيسية.",
+  scrollPrompt: "تابع",
   heroImageAlt: "مشهد بصري هادئ للشاعر في فضاء أدبي",
   mobileHeroImageAlt: "صورة الواجهة الرئيسية",
 };
 
 export const writerCopy = {
   eyebrow: "نبض الكاتب",
-  title: "صفحة تصغي إلى أثر الكاتب قبل تفاصيل السيرة",
-  description:
-    "مساحة أقرب إلى صورة الكاتب ونبرته، حيث يسبق الإحساس الشرح وتتكلم الملامح قبل العناوين.",
-  note: "تُدار صورة الكاتب من لوحة الأدمن، أما النبرة العامة للنص فتظل ثابتة حفاظًا على هوية الصفحة.",
-  badgeLabel: "سالم الورّاق",
-  aside: "الكلمة تبدأ من الداخل ثم تتسع",
-  pulseCaption: "من الصورة يبدأ الأثر، ثم تتوالى الحكايات",
+  title: "محمد سعيد الضنحاني",
+  description: "شاعر وكاتب.",
+  note: "صوت وصورة ومسار.",
+  badgeLabel: "محمد سعيد الضنحاني",
+  aside: "الكلمة تبدأ من الداخل",
+  pulseCaption: "صوت هادئ ونبرة واضحة",
   imageAlt: "صورة الشاعر",
   mobileImageAlt: "صورة الشاعر على الهاتف",
 };
 
 export const journeyCopy = {
   eyebrow: "الأعمال",
-  title: "أعمال تفتح أكثر من باب للقراءة",
-  description:
-    "في هذه الصفحة تتجاور القصائد والكتب والنصوص المسرحية والسيرة الذاتية، بحيث يظهر كل عمل بعنوانه ووصفه وصورته ورابطه الخاص.",
-  cardKicker: "استكشف العمل",
+  title: "الأعمال",
+  description: "قصائد، مؤلفات، نصوص مسرحية، وسيرة.",
+  cardKicker: "عرض العمل",
 };
 
 export const honorsCopy = {
   eyebrow: "التكريمات",
-  title: "محطات مضيئة في مسار التقدير",
-  description:
-    "كل تكريم هنا يظهر بوصفه لحظة مكتملة: تاريخًا وصورةً وحكايةً قصيرة تكشف أثره في المسار.",
+  title: "التكريمات",
+  description: "أبرز محطات التقدير والجوائز.",
   itemLabelPrefix: "المحطة",
 };
 
 export const newsCopy = {
   eyebrow: "الأخبار",
-  title: "أخبار تليق بالحدث",
-  description:
-    "إصدارات وأمسيات ومقالات جديدة تُعرض في بطاقات واضحة وسهلة التحديث من لوحة الأدمن.",
+  title: "الأخبار",
+  description: "آخر الأخبار والإصدارات.",
   readMoreLabel: "اقرأ الخبر",
 };
 
 export const quoteCopy = {
   eyebrow: "الاقتباسات",
-  title: "اقتباسات تنبض بإيقاع النص",
-  description:
-    "بدل اقتباس واحد ثابت، تعرض الصفحة مجموعة اقتباسات قصيرة يمكن إضافتها أو حذفها، مع تعليق موجز عند الحاجة.",
-  primaryActionLabel: "تصفح الاقتباسات",
-  secondaryActionLabel: "انتقل إلى الصوتيات",
+  title: "الاقتباسات",
+  description: "اقتباسات مختارة من النصوص.",
+  primaryActionLabel: "الاقتباسات",
+  secondaryActionLabel: "الصوتيات",
   emptyTitle: "لا توجد اقتباسات حتى الآن",
-  emptyDescription: "أضف أول اقتباس من لوحة الأدمن ليظهر هنا فورًا.",
+  emptyDescription: "سيتم إضافة الاقتباسات قريبًا.",
 };
 
 export const audioCopy = {
   eyebrow: "الصوتيات",
-  title: "مكتبة صوتية حيّة",
-  description:
-    "أضف المقاطع الصوتية من لوحة الأدمن لتظهر هنا بمشغّل مباشر وواجهة واضحة وسهلة التصفح.",
-  stageLabel: "جاهز للاستماع",
+  title: "الصوتيات",
+  description: "مقاطع صوتية للاستماع المباشر.",
+  stageLabel: "استماع",
   emptyTitle: "لا توجد صوتيات حتى الآن",
-  emptyDescription: "ارفع أول ملف صوتي من لوحة الأدمن ليظهر هنا مباشرة.",
+  emptyDescription: "سيتم إضافة المقاطع الصوتية قريبًا.",
 };
 
 export const workTypeLabels = {

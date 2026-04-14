@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getSiteContent, saveSiteContent } from "@/lib/site-content";
+import { publicSitePaths } from "@/lib/site-pages";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -14,6 +16,10 @@ export async function PUT(request: Request) {
   try {
     const body = await request.json();
     const content = await saveSiteContent(body);
+
+    for (const path of publicSitePaths) {
+      revalidatePath(path, "page");
+    }
 
     return NextResponse.json({ content });
   } catch (error) {

@@ -67,3 +67,5 @@ export const sitePageSummaries: SitePageSummary[] = [
     description: audioCopy.description,
   },
 ];
+
+export const publicSitePaths = ["/", ...new Set(sitePageSummaries.map((page) => page.href))];
